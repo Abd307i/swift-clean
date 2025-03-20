@@ -87,8 +87,3 @@ Dry cleaners also get a dedicated system to manage customer orders efficiently.
 ⚡ *Stay tuned for updates!* 
 
 
-
-
-i dont know !!!!!!!!!!!!
-testing on remote
-
