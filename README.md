@@ -1,4 +1,4 @@
-# swift-clean
+# Swift-Clean
 # 🧼 DryCleaning App
 
 ## 📌 Project Overview
@@ -80,8 +80,8 @@ Dry cleaners also get a dedicated system to manage customer orders efficiently.
 
 ## 🤝 Contributors
 - **Abdalrhman** (Repo Management & Firebase Integration)
-- **khalid** (Frontend Developer/Backend developer)
-- **Ali** (Frontend Developer/Backend developer
+- **Khalid** (Frontend Developer/Backend developer)
+- **Ali** (Frontend Developer/Backend developer)
 
 ---
 ⚡ *Stay tuned for updates!* 🚀
