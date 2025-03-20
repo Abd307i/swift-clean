@@ -84,4 +84,4 @@ Dry cleaners also get a dedicated system to manage customer orders efficiently.
 - **Ali** (Frontend Developer/Backend developer)
 
 ---
-⚡ *Stay tuned for updates!* 🚀
+⚡ *Stay tuned for updates!* 
