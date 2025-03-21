@@ -1,5 +1,5 @@
 # Swift-Clean
-# 🧼 DryCleaning App
+# 🧼 DryCleaning App 
 
 ## 📌 Project Overview
 The **DryCleaning App** is an online dry-cleaning service that allows customers to:
@@ -82,9 +82,8 @@ Dry cleaners also get a dedicated system to manage customer orders efficiently.
 - **Abdalrhman** (Repo Management & Firebase Integration)
 - **Khalid** (Frontend Developer/Backend developer)
 - **Ali** (Frontend Developer/Backend developer)
-
+test remote
 ---
 ⚡ *Stay tuned for updates!* 
-testing on remote
 
-on local develop
+
