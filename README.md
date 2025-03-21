@@ -1,7 +1,7 @@
 # Swift-Clean Application
 # 🧼 DryCleaning App 
 
-## 📌 Project Overview
+## 📌 Project
 The **DryCleaning App** is an online dry-cleaning service that allows customers to:
 - Select items they want to clean or iron.
 - Get assigned to the nearest dry-cleaning shop.
