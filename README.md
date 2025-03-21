@@ -1,4 +1,4 @@
-# Swift-Clean
+# Swift-Clean Application
 # 🧼 DryCleaning App 
 
 ## 📌 Project Overview
