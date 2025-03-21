@@ -82,7 +82,7 @@ Dry cleaners also get a dedicated system to manage customer orders efficiently.
 - **Abdalrhman** (Repo Management & Firebase Integration)
 - **Khalid** (Frontend Developer/Backend developer)
 - **Ali** (Frontend Developer/Backend developer)
-test remote
+
 ---
 ⚡ *Stay tuned for updates!* 
 
