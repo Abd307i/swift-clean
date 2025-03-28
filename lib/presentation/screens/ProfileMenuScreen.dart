@@ -2,9 +2,12 @@
 import 'package:flutter/material.dart';
 import 'package:testing/core/constants/appTheme.dart';
 import 'package:testing/core/constants/PickColorHelper.dart';
-import 'package:testing/presentation/screens/NotificationsMenu.dart';
+import 'package:testing/presentation/screens/HelpCenterScreen.dart';
+import 'package:testing/presentation/screens/NotificationsScreen.dart';
 import 'package:testing/presentation/widgets/BuildMenuItemsWidget.dart';
 import 'package:testing/presentation/widgets/BuildSignOutWidget.dart';
+
+import 'OrderHistoryScreen.dart';
 
 class SSwitchTheme extends StatefulWidget{
   const SSwitchTheme({super.key});
@@ -14,9 +17,6 @@ class SSwitchTheme extends StatefulWidget{
 }
 
 class ProfileScreen extends State<SSwitchTheme> {
-  bool isDark = appTheme().theme == 'Light' ? false : true;
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,7 +67,7 @@ class ProfileScreen extends State<SSwitchTheme> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            'Alone Musk',
+                            'Ali Dweik',
                             style: TextStyle(
                               color: ColorPickerHelper.colorHelper('mainTextColor'),
                               fontSize: 20,
@@ -104,9 +104,16 @@ class ProfileScreen extends State<SSwitchTheme> {
                       buildMenuItem(
                           Icons.payment, 'Payment Method',ColorPickerHelper.colorHelper('fieldBackgroundColor')
                           ,ColorPickerHelper.colorHelper('mainTextColor')),
-                      buildMenuItem(
-                          Icons.history, 'Order History',ColorPickerHelper.colorHelper('fieldBackgroundColor')
-                          ,ColorPickerHelper.colorHelper('mainTextColor')),
+                      GestureDetector(
+                        onDoubleTap: (){
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => OrderHistoryScreen()));
+                        },
+                        child: buildMenuItem(
+                            Icons.history, 'Order History',ColorPickerHelper.colorHelper('fieldBackgroundColor')
+                            ,ColorPickerHelper.colorHelper('mainTextColor')),
+                      ),
                       buildMenuItem(
                           Icons.location_on, 'Delivery Address',ColorPickerHelper.colorHelper('fieldBackgroundColor')
                           ,ColorPickerHelper.colorHelper('mainTextColor')),
@@ -116,9 +123,16 @@ class ProfileScreen extends State<SSwitchTheme> {
                       buildMenuItem(
                           Icons.group_add, 'Invite Friends',ColorPickerHelper.colorHelper('fieldBackgroundColor')
                           ,ColorPickerHelper.colorHelper('mainTextColor')),
-                      buildMenuItem(
-                          Icons.help, 'Help Center',ColorPickerHelper.colorHelper('fieldBackgroundColor')
-                          ,ColorPickerHelper.colorHelper('mainTextColor')),
+                      GestureDetector(
+                        onDoubleTap:(){
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => HelpCenterScreen()));
+                        },
+                        child: buildMenuItem(
+                            Icons.help, 'Help Center',ColorPickerHelper.colorHelper('fieldBackgroundColor')
+                            ,ColorPickerHelper.colorHelper('mainTextColor')),
+                      ),
                       buildMenuItem(
                           Icons.info, 'About Us',ColorPickerHelper.colorHelper('fieldBackgroundColor')
                           ,ColorPickerHelper.colorHelper('mainTextColor')),
