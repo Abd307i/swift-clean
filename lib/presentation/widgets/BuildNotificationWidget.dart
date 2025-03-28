@@ -14,8 +14,8 @@ Widget buildNotificationWidget(IconData icon, String title,String desc, Color fi
           )
         ]
     ),
-    padding: EdgeInsets.all(5.0),
-    margin: EdgeInsets.fromLTRB(5.0, 5.0, 0.0, 5.0),
+    padding: EdgeInsets.all(7.0),
+    margin: EdgeInsets.fromLTRB(3, 0, 3, 8),
     child: ListTile(
       leading: Icon(icon, color: Colors.blue),
       title: Column(

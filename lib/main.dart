@@ -1,8 +1,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:testing/core/constants/appTheme.dart';
-import 'package:testing/presentation/screens/NotificationsMenu.dart';
-import 'package:testing/presentation/screens/profile_menu_screen.dart';
+import 'package:testing/presentation/screens/NotificationSettingsScreen.dart';
+import 'package:testing/presentation/screens/NotificationsScreen.dart';
+import 'package:testing/presentation/screens/ProfileMenuScreen.dart';
 
 void main() {
   appTheme().theme = "Dark";
