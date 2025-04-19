@@ -10,8 +10,8 @@ class FirebaseAuthImp implements FirebaseAuthi{
   Future<UserCredential> loginUser(String username, String password) async{
     try{
       return await _firebaseAuth.signInWithEmailAndPassword(email: username, password: password);
-    } on FirebaseAuthException catch(e){
-      throw e.toString();
+    } on FirebaseAuthException catch (e) {
+      throw (e.message ?? 'Login failed');
     }
   }
 
@@ -23,7 +23,7 @@ class FirebaseAuthImp implements FirebaseAuthi{
         password: password,
       );
     } on FirebaseAuthException catch (e) {
-      throw e.toString();
+      throw (e.message ?? 'Registration failed');
     }
   }
 
@@ -32,7 +32,16 @@ class FirebaseAuthImp implements FirebaseAuthi{
     try {
       await _firebaseAuth.sendPasswordResetEmail(email: username);
     } on FirebaseAuthException catch (e) {
-      throw e.toString();
+      throw (e.message ?? 'Password reset failed');
+    }
+  }
+
+  @override
+  Future<void> sendEmailVerification() async {
+    try {
+      await _firebaseAuth.currentUser?.sendEmailVerification();
+    } on FirebaseAuthException catch (e) {
+      throw (e.message ?? 'Failed to send verification email');
     }
   }
 
@@ -41,7 +50,7 @@ class FirebaseAuthImp implements FirebaseAuthi{
     try {
       await _firebaseAuth.signOut();
     } on FirebaseAuthException catch (e) {
-      throw e.toString();
+      throw (e.message ?? 'Logout failed');
     }
   }
 
@@ -50,7 +59,7 @@ class FirebaseAuthImp implements FirebaseAuthi{
     try {
       return _firebaseAuth.currentUser;
     } on FirebaseAuthException catch (e) {
-      throw e.toString();
+      throw (e.message ?? 'Failed to get current user');
     }
   }
 }

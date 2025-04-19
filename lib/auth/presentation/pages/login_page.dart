@@ -1,7 +1,9 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../presentation/screens/ProfileMenuScreen.dart';
 import '../bloc/auth_bloc.dart';
 import '../bloc/auth_event.dart';
 import '../bloc/auth_state.dart';
@@ -33,14 +35,33 @@ class _LoginPageState extends State<LoginPage> {
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
         if(state is AuthAuthenticated){
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.message)),
-          );
+          AwesomeDialog(context: context,
+            dialogType: DialogType.success,
+            animType: AnimType.topSlide,
+            title : 'Success',
+            btnOkOnPress:() =>  {
+            Navigator.push(context,
+            MaterialPageRoute(builder: (context) => SSwitchTheme()))
+            },
+            desc : state.message,
+          ).show();
+
+        }
+        if(state is VerificationEmailSent){
+          AwesomeDialog(context: context,
+            dialogType: DialogType.info,
+            animType: AnimType.topSlide,
+            title : 'Alert',
+            desc : state.message,
+          ).show();
         }
         if (state is AuthError) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.message)),
-          );
+          AwesomeDialog(context: context,
+            dialogType: DialogType.error,
+            animType: AnimType.topSlide,
+            title : 'Error',
+            desc : state.message,
+          ).show();
         }
       },
       builder: (context, state) {
@@ -49,7 +70,7 @@ class _LoginPageState extends State<LoginPage> {
         }
 
         return SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(20.0),
           child: Form(
             key: _formKey,
             child: Column(

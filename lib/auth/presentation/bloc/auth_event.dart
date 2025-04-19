@@ -38,4 +38,6 @@ class ForgotPasswordEvent extends AuthEvent {
 
 class GetCurrentUserEvent extends AuthEvent {}
 
+class SendVerificationEmailEvent extends AuthEvent {}
+
 class LogoutEvent extends AuthEvent {}

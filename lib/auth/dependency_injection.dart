@@ -2,6 +2,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:testing_firebase/auth/data/datasources/remote/firebase_auth_imp.dart';
+import 'package:testing_firebase/auth/domain/usecases/send_verification_email.dart';
 import 'package:testing_firebase/auth/presentation/bloc/auth_bloc.dart';
 
 import 'data/datasources/remote/firebase_auth.dart';
@@ -25,6 +26,7 @@ Future<void> init() async {
       forgotPassword: sl(),
       getCurrentUser: sl(),
       logoutUser: sl(),
+      sendVerificationEmail: sl()
     ),
   );
 
@@ -34,6 +36,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => ForgotPassword(sl()));
   sl.registerLazySingleton(() => GetCurrentUser(sl()));
   sl.registerLazySingleton(() => LogoutUser(sl()));
+  sl.registerLazySingleton(() => SendVerificationEmail(sl()));
 
   // Repository
   sl.registerLazySingleton<AuthRepository>(

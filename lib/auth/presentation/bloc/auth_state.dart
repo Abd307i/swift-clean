@@ -32,6 +32,21 @@ class ForgotPasswordSuccess extends AuthState {}
 
 class AuthUnauthenticated extends AuthState {}
 
+class VerificationEmailSent extends AuthState {
+  final String message;
+  const VerificationEmailSent({required this.message});
+
+  @override
+  List<Object> get props => [message];
+}
+
+class EmailNotVerified extends AuthState{
+  final UserEntity user;
+  const EmailNotVerified({required this.user});
+
+  @override
+  List<Object> get props => [user];
+}
 
 class AuthError extends AuthState {
   final String message;

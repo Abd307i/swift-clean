@@ -1,12 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testing_firebase/auth/presentation/bloc/auth_state.dart';
+import 'package:testing_firebase/core/errors/firebase_auth_helper.dart';
 
 import '../../domain/usecases/forgot_password.dart';
 import '../../domain/usecases/get_current.dart';
 import '../../domain/usecases/login_user.dart';
 import '../../domain/usecases/logout_user.dart';
 import '../../domain/usecases/register_user.dart';
+import '../../domain/usecases/send_verification_email.dart';
 import '../../domain/usecases/usecase.dart';
 import 'auth_event.dart';
 
@@ -16,6 +18,7 @@ class AuthBloc extends Bloc<AuthEvent,AuthState>{
   final ForgotPassword forgotPassword;
   final GetCurrentUser getCurrentUser;
   final LogoutUser logoutUser;
+  final SendVerificationEmail sendVerificationEmail;
 
   AuthBloc({
     required this.loginUser,
@@ -23,13 +26,16 @@ class AuthBloc extends Bloc<AuthEvent,AuthState>{
     required this.forgotPassword,
     required this.getCurrentUser,
     required this.logoutUser,
+    required this.sendVerificationEmail
   }) : super(AuthInitial()) {
     on<LoginEvent>(_onLoginEvent);
     on<RegisterEvent>(_onRegisterEvent);
     on<ForgotPasswordEvent>(_onForgotPasswordEvent);
     on<GetCurrentUserEvent>(_onGetCurrentUserEvent);
     on<LogoutEvent>(_onLogoutEvent);
+    on<SendVerificationEmailEvent>(_onSendVerificationEmailEvent);
   }
+
   Future<void> _onLoginEvent(LoginEvent event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
     try {
@@ -37,8 +43,14 @@ class AuthBloc extends Bloc<AuthEvent,AuthState>{
         email: event.email,
         password: event.password,
       ));
-      emit(AuthAuthenticated(user: user, message: "Logged In"));
-    } catch (e) {
+      if(user.emailVerified){
+        emit(AuthAuthenticated(user: user, message: "You Have Logged In Successfully"));
+      }else{
+        emit(VerificationEmailSent(message: 'Chick Your Email For Verification'));
+      }
+      } on FirebaseAuthException catch(e){
+      emit(AuthError(message: getFirebaseAuthErrorMessage(e)));
+    } catch(e) {
       emit(AuthError(message: e.toString()));
     }
   }
@@ -50,21 +62,12 @@ class AuthBloc extends Bloc<AuthEvent,AuthState>{
         email: event.email,
         password: event.password,
       ));
-      emit(RegistrationSuccess(message: "Done"));
+      emit(RegistrationSuccess(message: "Check Your Email For Verification"));
       
-    }  catch (e) {
-      print("yaaaaa");
-      String errorMessage = '';
-        if (e == 'email-already-in-use') {
-          errorMessage = "Email already in use";
-        } else if (e == 'weak-password') {
-          errorMessage = "Weak password";
-        } else if (e == 'invalid-email') {
-          errorMessage = "Invalid email address";
-        } else {
-          errorMessage = "An error occurred";
-        }
-      emit(AuthError(message: errorMessage));
+    } on FirebaseAuthException catch (e) {
+      emit(AuthError(message: getFirebaseAuthErrorMessage(e)));
+    } catch(e){
+      emit(AuthError(message: e.toString()));
     }
   }
 
@@ -97,6 +100,19 @@ class AuthBloc extends Bloc<AuthEvent,AuthState>{
     try {
       await logoutUser.call(NoParams());
       emit(AuthUnauthenticated());
+    } catch (e) {
+      emit(AuthError(message: e.toString()));
+    }
+  }
+
+  Future<void> _onSendVerificationEmailEvent(
+      SendVerificationEmailEvent event,
+      Emitter<AuthState> emit
+      ) async {
+    emit(AuthLoading());
+    try {
+      await sendVerificationEmail.call(NoParams());
+      emit(VerificationEmailSent(message: 'Check Your Email For Verification'));
     } catch (e) {
       emit(AuthError(message: e.toString()));
     }

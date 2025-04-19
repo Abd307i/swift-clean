@@ -35,12 +35,15 @@ class _RegisterPageState extends State<RegisterPage> {
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is RegistrationSuccess) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.message)),
-          );
-          //Navigator.pop(context);
-          print("Done");
+          context.read<AuthBloc>().add(SendVerificationEmailEvent());
+          AwesomeDialog(context: context,
+            dialogType: DialogType.info,
+            animType: AnimType.topSlide,
+            title : 'ِAlert',
+            desc : state.message,
+          ).show();
         }
+
         if (state is AuthError) {
           AwesomeDialog(context: context,
             dialogType: DialogType.error,
@@ -65,8 +68,9 @@ class _RegisterPageState extends State<RegisterPage> {
                   controller: _emailController,
                   labelText: 'Email',
                   validator: (value){
-                    if (value == null || value.isEmpty)
+                    if (value == null || value.isEmpty) {
                       return 'Email is required';
+                    }
                     if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
                       return 'Enter a valid email';
                     }
@@ -79,10 +83,12 @@ class _RegisterPageState extends State<RegisterPage> {
                   controller: _passwordController,
                   labelText: 'Password',
                   validator: (value) {
-                    if (value == null || value.isEmpty)
+                    if (value == null || value.isEmpty) {
                       return 'Password is required';
-                    if (value.length < 6)
+                    }
+                    if (value.length < 6) {
                       return 'Password must be 6+ characters';
+                    }
                     return null; // Validation passed
                   },
                   obscureText: true,
@@ -103,7 +109,6 @@ class _RegisterPageState extends State<RegisterPage> {
                 AuthButton(
                   text: 'Register',
                   onPressed: () {
-                    print("HOIIII");
                     //if (_formKey.currentState!.validate()) {
                       context.read<AuthBloc>().add(RegisterEvent(
                         email: _emailController.text.trim(),
