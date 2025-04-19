@@ -23,7 +23,6 @@ class UserModel extends UserEntity{
       'name':name
     };
   }
-  // TODO
   factory UserModel.fromFirebaseUser(User user) {
     return UserModel(
       id: user.uid,
