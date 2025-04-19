@@ -50,21 +50,20 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDr-KF959uioTSKKqeD2F-5mXz6ExB9YUM',
-    appId: '1:1087044718680:android:9f520857a679dc6e1c7a2d',
-    messagingSenderId: '1087044718680',
-    projectId: 'swiftclean-a6aa1',
-    databaseURL: 'https://swiftclean-a6aa1-default-rtdb.asia-southeast1.firebasedatabase.app',
-    storageBucket: 'swiftclean-a6aa1.firebasestorage.app',
+    apiKey: 'AIzaSyDxtsd2a7LLg3nmUpT23WPhavgcHsIXyGg',
+    appId: '1:385337990962:android:b5f7eb1d456108acad412b',
+    messagingSenderId: '385337990962',
+    projectId: 'swift-clean-c9484',
+    storageBucket: 'swift-clean-c9484.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCNfAVvpkQLxu5ehZDiTCiqtDHRaAGhZe0',
-    appId: '1:1087044718680:ios:a0a7ad41b3b8e8d81c7a2d',
-    messagingSenderId: '1087044718680',
-    projectId: 'swiftclean-a6aa1',
-    databaseURL: 'https://swiftclean-a6aa1-default-rtdb.asia-southeast1.firebasedatabase.app',
-    storageBucket: 'swiftclean-a6aa1.firebasestorage.app',
+    apiKey: 'AIzaSyCTQCJPitN_wZNc6W_1K9xQiUoHMb7oGpY',
+    appId: '1:385337990962:ios:83a556b71c006a22ad412b',
+    messagingSenderId: '385337990962',
+    projectId: 'swift-clean-c9484',
+    storageBucket: 'swift-clean-c9484.firebasestorage.app',
     iosBundleId: 'com.example.testingFirebase',
   );
+
 }

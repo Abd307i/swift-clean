@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:testing_firebase/auth/data/datasources/remote/firebase_auth.dart';
 import 'package:testing_firebase/auth/data/models/UserModel.dart';
 import 'package:testing_firebase/auth/domain/entites/user_entity.dart';
@@ -60,7 +61,7 @@ class AuthRepositoryImp implements AuthRepository{
       final userModel = UserModel.fromFirebaseUser(userCredential.user!);
       return userModel;
     } catch (e) {
-      throw e.toString();
+      throw e;
     }
-  }
+ }
 }

@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testing_firebase/auth/presentation/pages/login_page.dart';
@@ -41,9 +42,12 @@ class _RegisterPageState extends State<RegisterPage> {
           print("Done");
         }
         if (state is AuthError) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.message)),
-          );
+          AwesomeDialog(context: context,
+            dialogType: DialogType.error,
+            animType: AnimType.topSlide,
+            title : 'Error',
+            desc : state.message,
+          ).show();
         }
       },
       builder: (context, state) {

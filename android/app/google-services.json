@@ -1,14 +1,13 @@
 {
   "project_info": {
-    "project_number": "1087044718680",
-    "firebase_url": "https://swiftclean-a6aa1-default-rtdb.asia-southeast1.firebasedatabase.app",
-    "project_id": "swiftclean-a6aa1",
-    "storage_bucket": "swiftclean-a6aa1.firebasestorage.app"
+    "project_number": "385337990962",
+    "project_id": "swift-clean-c9484",
+    "storage_bucket": "swift-clean-c9484.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1087044718680:android:9f520857a679dc6e1c7a2d",
+        "mobilesdk_app_id": "1:385337990962:android:b5f7eb1d456108acad412b",
         "android_client_info": {
           "package_name": "com.example.testing_firebase"
         }
@@ -16,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDr-KF959uioTSKKqeD2F-5mXz6ExB9YUM"
+          "current_key": "AIzaSyDxtsd2a7LLg3nmUpT23WPhavgcHsIXyGg"
         }
       ],
       "services": {

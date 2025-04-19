@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testing_firebase/auth/presentation/bloc/auth_state.dart';
 
@@ -50,8 +51,20 @@ class AuthBloc extends Bloc<AuthEvent,AuthState>{
         password: event.password,
       ));
       emit(RegistrationSuccess(message: "Done"));
-    } catch (e) {
-      emit(AuthError(message: e.toString()));
+      
+    }  catch (e) {
+      print("yaaaaa");
+      String errorMessage = '';
+        if (e == 'email-already-in-use') {
+          errorMessage = "Email already in use";
+        } else if (e == 'weak-password') {
+          errorMessage = "Weak password";
+        } else if (e == 'invalid-email') {
+          errorMessage = "Invalid email address";
+        } else {
+          errorMessage = "An error occurred";
+        }
+      emit(AuthError(message: errorMessage));
     }
   }
 
