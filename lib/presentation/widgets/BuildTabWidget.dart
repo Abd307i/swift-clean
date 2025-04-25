@@ -1,37 +1,61 @@
 import 'package:flutter/material.dart';
-import 'package:testing_firebase/core/constants/PickColorHelper.dart';
-import 'package:testing_firebase/presentation/screens/OrderHistoryScreen.dart';
+import '../../core/constants/PickColorHelper.dart';
 
-Widget BuildTabBar() {
-  return Container(
-    padding: EdgeInsets.symmetric(vertical: 8),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        _buildTabButton('All', 0),
-        _buildTabButton('In Progress', 1),
-        _buildTabButton('Delivered', 2),
-        _buildTabButton('Canceled', 3),
+class BuildTabBar extends StatelessWidget {
+  final Function(int) onTabChanged;
+  final int currentTab;
 
-      ],
-    ),
-  );
-}
+  const BuildTabBar({
+    Key? key,
+    required this.onTabChanged,
+    required this.currentTab,
+  }) : super(key: key);
 
-Widget _buildTabButton(String status, int idx){
-  return Container(
-    color: ColorPickerHelper.colorHelper('backgroundColor'),
-    child: GestureDetector(
-      onDoubleTap: () {
-        OrderHistoryScreen.selectedTab = idx;
-      },
-      child: Text(
-        status,
-        style: TextStyle(
-          color: OrderHistoryScreen.selectedTab == idx ? Colors.blue : ColorPickerHelper.colorHelper('secondaryTextColor'),
-          fontWeight: OrderHistoryScreen.selectedTab == idx ? FontWeight.bold : FontWeight.normal,
-        ),
+  @override
+  Widget build(BuildContext context) {
+    final List<String> tabs = ['All', 'In Progress', 'Delivered', 'Canceled'];
+
+    return Container(
+      height: 48,
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
-    ),
-  );
+      child: Row(
+        children: List.generate(tabs.length, (index) {
+          final isSelected = currentTab == index;
+          return Expanded(
+            child: GestureDetector(
+              onTap: () => onTabChanged(index),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: isSelected ? Colors.indigo.shade500 : Colors.transparent,
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                alignment: Alignment.center,
+                child: Text(
+                  tabs[index],
+                  style: TextStyle(
+                    color: isSelected ? Colors.white : Colors.grey,
+                    fontWeight: isSelected ? FontWeight.w500 : FontWeight.normal,
+                    fontSize: 14,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ),
+          );
+        }),
+      ),
+    );
+  }
 }

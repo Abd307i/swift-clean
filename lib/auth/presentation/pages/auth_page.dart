@@ -1,44 +1,46 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testing_firebase/auth/presentation/bloc/auth_bloc.dart';
+import 'package:testing_firebase/auth/presentation/bloc/auth_event.dart';
 import 'package:testing_firebase/auth/presentation/bloc/auth_state.dart';
-import 'package:testing_firebase/auth/presentation/pages/register_page.dart';
-import 'package:testing_firebase/services/presentation/pages/service_page.dart';
+import 'package:testing_firebase/auth/presentation/pages/sign_in_screen.dart.dart' show SignInScreen;
+import 'package:testing_firebase/presentation/screens/ProfileMenuScreen.dart';
 
-import 'login_page.dart';
-
-class AuthPage extends StatelessWidget{
+class AuthPage extends StatefulWidget {
   const AuthPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return BlocListener<AuthBloc,AuthState>(
-      listener: (context,state){
-        if(state is AuthAuthenticated){
-          //Navigator.push(context,MaterialPageRoute(builder: (context) => const LoginPage()));
-        }
-      },
-      child: DefaultTabController(
-        length: 2,
-        child: Scaffold(
-          appBar: AppBar(
-            title: const Text('Authentication'),
-            bottom: const TabBar(
-              tabs: [
-                Tab(text: 'Login'),
-                Tab(text: 'Register'),
-              ],
-            ),
-          ),
-          body: const TabBarView(
-            children: [
-              LoginPage(),
-              RegisterPage(),
-            ],
-          ),
-        ),
-      ),
-    );
+  State<AuthPage> createState() => _AuthPageState();
+}
+
+class _AuthPageState extends State<AuthPage> {
+  @override
+  void initState() {
+    super.initState();
+    // For testing purposes, we can force logout
+    // Comment this out when you want normal login flow
+    context.read<AuthBloc>().add(LogoutEvent());
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<AuthBloc, AuthState>(
+      builder: (context, state) {
+        // Show loading indicator while checking auth status
+        if (state is AuthLoading) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
+
+        // If authenticated, show the profile screen
+        if (state is AuthAuthenticated) {
+          return SSwitchTheme();
+        }
+
+        // For any other state (including AuthUnauthenticated and AuthInitial), show the sign in screen
+        return SignInScreen();
+      },
+    );
+  }
 }
