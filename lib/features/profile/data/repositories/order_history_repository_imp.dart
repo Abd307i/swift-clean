@@ -31,8 +31,5 @@ class OrderHistoryRepositoryImpl implements OrderHistoryRepository {
     } catch (e) {
       throw Exception('Repository error: $e');
     }
-  }
-  
-  
-  
+  } 
 }
