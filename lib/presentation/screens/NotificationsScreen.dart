@@ -3,6 +3,7 @@ import 'package:testing_firebase/NotificationModel.dart';
 import 'package:testing_firebase/core/constants/PickColorHelper.dart';
 import 'package:testing_firebase/presentation/widgets/BuildNotificationWidget.dart';
 
+import '../../core/constants/appTheme.dart';
 import 'NotificationSettingsScreen.dart';
 
 class NotificationsMenu extends StatelessWidget {
@@ -15,7 +16,7 @@ class NotificationsMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //appTheme().theme = 'Light';
+    appTheme().theme = 'Light';
     _getNotifications();
     if(notifications.isEmpty){
       return Scaffold(
