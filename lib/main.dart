@@ -2,13 +2,15 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:testing_firebase/features/profile/data/datasources/remote/firebase_order_history.dart';
+import 'package:testing_firebase/features/profile/data/repositories/order_history_repository_imp.dart';
+import 'package:testing_firebase/features/profile/domain/repositories/order_history_repository.dart';
+import 'package:testing_firebase/features/profile/domain/usecases/get_order_history.dart';
 import 'package:testing_firebase/services/data/datasource/remote/firebase_service.dart';
 import 'package:testing_firebase/services/data/repositories/service_repositories_imp.dart';
 import 'package:testing_firebase/services/domain/repositories/service_repository.dart';
 import 'package:testing_firebase/services/domain/usecases/get_services.dart';
 import 'package:testing_firebase/services/presentation/bloc/service_bloc.dart';
-import 'package:testing_firebase/services/presentation/bloc/service_event.dart';
-import 'package:testing_firebase/services/presentation/pages/service_page.dart';
 
 import 'auth/dependency_injection.dart' as di;
 import 'auth/presentation/bloc/auth_bloc.dart';
@@ -43,6 +45,21 @@ Future<void> setupDependencies() async {
   getIt.registerFactory<ServiceBloc>(
         () => ServiceBloc(getIt<GetServices>()),
   );
+
+
+  // For OrderHistory
+
+  getIt.registerSingleton<FirebaseOrderHistory>(
+    FirebaseOrderHistory(),
+  );
+
+  getIt.registerSingleton<OrderHistoryRepositoryImpl>(
+    OrderHistoryRepositoryImpl(getIt<FirebaseOrderHistory>()),
+  );
+
+  getIt.registerSingleton<GetOrderHistory>(
+    GetOrderHistory(getIt<OrderHistoryRepository>()),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -63,7 +80,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: const AuthPage(),
+        home: AuthPage(),
       ),
     );
   }

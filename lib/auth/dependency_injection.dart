@@ -6,7 +6,7 @@ import 'package:testing_firebase/auth/domain/usecases/send_verification_email.da
 import 'package:testing_firebase/auth/presentation/bloc/auth_bloc.dart';
 
 import 'data/datasources/remote/firebase_auth.dart';
-import 'data/repositories/auth_repository.dart';
+import 'data/repositories/auth_repository_imp.dart';
 import 'domain/repositories/auth_repository.dart';
 import 'domain/usecases/forgot_password.dart';
 import 'domain/usecases/get_current.dart';

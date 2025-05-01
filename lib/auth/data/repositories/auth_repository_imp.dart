@@ -1,9 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:testing_firebase/auth/data/datasources/remote/firebase_auth.dart';
-import 'package:testing_firebase/auth/data/datasources/remote/firebase_auth_imp.dart';
 import 'package:testing_firebase/auth/data/models/UserModel.dart';
 import 'package:testing_firebase/auth/domain/entites/user_entity.dart';
-import 'package:testing_firebase/auth/domain/repositories/auth_repository.dart';
+
+import '../../domain/repositories/auth_repository.dart';
 
 class AuthRepositoryImp implements AuthRepository{
   final FirebaseAuthi firebaseAuthi;

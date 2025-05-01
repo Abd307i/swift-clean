@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:testing_firebase/auth/data/repositories/auth_repository_imp.dart';
 import 'package:testing_firebase/auth/presentation/bloc/auth_state.dart';
 import 'package:testing_firebase/core/errors/firebase_auth_helper.dart';
 
@@ -84,7 +85,7 @@ class AuthBloc extends Bloc<AuthEvent,AuthState>{
   Future<void> _onGetCurrentUserEvent(GetCurrentUserEvent event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
     try {
-      final user = await getCurrentUser.call(NoParams());
+      final user = await getCurrentUser.repository.getCurrentUser();
       if (user != null) {
         emit(AuthAuthenticated(user: user, message: "Logged In"));
       } else {
