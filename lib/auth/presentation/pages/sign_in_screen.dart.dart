@@ -9,7 +9,7 @@ import 'package:testing_firebase/auth/presentation/pages/sign_up_screen.dart'
     show SignUpScreen;
 import 'package:testing_firebase/presentation/screens/ProfileMenuScreen.dart';
 
-import '../../../information gathering/presentation/pages/info_page.dart';
+import '../../../information_gathering/presentation/pages/info_page.dart';
 
 class SignInScreen extends StatefulWidget {
   static const String routeName = '/sign-in';

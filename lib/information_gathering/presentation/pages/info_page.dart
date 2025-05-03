@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:testing_firebase/information%20gathering/domain/entities/user_details_entity.dart';
+import 'package:testing_firebase/information_gathering/domain/entities/user_details_entity.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:uuid/uuid.dart';
 // Import custom widgets
