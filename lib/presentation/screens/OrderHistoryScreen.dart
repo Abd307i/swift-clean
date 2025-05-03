@@ -1,27 +1,22 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:testing_firebase/OrderHistoryModel.dart';
-import 'package:testing_firebase/presentation/widgets/BuildTabWidget.dart';
-
 import '../../core/constants/PickColorHelper.dart';
 import '../widgets/BuildOrderListWidget.dart';
+import '../widgets/BuildTabWidget.dart';
+import 'OrderHistoryModel.dart';
 
 class OrderHistoryScreen extends StatefulWidget {
   const OrderHistoryScreen({super.key});
-  static int selectedTab = 0;
 
   @override
   _OrderHistoryScreenState createState() => _OrderHistoryScreenState();
-
 }
 
 class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
   final List<OrderHistoryModel> orders = [];
+  static int selectedTab = 0;
 
-  final List<OrderHistoryModel> newOrders = [];
-
-  List<OrderHistoryModel> getNewOrders(){
-    switch (OrderHistoryScreen.selectedTab) {
+  List<OrderHistoryModel> getFilteredOrders() {
+    switch (selectedTab) {
       case 1:
         return orders.where((order) => order.status == 'In Progress').toList();
       case 2:
@@ -33,8 +28,16 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
     }
   }
 
-  void getOrders(){
-    orders.addAll(OrderHistoryModel.getOrders());
+  void getOrders() {
+    if (orders.isEmpty) {
+      orders.addAll(OrderHistoryModel.getOrders());
+    }
+  }
+
+  void _handleTabChange(int index) {
+    setState(() {
+      selectedTab = index;
+    });
   }
 
   @override
@@ -44,20 +47,33 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
       backgroundColor: ColorPickerHelper.colorHelper('backgroundColor'),
       appBar: AppBar(
         backgroundColor: ColorPickerHelper.colorHelper('backgroundColor'),
-        title: Text('Order History',
-            style: TextStyle(color: ColorPickerHelper.colorHelper('mainTextColor'))),
+        elevation: 0,
+        title: Text(
+          'Order History',
+          style: TextStyle(
+            color: ColorPickerHelper.colorHelper('mainTextColor'),
+            fontWeight: FontWeight.w600,
+          ),
+        ),
         centerTitle: true,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_rounded, color: ColorPickerHelper.colorHelper('mainTextColor'),),
-          onPressed:() {
+          icon: Icon(
+            Icons.arrow_back_rounded,
+            color: ColorPickerHelper.colorHelper('mainTextColor'),
+          ),
+          onPressed: () {
             Navigator.pop(context);
-          },),
+          },
+        ),
       ),
       body: Column(
         children: [
-          BuildTabBar(),
+          BuildTabBar(
+            onTabChanged: _handleTabChange,
+            currentTab: selectedTab,
+          ),
           Expanded(
-            child: BuildOrderList(getNewOrders()),
+            child: BuildOrderList(getFilteredOrders()),
           ),
         ],
       ),
