@@ -5,8 +5,11 @@ import 'package:testing_firebase/auth/presentation/bloc/auth_bloc.dart';
 import 'package:testing_firebase/auth/presentation/bloc/auth_event.dart';
 import 'package:testing_firebase/auth/presentation/bloc/auth_state.dart';
 import 'package:testing_firebase/auth/presentation/pages/forgot_password_page.dart';
-import 'package:testing_firebase/auth/presentation/pages/sign_up_screen.dart' show SignUpScreen;
+import 'package:testing_firebase/auth/presentation/pages/sign_up_screen.dart'
+    show SignUpScreen;
 import 'package:testing_firebase/presentation/screens/ProfileMenuScreen.dart';
+
+import '../../../information gathering/presentation/pages/info_page.dart';
 
 class SignInScreen extends StatefulWidget {
   static const String routeName = '/sign-in';
@@ -22,6 +25,16 @@ class _SignInScreenState extends State<SignInScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _rememberMe = false;
+  bool _isInitialBuild = true;
+
+  @override
+  void initState() {
+    super.initState();
+    // Check for current user after first build
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<AuthBloc>().add(GetCurrentUserEvent());
+    });
+  }
 
   @override
   void dispose() {
@@ -34,37 +47,49 @@ class _SignInScreenState extends State<SignInScreen> {
   Widget build(BuildContext context) {
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
-        if (state is AuthAuthenticated) {
+        // Skip showing dialogs during initial build
+        if (_isInitialBuild) {
+          _isInitialBuild = false;
+          return;
+        }
+
+        if (state is AuthAuthenticated && state.message.isNotEmpty) {
+          // NEW: Enhanced success dialog
           AwesomeDialog(
             context: context,
             dialogType: DialogType.success,
             animType: AnimType.topSlide,
-            title: 'Success',
-            btnOkOnPress: () => {
+            title: 'Welcome!', // NEW: More welcoming title
+            btnOkOnPress: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => SSwitchTheme()),
-              )
+              );
             },
             desc: state.message,
           ).show();
         }
-        if (state is VerificationEmailSent) {
+        else if (state is VerificationEmailSent) {
+          // NEW: Warning dialog for unverified email
           AwesomeDialog(
             context: context,
-            dialogType: DialogType.info,
+            dialogType: DialogType.warning, // NEW: Changed to warning style
             animType: AnimType.topSlide,
-            title: 'Alert',
+            title: 'Email Verification Required', // NEW: More specific title
             desc: state.message,
+            btnOkOnPress: () {},
           ).show();
         }
-        if (state is AuthError) {
+        else if (state is AuthError) {
+          // NEW: Enhanced error dialog
           AwesomeDialog(
             context: context,
             dialogType: DialogType.error,
             animType: AnimType.topSlide,
-            title: 'Error',
+            title: 'Login Failed', // NEW: Clear error title
             desc: state.message,
+            btnOkText: 'Try Again', // NEW: Action-oriented button text
+            btnOkOnPress: () {},
           ).show();
         }
       },
@@ -253,8 +278,9 @@ class _SignInScreenState extends State<SignInScreen> {
                         TextButton(
                           onPressed: () {
                             Navigator.push(
-                              context,MaterialPageRoute(builder: (context) =>
-                                SignUpScreen())
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => InformationGatheringScreen()),
                             );
                           },
                           child: const Text(
