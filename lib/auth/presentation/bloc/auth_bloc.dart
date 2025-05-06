@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:testing_firebase/auth/data/repositories/auth_repository_imp.dart';
 import 'package:testing_firebase/auth/presentation/bloc/auth_state.dart';
 import 'package:testing_firebase/core/errors/firebase_auth_helper.dart';
 
@@ -12,7 +13,7 @@ import '../../domain/usecases/send_verification_email.dart';
 import '../../domain/usecases/usecase.dart';
 import 'auth_event.dart';
 
-class AuthBloc extends Bloc<AuthEvent,AuthState>{
+class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final LoginUser loginUser;
   final RegisterUser registerUser;
   final ForgotPassword forgotPassword;
@@ -26,7 +27,7 @@ class AuthBloc extends Bloc<AuthEvent,AuthState>{
     required this.forgotPassword,
     required this.getCurrentUser,
     required this.logoutUser,
-    required this.sendVerificationEmail
+    required this.sendVerificationEmail,
   }) : super(AuthInitial()) {
     on<LoginEvent>(_onLoginEvent);
     on<RegisterEvent>(_onRegisterEvent);
@@ -43,15 +44,26 @@ class AuthBloc extends Bloc<AuthEvent,AuthState>{
         email: event.email,
         password: event.password,
       ));
-      if(user.emailVerified){
-        emit(AuthAuthenticated(user: user, message: "You Have Logged In Successfully"));
-      }else{
-        emit(VerificationEmailSent(message: 'Chick Your Email For Verification'));
+
+      if (user.emailVerified) {
+        emit(AuthAuthenticated(
+            user: user,
+            message: "Login successful! Welcome back."
+        ));
+      } else {
+        emit(VerificationEmailSent(
+            message: 'Please verify your email first. We sent a verification link to ${event.email}'
+        ));
       }
-      } on FirebaseAuthException catch(e){
-      emit(AuthError(message: getFirebaseAuthErrorMessage(e)));
-    } catch(e) {
-      emit(AuthError(message: e.toString()));
+    } on FirebaseAuthException catch (e) {
+      final errorMessage = getFirebaseAuthErrorMessage(e);
+      if (e.code == 'user-not-found' || e.code == 'wrong-password') {
+        emit(AuthError(message: 'Invalid email or password. Please try again.'));
+      } else {
+        emit(AuthError(message: errorMessage));
+      }
+    } catch (e) {
+      emit(AuthError(message: 'An unexpected error occurred. Please try again.'));
     }
   }
 
@@ -63,7 +75,6 @@ class AuthBloc extends Bloc<AuthEvent,AuthState>{
         password: event.password,
       ));
       emit(RegistrationSuccess(message: "Check Your Email For Verification"));
-      
     } on FirebaseAuthException catch (e) {
       emit(AuthError(message: getFirebaseAuthErrorMessage(e)));
     } catch(e){
@@ -82,11 +93,10 @@ class AuthBloc extends Bloc<AuthEvent,AuthState>{
   }
 
   Future<void> _onGetCurrentUserEvent(GetCurrentUserEvent event, Emitter<AuthState> emit) async {
-    emit(AuthLoading());
     try {
-      final user = await getCurrentUser.call(NoParams());
+      final user = await getCurrentUser.repository.getCurrentUser();
       if (user != null) {
-        emit(AuthAuthenticated(user: user, message: "Logged In"));
+        emit(AuthAuthenticated(user: user, message: ""));
       } else {
         emit(AuthUnauthenticated());
       }
@@ -118,5 +128,3 @@ class AuthBloc extends Bloc<AuthEvent,AuthState>{
     }
   }
 }
-
-
