@@ -28,7 +28,12 @@ class AuthAuthenticated extends AuthState {
   List<Object> get props => [user];
 }
 
-class ForgotPasswordSuccess extends AuthState {}
+class ForgotPasswordSuccess extends AuthState {
+  final String message;
+  const ForgotPasswordSuccess({required this.message});
+  @override
+  List<Object> get props => [message];
+}
 
 class AuthUnauthenticated extends AuthState {}
 

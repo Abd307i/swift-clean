@@ -70,9 +70,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   Future<void> _onRegisterEvent(RegisterEvent event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
     try {
-      final user = await registerUser.call(RegisterUserParams(
+        await registerUser.call(RegisterUserParams(
         email: event.email,
         password: event.password,
+        firstName: event.firstName,
+        lastName: event.lastName,
+        phoneNumber: event.phoneNumber
       ));
       emit(RegistrationSuccess(message: "Check Your Email For Verification"));
     } on FirebaseAuthException catch (e) {
@@ -86,7 +89,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(AuthLoading());
     try {
       await forgotPassword.call(event.email);
-      emit(ForgotPasswordSuccess());
+      emit(ForgotPasswordSuccess(message: "Check Your Email For Verification"));
     } catch (e) {
       emit(AuthError(message: e.toString()));
     }

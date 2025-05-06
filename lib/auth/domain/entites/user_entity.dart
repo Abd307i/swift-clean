@@ -1,8 +1,20 @@
-abstract class UserEntity {
-  final String id;
-  final String email;
-  final String? name;
-  final bool emailVerified;
+import 'package:equatable/equatable.dart';
 
-  const UserEntity({required this.id, required this.email, this.name,required this.emailVerified});
+class UserEntity extends Equatable {
+  final String? id;
+  final String? email;
+  final String? firstName;
+  final String? lastName;
+  final String? phoneNumber;
+
+  const UserEntity({
+    required this.id,
+    required this.email,
+    required this.firstName,
+    required this.lastName,
+    required this.phoneNumber
+  });
+
+  @override
+  List<Object?> get props => [id, email,firstName,lastName,phoneNumber];
 }

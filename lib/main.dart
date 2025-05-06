@@ -2,6 +2,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:testing_firebase/auth/presentation%20test/bloc/auth_bloc_test.dart';
+import 'package:testing_firebase/auth/presentation%20test/bloc/auth_event_test.dart';
 import 'package:testing_firebase/features/profile/data/datasources/remote/firebase_order_history.dart';
 import 'package:testing_firebase/features/profile/data/repositories/order_history_repository_imp.dart';
 import 'package:testing_firebase/features/profile/domain/repositories/order_history_repository.dart';
@@ -13,8 +15,6 @@ import 'package:testing_firebase/services/domain/usecases/get_services.dart';
 import 'package:testing_firebase/services/presentation/bloc/service_bloc.dart';
 
 import 'auth/dependency_injection.dart' as di;
-import 'auth/presentation/bloc/auth_bloc.dart';
-import 'auth/presentation/bloc/auth_event.dart';
 import 'auth/presentation/pages/auth_page.dart';
 
 final getIt = GetIt.instance;
@@ -71,7 +71,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => di.sl<AuthBloc>()..add(GetCurrentUserEvent()),
+          create: (context) => di.sl<AuthBlocTest>()..add(GetCurrentUserEventTest()),
         ),
       ],
       child: MaterialApp(

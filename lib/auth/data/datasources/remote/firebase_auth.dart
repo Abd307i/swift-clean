@@ -1,10 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
-abstract class FirebaseAuthi{
-  Future<UserCredential> loginUser(String username, String password);
-  Future<UserCredential> registerUser(String username, String password);
+abstract class AuthRemoteDataSource {
+  Future<void> loginUser(String username, String password);
+  Future<void> registerUser(
+      String username,
+      String password,
+      String firstName,
+      String lastName,
+      String phoneNumber);
+
   Future<void> forgotPassword(String username);
   Future<void> sendEmailVerification();
   Future<void> logout();
-  Future<User?> getCurrentUser();
+  Stream<User?> get authStateChanges;
 }

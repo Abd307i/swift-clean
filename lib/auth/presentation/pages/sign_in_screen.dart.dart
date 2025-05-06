@@ -1,6 +1,9 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:testing_firebase/auth/presentation%20test/bloc/auth_bloc_test.dart';
+import 'package:testing_firebase/auth/presentation%20test/bloc/auth_event_test.dart';
+import 'package:testing_firebase/auth/presentation%20test/bloc/auth_state_test.dart';
 import 'package:testing_firebase/auth/presentation/bloc/auth_bloc.dart';
 import 'package:testing_firebase/auth/presentation/bloc/auth_event.dart';
 import 'package:testing_firebase/auth/presentation/bloc/auth_state.dart';
@@ -32,7 +35,7 @@ class _SignInScreenState extends State<SignInScreen> {
     super.initState();
     // Check for current user after first build
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<AuthBloc>().add(GetCurrentUserEvent());
+      context.read<AuthBlocTest>().add(LogoutEventTest());
     });
   }
 
@@ -45,7 +48,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AuthBloc, AuthState>(
+    return BlocConsumer<AuthBlocTest, AuthStateTest>(
       listener: (context, state) {
         // Skip showing dialogs during initial build
         if (_isInitialBuild) {
@@ -53,7 +56,7 @@ class _SignInScreenState extends State<SignInScreen> {
           return;
         }
 
-        if (state is AuthAuthenticated && state.message.isNotEmpty) {
+        if (state is AuthAuthenticatedTest) {
           // NEW: Enhanced success dialog
           AwesomeDialog(
             context: context,
@@ -69,7 +72,7 @@ class _SignInScreenState extends State<SignInScreen> {
             desc: state.message,
           ).show();
         }
-        else if (state is VerificationEmailSent) {
+        else if (state is VerificationEmailSentTest) {
           // NEW: Warning dialog for unverified email
           AwesomeDialog(
             context: context,
@@ -80,7 +83,7 @@ class _SignInScreenState extends State<SignInScreen> {
             btnOkOnPress: () {},
           ).show();
         }
-        else if (state is AuthError) {
+        else if (state is AuthErrorTest) {
           // NEW: Enhanced error dialog
           AwesomeDialog(
             context: context,
@@ -94,7 +97,7 @@ class _SignInScreenState extends State<SignInScreen> {
         }
       },
       builder: (context, state) {
-        if (state is AuthLoading) {
+        if (state is AuthLoadingTest) {
           return const Scaffold(
             body: Center(child: CircularProgressIndicator()),
           );
@@ -215,7 +218,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
-                          context.read<AuthBloc>().add(LoginEvent(
+                          context.read<AuthBlocTest>().add(LoginEventTest(
                             email: _emailController.text.trim(),
                             password: _passwordController.text.trim(),
                           ));
@@ -261,10 +264,11 @@ class _SignInScreenState extends State<SignInScreen> {
                             border: Border.all(color: Colors.grey.shade300),
                           ),
                           child: Center(
+
                             child: Image.asset(
                               'assets/images/Google.png',
-                              width: 25,
-                              height: 25,
+                              width: 50,
+                              height: 50,
                             ),
                           ),
                         ),
@@ -280,7 +284,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => InformationGatheringScreen()),
+                                  builder: (context) => SignUpScreen()),
                             );
                           },
                           child: const Text(

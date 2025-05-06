@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:testing_firebase/auth/data/datasources/remote/firebase_auth_imp.dart';
 import 'package:testing_firebase/auth/domain/usecases/send_verification_email.dart';
-import 'package:testing_firebase/auth/presentation/bloc/auth_bloc.dart';
+import 'package:testing_firebase/auth/presentation%20test/bloc/auth_bloc_test.dart';
 
 import 'data/datasources/remote/firebase_auth.dart';
 import 'data/repositories/auth_repository_imp.dart';
@@ -20,7 +20,7 @@ Future<void> init() async {
   // Features - Auth
   // Bloc
   sl.registerFactory(
-        () => AuthBloc(
+        () => AuthBlocTest(
       loginUser: sl(),
       registerUser: sl(),
       forgotPassword: sl(),

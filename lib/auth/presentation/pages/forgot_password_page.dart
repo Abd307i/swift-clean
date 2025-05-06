@@ -1,8 +1,11 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:testing_firebase/auth/presentation/bloc/auth_bloc.dart';
-import 'package:testing_firebase/auth/presentation/bloc/auth_event.dart';
-import 'package:testing_firebase/auth/presentation/bloc/auth_state.dart';
+import 'package:testing_firebase/auth/presentation%20test/bloc/auth_event_test.dart';
+import 'package:testing_firebase/auth/presentation/pages/sign_in_screen.dart.dart';
+
+import '../../presentation test/bloc/auth_bloc_test.dart';
+import '../../presentation test/bloc/auth_state_test.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   static const String routeName = '/forgot-password';
@@ -26,21 +29,31 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocConsumer<AuthBloc, AuthState>(
+      body: BlocConsumer<AuthBlocTest, AuthStateTest>(
         listener: (context, state) {
-          if (state is ForgotPasswordSuccess) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Password reset email sent')),
-            );
+          if (state is ForgetPasswordSuccessTest) {
+            AwesomeDialog(
+              context: context,
+              dialogType: DialogType.success,
+              animType: AnimType.topSlide,
+              title: 'Alert',
+              btnOkOnPress: () => {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SignInScreen()),
+                )
+              },
+              desc: state.message,
+            ).show();
             Navigator.pop(context);
-          } else if (state is AuthError) {
+          } else if (state is AuthErrorTest) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(state.message)),
             );
           }
         },
         builder: (context, state) {
-          if (state is AuthLoading) {
+          if (state is AuthLoadingTest) {
             return const Center(child: CircularProgressIndicator());
           }
 
@@ -102,7 +115,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
-                          context.read<AuthBloc>().add(ForgotPasswordEvent(
+                          context.read<AuthBlocTest>().add(ForgotPasswordEventTest(
                             email: _emailController.text.trim(),
                           ));
                         }

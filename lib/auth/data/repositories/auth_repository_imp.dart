@@ -1,51 +1,28 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:testing_firebase/auth/data/datasources/remote/firebase_auth.dart';
-import 'package:testing_firebase/auth/data/models/UserModel.dart';
-import 'package:testing_firebase/auth/domain/entites/user_entity.dart';
 
 import '../../domain/repositories/auth_repository.dart';
 
 class AuthRepositoryImp implements AuthRepository{
-  final FirebaseAuthi firebaseAuthi;
+  final AuthRemoteDataSource remoteDataSource;
 
   AuthRepositoryImp({
-    required this.firebaseAuthi
+    required this.remoteDataSource
 });
 
   @override
   Future<void> forgotPassword(String username) async{
     try {
-      await firebaseAuthi.forgotPassword(username);
+      await remoteDataSource.forgotPassword(username);
     } catch (e) {
       throw e.toString();
     }
   }
 
   @override
-  Future<UserEntity?> getCurrentUser() async{
+  Future<void> loginUser(String username, String password) async {
     try {
-      final user = await firebaseAuthi.getCurrentUser();
-      if (user != null) {
-        final userModel = UserModel.fromFirebaseUser(user);
-        return userModel;
-      }
-      return null;
-    } catch (e) {
-      throw e.toString();
-    }
-  }
-
-  @override
-  Future<UserModel> loginUser(String username, String password) async {
-    try {
-      final userCredential = await firebaseAuthi.loginUser(username, password);
-      final userModel = UserModel.fromFirebaseUser(userCredential.user!);
-
-      if (!userCredential.user!.emailVerified) {
-        await firebaseAuthi.sendEmailVerification();
-        throw ('Please verify your email first');
-      }
-
-      return userModel;
+      await remoteDataSource.loginUser(username, password);
     } catch (e) {
       throw e.toString();
     }
@@ -54,29 +31,29 @@ class AuthRepositoryImp implements AuthRepository{
   @override
   Future<void> logout() async{
     try {
-      await firebaseAuthi.logout();
+      await remoteDataSource.logout();
     } catch (e) {
       throw e.toString();
     }
   }
 
   @override
-  Future<UserModel> registerUser(String username, String password) async {
+  Future<void> registerUser(
+       String username,
+       String password,
+       String firstName,
+       String lastName,
+       String phoneNumber) async {
     try {
-      final userCredential = await firebaseAuthi.registerUser(username, password);
-      final userModel = UserModel.fromFirebaseUser(userCredential.user!);
-      return userModel;
+      await remoteDataSource.registerUser(username,password,firstName,lastName,phoneNumber);
     } catch (e) {
       throw e.toString();
     }
  }
 
   @override
-  Future<void> sendEmailVerification() async {
-    try {
-      await firebaseAuthi.sendEmailVerification();
-    } catch (e) {
-      throw e.toString();
-    }
+  Stream <User?> authStateChanges(){
+    return remoteDataSource.authStateChanges;
   }
+
 }

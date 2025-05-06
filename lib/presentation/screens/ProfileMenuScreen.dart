@@ -17,6 +17,7 @@ class SSwitchTheme extends StatefulWidget{
 }
 
 class ProfileScreen extends State<SSwitchTheme> {
+
   @override
   Widget build(BuildContext context) {
     appTheme().theme = 'Light';

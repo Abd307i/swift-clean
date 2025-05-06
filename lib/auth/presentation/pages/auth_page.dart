@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:testing_firebase/auth/presentation%20test/bloc/auth_bloc_test.dart';
+import 'package:testing_firebase/auth/presentation%20test/bloc/auth_event_test.dart';
+import 'package:testing_firebase/auth/presentation%20test/bloc/auth_state_test.dart';
 import 'package:testing_firebase/auth/presentation/bloc/auth_bloc.dart';
 import 'package:testing_firebase/auth/presentation/bloc/auth_event.dart';
 import 'package:testing_firebase/auth/presentation/bloc/auth_state.dart';
@@ -19,22 +22,22 @@ class _AuthPageState extends State<AuthPage> {
     super.initState();
     // For testing purposes, we can force logout
     // Comment this out when you want normal login flow
-    context.read<AuthBloc>().add(LogoutEvent());
+    context.read<AuthBlocTest>().add(LogoutEventTest());
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AuthBloc, AuthState>(
+    return BlocBuilder<AuthBlocTest, AuthStateTest>(
       builder: (context, state) {
         // Show loading indicator while checking auth status
-        if (state is AuthLoading) {
+        if (state is AuthLoadingTest) {
           return const Scaffold(
             body: Center(child: CircularProgressIndicator()),
           );
         }
 
         // If authenticated, show the profile screen
-        if (state is AuthAuthenticated) {
+        if (state is AuthAuthenticatedTest) {
           return SSwitchTheme();
         }
 

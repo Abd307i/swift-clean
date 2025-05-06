@@ -7,16 +7,18 @@ class UserModel extends UserEntity{
   const UserModel({
     required String id,
     required String email,
-    required bool emailVerified,
-    String? name,
-}) : super(id: id, email:email, name: name, emailVerified: emailVerified);
+    required String firstName,
+    required String lastName,
+    required String phoneNumber
+}) : super(id: id, email:email, firstName: firstName, lastName: lastName, phoneNumber: phoneNumber);
 
   factory UserModel.fromJson(Map<String, dynamic> json){
     return UserModel(
       id: json['id'],
       email: json['email'],
-      name: json['name'],
-      emailVerified: json['emailVerified']
+      firstName: json['firstName'],
+      lastName: json['lastName'],
+      phoneNumber: json['phone'],
     );
   }
 
@@ -24,15 +26,18 @@ class UserModel extends UserEntity{
     return {
       'id':id,
       'email':email,
-      'name':name
+      'firstName':firstName,
+      'lastName':lastName,
+      'phone': phoneNumber
     };
   }
   factory UserModel.fromFirebaseUser(User user) {
     return UserModel(
       id: user.uid,
       email: user.email ?? '',
-      name: user.displayName,
-      emailVerified: user.emailVerified
+      firstName: user.displayName??'',
+      lastName: user.displayName??'',
+      phoneNumber: user.phoneNumber??''
     );
   }
 }
