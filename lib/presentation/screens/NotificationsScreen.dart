@@ -33,7 +33,7 @@ class NotificationsMenu extends StatelessWidget {
             IconButton(onPressed:() {
               Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Notificationsettings()
+                  MaterialPageRoute(builder: (context) => NotificationSettingsScreen()
                   )
               );
             },icon: Icon(Icons.settings,color: ColorPickerHelper.colorHelper('mainTextColor'),))
@@ -71,7 +71,7 @@ class NotificationsMenu extends StatelessWidget {
           IconButton(onPressed:() {
             Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => Notificationsettings()
+                MaterialPageRoute(builder: (context) => NotificationSettingsScreen()
                 )
             );
           },icon: Icon(Icons.settings,color: ColorPickerHelper.colorHelper('mainTextColor')))

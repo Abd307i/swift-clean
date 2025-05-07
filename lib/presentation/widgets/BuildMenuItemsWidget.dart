@@ -1,8 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-
-Widget buildMenuItem(IconData icon, String title, Color fieldBackgroundColor, Color mainTextColor) {
+Widget buildMenuItem(
+    IconData icon,
+    String title,
+    Color fieldBackgroundColor,
+    Color mainTextColor,
+    {VoidCallback? onTapCallback}
+    ) {
   return Container(
     decoration: BoxDecoration(
         color: fieldBackgroundColor,
@@ -20,11 +25,9 @@ Widget buildMenuItem(IconData icon, String title, Color fieldBackgroundColor, Co
       leading: Icon(icon, color: Colors.blue),
       title: Text(
         title,
-        style: TextStyle(fontSize: 16,color: mainTextColor),
+        style: TextStyle(fontSize: 16, color: mainTextColor),
       ),
-      onTap: () {
-        // Handle menu item tap
-      },
+      onTap: onTapCallback,
     ),
   );
 }

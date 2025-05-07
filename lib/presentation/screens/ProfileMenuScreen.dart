@@ -1,8 +1,8 @@
-
 import 'package:flutter/material.dart';
 import 'package:testing_firebase/core/constants/appTheme.dart';
 import 'package:testing_firebase/core/constants/PickColorHelper.dart';
 import 'package:testing_firebase/presentation/screens/HelpCenterScreen.dart';
+import 'package:testing_firebase/presentation/screens/InviteFriendsScreen.dart';
 import 'package:testing_firebase/presentation/screens/NotificationsScreen.dart';
 import 'package:testing_firebase/presentation/widgets/BuildMenuItemsWidget.dart';
 import 'package:testing_firebase/presentation/widgets/BuildSignOutWidget.dart';
@@ -121,9 +121,17 @@ class ProfileScreen extends State<SSwitchTheme> {
                       buildMenuItem(
                           Icons.local_offer, 'Offer',ColorPickerHelper.colorHelper('fieldBackgroundColor')
                           ,ColorPickerHelper.colorHelper('mainTextColor')),
-                      buildMenuItem(
-                          Icons.group_add, 'Invite Friends',ColorPickerHelper.colorHelper('fieldBackgroundColor')
-                          ,ColorPickerHelper.colorHelper('mainTextColor')),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => InviteFriendsScreen()),
+                          );
+                        },
+                        child: buildMenuItem(
+                            Icons.group_add, 'Invite Friends',ColorPickerHelper.colorHelper('fieldBackgroundColor')
+                            ,ColorPickerHelper.colorHelper('mainTextColor')),
+                      ),
                       GestureDetector(
                         onDoubleTap:(){
                           Navigator.push(
