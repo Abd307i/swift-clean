@@ -1,7 +1,6 @@
 import 'package:testing_firebase/auth/domain/entites/user_entity.dart';
+import 'package:testing_firebase/auth/domain/repositories/auth_repository.dart';
 import 'package:testing_firebase/auth/domain/usecases/usecase.dart';
-
-import '../repositories/auth_repository.dart';
 
 class LoginUser implements UseCase<UserEntity,LoginUserParams>{
   final AuthRepository repository;
@@ -10,11 +9,7 @@ class LoginUser implements UseCase<UserEntity,LoginUserParams>{
 
   @override
   Future<UserEntity> call(LoginUserParams params) async {
-    final user = await repository.loginUser(params.email, params.password);
-    if(!user.emailVerified){
-      throw 'Please Verify Your Email First';
-    }
-    return user;
+    return await repository.loginUser(params.email, params.password);
   }
 
 }

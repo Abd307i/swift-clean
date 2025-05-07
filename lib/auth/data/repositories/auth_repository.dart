@@ -1,8 +1,7 @@
 import 'package:testing_firebase/auth/data/datasources/remote/firebase_auth.dart';
 import 'package:testing_firebase/auth/data/models/UserModel.dart';
 import 'package:testing_firebase/auth/domain/entites/user_entity.dart';
-
-import '../../domain/repositories/auth_repository.dart';
+import 'package:testing_firebase/auth/domain/repositories/auth_repository.dart';
 
 class AuthRepositoryImp implements AuthRepository{
   final FirebaseAuthi firebaseAuthi;
@@ -39,12 +38,6 @@ class AuthRepositoryImp implements AuthRepository{
     try {
       final userCredential = await firebaseAuthi.loginUser(username, password);
       final userModel = UserModel.fromFirebaseUser(userCredential.user!);
-
-      if (!userCredential.user!.emailVerified) {
-        await firebaseAuthi.sendEmailVerification();
-        throw ('Please verify your email first');
-      }
-
       return userModel;
     } catch (e) {
       throw e.toString();
@@ -69,7 +62,7 @@ class AuthRepositoryImp implements AuthRepository{
     } catch (e) {
       throw e.toString();
     }
- }
+  }
 
   @override
   Future<void> sendEmailVerification() async {

@@ -1,15 +1,16 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:testing_firebase/auth/presentation/bloc/auth_bloc.dart';
-import 'package:testing_firebase/auth/presentation/bloc/auth_event.dart';
-import 'package:testing_firebase/auth/presentation/bloc/auth_state.dart';
-import 'package:testing_firebase/auth/presentation/pages/sign_in_screen.dart.dart' show SignInScreen;
+
+import '../bloc/auth_bloc.dart';
+import '../bloc/auth_event.dart';
+import '../bloc/auth_state.dart';
+import 'login_page.dart';
 
 class SignUpScreen extends StatefulWidget {
   static const String routeName = '/sign-up';
 
-  const SignUpScreen({Key? key}) : super(key: key);
+  const SignUpScreen({super.key});
 
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
@@ -35,23 +36,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Widget build(BuildContext context) {
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
-        if (state is RegistrationSuccess) {
-          context.read<AuthBloc>().add(SendVerificationEmailEvent());
-          AwesomeDialog(
-            context: context,
-            dialogType: DialogType.info,
-            animType: AnimType.topSlide,
-            title: 'Alert',
-            desc: state.message,
-          ).show();
-        }
-
         if (state is AuthError) {
           AwesomeDialog(
             context: context,
             dialogType: DialogType.error,
             animType: AnimType.topSlide,
             title: 'Error',
+            desc: state.message,
+          ).show();
+        }else if (state is RegistrationSuccess) {
+          context.read<AuthBloc>().add(SendVerificationEmailEvent());
+          AwesomeDialog(
+            context: context,
+            dialogType: DialogType.info,
+            animType: AnimType.topSlide,
+            title: 'Alert',
             desc: state.message,
           ).show();
         }
@@ -260,10 +259,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           const Text("Already have an account?"),
                           TextButton(
                             onPressed: () {
-                          Navigator.push(
-                              context,MaterialPageRoute(builder: (context) =>
-                              SignInScreen())
-                                            );
+                              Navigator.push(
+                                  context,MaterialPageRoute(builder: (context) =>
+                                  LoginPage())
+                              );
                             },
                             child: const Text(
                               'Sign In',

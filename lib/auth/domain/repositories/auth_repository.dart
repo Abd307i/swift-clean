@@ -4,8 +4,9 @@ abstract class AuthRepository {
   Future<UserEntity> loginUser(String username, String password);
   Future<UserEntity> registerUser(String username, String password);
   Future<void> forgotPassword(String username);
-  Future<void> sendEmailVerification();
   Future<void> logout();
 
   Future<UserEntity?> getCurrentUser();
+
+  sendEmailVerification() {}
 }
