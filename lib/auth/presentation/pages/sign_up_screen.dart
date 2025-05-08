@@ -1,15 +1,17 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:testing_firebase/auth/presentation/bloc/auth_bloc.dart';
-import 'package:testing_firebase/auth/presentation/bloc/auth_event.dart';
-import 'package:testing_firebase/auth/presentation/bloc/auth_state.dart';
-import 'package:testing_firebase/auth/presentation/pages/sign_in_screen.dart.dart' show SignInScreen;
+import 'package:testing_firebase/auth/presentation/pages/sign_in_screen.dart';
+
+import '../bloc/auth_bloc.dart';
+import '../bloc/auth_event.dart';
+import '../bloc/auth_state.dart';
+import '../widgets/auth_text_field.dart';
 
 class SignUpScreen extends StatefulWidget {
   static const String routeName = '/sign-up';
 
-  const SignUpScreen({Key? key}) : super(key: key);
+  const SignUpScreen({super.key});
 
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
@@ -17,18 +19,22 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _fullNameController = TextEditingController();
+  final _firstNameController = TextEditingController();
+  final _lastNameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  final _phoneNumberController = TextEditingController();
 
   @override
   void dispose() {
-    _fullNameController.dispose();
-    _emailController.dispose();
-    _passwordController.dispose();
-    _confirmPasswordController.dispose();
-    super.dispose();
+      _firstNameController.dispose();
+      _lastNameController.dispose();
+      _emailController.dispose();
+      _passwordController.dispose();
+      _confirmPasswordController.dispose();
+      _phoneNumberController.dispose();
+      super.dispose();
   }
 
   @override
@@ -91,8 +97,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                       ),
                       const SizedBox(height: 40),
-                      TextFormField(
-                        controller: _fullNameController,
+
+                      AuthTextField(
+                        controller: _firstNameController,
+                        hintText: 'First Name',
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'First name is required';
+                          }
+                          return null;
+                        },
+                      ),
+
+                      /*TextFormField(
+                        controller: _firstNameController,
                         decoration: InputDecoration(
                           hintText: 'Full Name',
                           filled: true,
@@ -112,9 +130,39 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           }
                           return null;
                         },
-                      ),
+                      ),*/
+
                       const SizedBox(height: 16),
-                      TextFormField(
+
+                      AuthTextField(
+                        controller: _lastNameController,
+                        hintText: 'Last Name',
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Last name is required';
+                          }
+                          return null;
+                        },
+                      ),
+
+                      const SizedBox(height: 16),
+
+                      AuthTextField(
+                        controller: _emailController,
+                        hintText: 'Email',
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Email is required';
+                          }
+                          if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                              .hasMatch(value)) {
+                            return 'Enter a valid email';
+                          }
+                          return null;
+                        },
+                      ),
+
+                      /*TextFormField(
                         controller: _emailController,
                         keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
@@ -140,9 +188,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           }
                           return null;
                         },
-                      ),
+                      ),*/
+
                       const SizedBox(height: 16),
-                      TextFormField(
+
+                      AuthTextField(
+                        controller: _passwordController,
+                        hintText: 'Password',
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Password is required';
+                          }
+                          if (value.length < 6) {
+                            return 'Password must be 6+ characters';
+                          }
+                          return null;
+                        },
+                      ),
+
+                      /*TextFormField(
                         controller: _passwordController,
                         obscureText: true,
                         decoration: InputDecoration(
@@ -168,9 +232,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           }
                           return null;
                         },
-                      ),
+                      ),*/
+
                       const SizedBox(height: 16),
-                      TextFormField(
+
+                      AuthTextField(
+                        controller: _confirmPasswordController,
+                        hintText: 'Confirm Password',
+                        validator: (value) {
+                          if (value != _passwordController.text) {
+                            return 'Passwords do not match';
+                          }
+                          return null;
+                        },
+                      ),
+
+                      /*TextFormField(
                         controller: _confirmPasswordController,
                         obscureText: true,
                         decoration: InputDecoration(
@@ -193,15 +270,35 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           }
                           return null;
                         },
+                      ),*/
+
+                      const SizedBox(height: 16),
+
+                      AuthTextField(
+                        controller: _phoneNumberController,
+                        hintText: 'Phone Number',
+                        validator: (value) {
+                          if (value.toString().length != 10) {
+                            return 'Phone Number Must Be 10 Digits Start with 07 xxxx xxxx';
+                          }
+                          return null;
+                        },
                       ),
+
                       const SizedBox(height: 30),
+
                       ElevatedButton(
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
-                            context.read<AuthBloc>().add(RegisterEvent(
-                              email: _emailController.text.trim(),
-                              password: _passwordController.text.trim(),
-                            ));
+                            context.read<AuthBloc>().add(
+                                RegisterEvent(
+                                  email: _emailController.text.trim(),
+                                  password: _passwordController.text.trim(),
+                                  firstName: _firstNameController.text.trim(),
+                                  lastName: _lastNameController.text.trim(),
+                                  phone: _phoneNumberController.text.trim(),
+                                )
+                            );
                           }
                         },
                         style: ElevatedButton.styleFrom(
@@ -260,10 +357,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           const Text("Already have an account?"),
                           TextButton(
                             onPressed: () {
-                          Navigator.push(
-                              context,MaterialPageRoute(builder: (context) =>
-                              SignInScreen())
-                                            );
+                              Navigator.push(
+                                  context,MaterialPageRoute(builder: (context) =>
+                                  SignInScreen())
+                              );
                             },
                             child: const Text(
                               'Sign In',
@@ -279,6 +376,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
           ),
         );
+
       },
     );
   }

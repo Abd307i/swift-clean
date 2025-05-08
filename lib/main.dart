@@ -17,6 +17,7 @@ import 'auth/presentation/bloc/auth_bloc.dart';
 import 'auth/presentation/bloc/auth_event.dart';
 import 'auth/presentation/pages/auth_page.dart';
 
+
 final getIt = GetIt.instance;
 
 Future<void> main() async {
@@ -71,7 +72,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => di.sl<AuthBloc>()..add(GetCurrentUserEvent()),
+          create: (context) => di.sl<AuthBloc>()..add(LogoutEvent()),
         ),
       ],
       child: MaterialApp(

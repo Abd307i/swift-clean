@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:testing_firebase/auth/presentation/pages/sign_in_screen.dart';
 import 'package:testing_firebase/core/constants/appTheme.dart';
 import 'package:testing_firebase/core/constants/PickColorHelper.dart';
 import 'package:testing_firebase/presentation/screens/HelpCenterScreen.dart';
@@ -148,7 +149,17 @@ class ProfileScreen extends State<SSwitchTheme> {
                     ],
                   ),
                   SizedBox(height: 20),
-                  buildSignOutItem(Icons.exit_to_app, 'Sign Out'),
+
+                  GestureDetector(
+                    onDoubleTap:(){
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => SignInScreen()));
+                    },
+                    child: buildSignOutItem(Icons.exit_to_app, 'Sign Out'),
+                  ),
+
+
                   // Sign Out Button
                 ],
               ),

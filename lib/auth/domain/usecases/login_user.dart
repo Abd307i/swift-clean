@@ -1,7 +1,6 @@
 import 'package:testing_firebase/auth/domain/entites/user_entity.dart';
+import 'package:testing_firebase/auth/domain/repositories/auth_repository.dart';
 import 'package:testing_firebase/auth/domain/usecases/usecase.dart';
-
-import '../repositories/auth_repository.dart';
 
 class LoginUser implements UseCase<UserEntity,LoginUserParams>{
   final AuthRepository repository;

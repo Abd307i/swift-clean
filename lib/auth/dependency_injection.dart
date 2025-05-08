@@ -1,8 +1,8 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:testing_firebase/auth/data/datasources/remote/firebase_auth_imp.dart';
-import 'package:testing_firebase/auth/domain/usecases/send_verification_email.dart';
 import 'package:testing_firebase/auth/presentation/bloc/auth_bloc.dart';
 
 import 'data/datasources/remote/firebase_auth.dart';
@@ -13,6 +13,7 @@ import 'domain/usecases/get_current.dart';
 import 'domain/usecases/login_user.dart';
 import 'domain/usecases/logout_user.dart';
 import 'domain/usecases/register_user.dart';
+import 'domain/usecases/send_verification_email.dart';
 
 final sl = GetIt.instance;
 
@@ -21,12 +22,12 @@ Future<void> init() async {
   // Bloc
   sl.registerFactory(
         () => AuthBloc(
-      loginUser: sl(),
-      registerUser: sl(),
-      forgotPassword: sl(),
-      getCurrentUser: sl(),
-      logoutUser: sl(),
-      sendVerificationEmail: sl()
+        loginUser: sl(),
+        registerUser: sl(),
+        forgotPassword: sl(),
+        getCurrentUser: sl(),
+        logoutUser: sl(),
+        sendVerificationEmail: sl()
     ),
   );
 
@@ -47,6 +48,6 @@ Future<void> init() async {
 
   // Data sources
   sl.registerLazySingleton<FirebaseAuthi>(
-        () => FirebaseAuthImp(FirebaseAuth.instance),
+        () => FirebaseAuthImp(FirebaseAuth.instance,FirebaseFirestore.instance),
   );
 }
