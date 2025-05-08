@@ -2,10 +2,8 @@
 // It delegates calls to the NotificationDataSource, acting as a bridge between the domain layer and the data layer.
 // This maintains clean architecture by isolating Firebase-specific logic from the rest of the application.
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:testing_firebase/notification/data/datasources/remote/notification_remote_data_source.dart';
 import 'package:testing_firebase/notification/data/models/notification_model.dart';
-import 'package:testing_firebase/notification/domain/repositories/notification_repository.dart';
 
 abstract class NotificationRepository {
   Future<void> createNotification(NotificationModel notification);
@@ -14,7 +12,7 @@ abstract class NotificationRepository {
     String? shopId,
   });
   Future<void> updateNotificationReadStatus(String notificationId);
-  Future<List<String>> getNearbyDrivers(GeoPoint shopLocation, double radiusInKm);
+  //Future<List<String>> getNearbyDrivers(GeoPoint shopLocation, double radiusInKm);
   Future<void> setOrderStatus(String orderId, String status);
 }
 
@@ -45,9 +43,9 @@ class NotificationRepositoryImpl implements NotificationRepository {
   }
 
   @override
-  Future<List<String>> getNearbyDrivers(GeoPoint shopLocation, double radiusInKm) async {
+  /*Future<List<String>> getNearbyDrivers(GeoPoint shopLocation, double radiusInKm) async {
     return await _dataSource.getNearbyDrivers(shopLocation, radiusInKm);
-  }
+  }*/
 
   @override
   Future<void> setOrderStatus(String orderId, String status) async {

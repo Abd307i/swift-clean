@@ -7,12 +7,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:testing_firebase/notification/data/models/notification_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:geoflutterfire2/geoflutterfire2.dart';
-import 'package:geoflutterfire/geoflutterfire.dart';
+//import 'package:geoflutterfire2/geoflutterfire2.dart';
+//import 'package:geoflutterfire/geoflutterfire.dart';
 
 class NotificationDataSource {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final GeoFlutterFire _geo = GeoFlutterFire(); // geoflutterfire2 for geolocation queries
+  //final GeoFlutterFire _geo = GeoFlutterFire(); // geoflutterfire2 for geolocation queries
   final FirebaseMessaging _messaging = FirebaseMessaging.instance; // FirebaseMessaging for push notifications
 
   // Creates a new notification in Firestore and sends a push notification.
@@ -62,7 +62,7 @@ class NotificationDataSource {
 
   // Finds nearby drivers within a specified radius from a shop's location.
   // Uses geoflutterfire2 to query Users with a 'location' GeoPoint field.
-  Future<List<String>> getNearbyDrivers(GeoPoint shopLocation, double radiusInKm) async {
+  /*Future<List<String>> getNearbyDrivers(GeoPoint shopLocation, double radiusInKm) async {
     try {
       final center = _geo.point(
         latitude: shopLocation.latitude,
@@ -80,7 +80,7 @@ class NotificationDataSource {
     } catch (e) {
       throw Exception('Error finding nearby drivers: $e');
     }
-  }
+  }*/
 
   // Updates the status of an order in Firestore.
   Future<void> setOrderStatus(String orderId, String status) async {

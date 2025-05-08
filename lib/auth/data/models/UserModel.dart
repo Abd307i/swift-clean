@@ -1,20 +1,29 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:testing_firebase/auth/domain/entites/user_entity.dart';
 
+import 'address_model.dart';
+
+
 class UserModel extends UserEntity{
   const UserModel({
-    required String id,
-    required String email,
-    String? name,
-    required bool emailVerified
-}) : super(id: id, email:email, name: name,emailVerified: emailVerified);
+    required super.id,
+    required super.email,
+    required super.firstName,
+    required super.lastName,
+    required super.phone,
+    super.address,
+    required super.emailVerified,
+  });
 
   factory UserModel.fromJson(Map<String, dynamic> json){
     return UserModel(
-      id: json['id'],
-      email: json['email'],
-      name: json['name'],
-      emailVerified: json['emailVerified']
+        id: json['id'],
+        email: json['email'],
+        firstName: json['firstName'],
+        lastName: json['lastName'],
+        phone:json['phone'],
+        address: json['address'],
+        emailVerified: json['emailVerified']
     );
   }
 
@@ -22,15 +31,30 @@ class UserModel extends UserEntity{
     return {
       'id':id,
       'email':email,
-      'name':name
+      'firstName': firstName,
+      'lastName': lastName,
+      'phone': phone,
+      'address': address,
+      'emailVerified': emailVerified
     };
   }
-  factory UserModel.fromFirebaseUser(User user) {
+  factory UserModel.fromFirebaseUser(User user, {Map<String, dynamic>? data}) {
     return UserModel(
       id: user.uid,
       email: user.email ?? '',
-      name: user.displayName,
-      emailVerified: false
+      firstName: data?['firstName'] ?? '',
+      lastName: data?['lastName'] ?? '',
+      phone: data?['phone'] ?? '',
+      address: data?['address'] != null
+          ? AddressModel.fromJson(data!['address'])
+          : const AddressModel( // Default empty address
+        street: '',
+        city: '',
+        postalCode: '',
+        lat: 0,
+        lng: 0,
+      ),
+      emailVerified: user.emailVerified,
     );
   }
 }

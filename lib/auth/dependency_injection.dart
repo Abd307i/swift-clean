@@ -1,11 +1,12 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:testing_firebase/auth/data/datasources/remote/firebase_auth_imp.dart';
 import 'package:testing_firebase/auth/presentation/bloc/auth_bloc.dart';
 
 import 'data/datasources/remote/firebase_auth.dart';
-import 'data/repositories/auth_repository.dart';
+import 'data/repositories/auth_repository_imp.dart';
 import 'domain/repositories/auth_repository.dart';
 import 'domain/usecases/forgot_password.dart';
 import 'domain/usecases/get_current.dart';
@@ -47,6 +48,6 @@ Future<void> init() async {
 
   // Data sources
   sl.registerLazySingleton<FirebaseAuthi>(
-        () => FirebaseAuthImp(FirebaseAuth.instance),
+        () => FirebaseAuthImp(FirebaseAuth.instance,FirebaseFirestore.instance),
   );
 }

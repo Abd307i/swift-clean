@@ -1,15 +1,13 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:testing_firebase/auth/presentation/bloc/auth_bloc.dart';
-import 'package:testing_firebase/auth/presentation/bloc/auth_event.dart';
-import 'package:testing_firebase/auth/presentation/bloc/auth_state.dart';
-import 'package:testing_firebase/auth/presentation/pages/forgot_password_page.dart';
-import 'package:testing_firebase/auth/presentation/pages/sign_up_screen.dart'
-    show SignUpScreen;
-import 'package:testing_firebase/presentation/screens/ProfileMenuScreen.dart';
+import 'package:testing_firebase/auth/presentation/pages/sign_up_screen.dart';
 
-import '../../../information_gathering/presentation/pages/info_page.dart';
+import '../../../presentation/screens/ProfileMenuScreen.dart';
+import '../bloc/auth_bloc.dart';
+import '../bloc/auth_event.dart';
+import '../bloc/auth_state.dart';
+import 'forgot_password_page.dart';
 
 class SignInScreen extends StatefulWidget {
   static const String routeName = '/sign-in';
@@ -25,16 +23,6 @@ class _SignInScreenState extends State<SignInScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _rememberMe = false;
-  bool _isInitialBuild = true;
-
-  @override
-  void initState() {
-    super.initState();
-    // Check for current user after first build
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<AuthBloc>().add(GetCurrentUserEvent());
-    });
-  }
 
   @override
   void dispose() {
@@ -47,49 +35,38 @@ class _SignInScreenState extends State<SignInScreen> {
   Widget build(BuildContext context) {
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
-        // Skip showing dialogs during initial build
-        if (_isInitialBuild) {
-          _isInitialBuild = false;
-          return;
-        }
-
-        if (state is AuthAuthenticated && state.message.isNotEmpty) {
-          // NEW: Enhanced success dialog
+        if (state is AuthAuthenticated) {
           AwesomeDialog(
             context: context,
             dialogType: DialogType.success,
             animType: AnimType.topSlide,
-            title: 'Welcome!', // NEW: More welcoming title
-            btnOkOnPress: () {
+            title: 'Success',
+            btnOkOnPress: () => {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => SSwitchTheme()),
-              );
+              )
             },
             desc: state.message,
           ).show();
+
         }
-        else if (state is VerificationEmailSent) {
-          // NEW: Warning dialog for unverified email
+        if (state is VerificationEmailSent) {
           AwesomeDialog(
             context: context,
-            dialogType: DialogType.warning, // NEW: Changed to warning style
+            dialogType: DialogType.info,
             animType: AnimType.topSlide,
-            title: 'Email Verification Required', // NEW: More specific title
+            title: 'Alert',
             desc: state.message,
-            btnOkOnPress: () {},
           ).show();
         }
-        else if (state is AuthError) {
-          // NEW: Enhanced error dialog
+        if (state is AuthError) {
           AwesomeDialog(
             context: context,
             dialogType: DialogType.error,
             animType: AnimType.topSlide,
-            title: 'Login Failed', // NEW: Clear error title
+            title: 'Error',
             desc: state.message,
-            btnOkText: 'Try Again', // NEW: Action-oriented button text
-            btnOkOnPress: () {},
           ).show();
         }
       },
@@ -278,9 +255,8 @@ class _SignInScreenState extends State<SignInScreen> {
                         TextButton(
                           onPressed: () {
                             Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => InformationGatheringScreen()),
+                                context,MaterialPageRoute(builder: (context) =>
+                                SignUpScreen())
                             );
                           },
                           child: const Text(

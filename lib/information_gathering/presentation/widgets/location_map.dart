@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+/*mport 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class LocationMap extends StatelessWidget {
@@ -47,4 +47,4 @@ class LocationMap extends StatelessWidget {
       ),
     );
   }
-}
+}*/
