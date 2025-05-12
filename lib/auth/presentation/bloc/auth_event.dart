@@ -1,4 +1,7 @@
+
 import 'package:equatable/equatable.dart';
+
+import '../../domain/entites/adddress_entity.dart';
 
 abstract class AuthEvent extends Equatable{
   const AuthEvent();
@@ -20,11 +23,20 @@ class LoginEvent extends AuthEvent {
 class RegisterEvent extends AuthEvent {
   final String email;
   final String password;
+  final String firstName;
+  final String lastName;
+  final String phone;
+  final AddressEntity? address;
 
-  const RegisterEvent({required this.email, required this.password});
+  const RegisterEvent({required this.email,
+    required this.password,
+    required this.firstName,
+    required this.lastName,
+    required this.phone,
+    this.address,});
 
   @override
-  List<Object> get props => [email, password];
+  List<Object> get props => [email, password,firstName,lastName,phone];
 }
 
 class ForgotPasswordEvent extends AuthEvent {

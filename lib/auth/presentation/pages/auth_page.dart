@@ -1,10 +1,12 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:testing_firebase/auth/presentation/bloc/auth_bloc.dart';
-import 'package:testing_firebase/auth/presentation/bloc/auth_event.dart';
-import 'package:testing_firebase/auth/presentation/bloc/auth_state.dart';
-import 'package:testing_firebase/auth/presentation/pages/sign_in_screen.dart.dart' show SignInScreen;
-import 'package:testing_firebase/presentation/screens/ProfileMenuScreen.dart';
+import 'package:testing_firebase/auth/presentation/pages/sign_in_screen.dart';
+
+import '../../../presentation/screens/ProfileMenuScreen.dart';
+import '../bloc/auth_bloc.dart';
+import '../bloc/auth_event.dart';
+import '../bloc/auth_state.dart';
 
 class AuthPage extends StatefulWidget {
   const AuthPage({super.key});
@@ -26,17 +28,6 @@ class _AuthPageState extends State<AuthPage> {
   Widget build(BuildContext context) {
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
-        // Show loading indicator while checking auth status
-        if (state is AuthLoading) {
-          return const Scaffold(
-            body: Center(child: CircularProgressIndicator()),
-          );
-        }
-
-        // If authenticated, show the profile screen
-        if (state is AuthAuthenticated) {
-          return SSwitchTheme();
-        }
 
         // For any other state (including AuthUnauthenticated and AuthInitial), show the sign in screen
         return SignInScreen();
