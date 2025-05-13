@@ -1,5 +1,7 @@
 import 'package:testing_firebase/services/domain/entites/service_entity.dart';
 
+import '../../domain/entites/item_entity.dart';
+
 abstract class ServiceState{}
 
 class ServiceInitial extends ServiceState{}
@@ -17,3 +19,23 @@ class ServiceError extends ServiceState{
   ServiceError(this.message);
 }
 
+class ItemsLoading extends ServiceState {
+  final String serviceId;
+
+  ItemsLoading(this.serviceId);
+
+}
+
+class ItemsLoaded extends ServiceState {
+  final String serviceId;
+  final List<ItemEntity> items;
+
+  ItemsLoaded(this.serviceId, this.items);
+
+}
+
+class ItemsError extends ServiceState {
+  final String message;
+
+  ItemsError(this.message);
+}

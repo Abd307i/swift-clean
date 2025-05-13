@@ -1,3 +1,4 @@
+import 'package:testing_firebase/services/domain/entites/item_entity.dart';
 import 'package:testing_firebase/services/domain/entites/service_entity.dart';
 
 abstract class ServiceRepository{
@@ -6,5 +7,6 @@ abstract class ServiceRepository{
   Future<void> removeFromCart(String serviceId);
   Stream<List<ServiceEntity>> streamServices();
   Future<List<ServiceEntity>> getCartItems();
+  Future<List<ItemEntity>> getItemsByService(String serviceId);
 
 }

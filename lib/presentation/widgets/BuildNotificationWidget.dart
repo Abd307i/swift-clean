@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 
-Widget buildNotificationWidget(IconData icon, String title,String desc, Color fieldBackgroundColor, Color mainTextColor, Color secondaryTextColor) {
+Widget buildNotificationWidget(IconData icon, String title,String desc, Color fieldBackgroundColor, Color mainTextColor, Color secondaryTextColor,) {
   return Container(
     decoration: BoxDecoration(
         color: fieldBackgroundColor,

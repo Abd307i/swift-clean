@@ -5,13 +5,13 @@ import '../../domain/repositories/cart_repository.dart';
 import '../models/cart_model.dart';
 
 class CartRepositoryImpl implements CartRepository {
-  final FirebaseFirestore _firestore;
+  final FirebaseFirestore firestore;
 
-  CartRepositoryImpl(this._firestore);
+  CartRepositoryImpl({required this.firestore});
 
   @override
   Future<void> addToCart(ServiceEntity service) async {
-    await _firestore.collection('cart').doc(service.id).set({
+    await firestore.collection('cart').doc(service.id).set({
       'name': service.name,
       'description': service.description,
       'addedAt': FieldValue.serverTimestamp()
@@ -20,7 +20,7 @@ class CartRepositoryImpl implements CartRepository {
 
   @override
   Future<List<ServiceEntity>> getCartItems() async {
-    final snapshot = await _firestore.collection('cart').get();
+    final snapshot = await firestore.collection('cart').get();
     return snapshot.docs
         .map((doc) => CartModel.fromFirestore(doc).toEntity())
         .toList();
@@ -28,7 +28,7 @@ class CartRepositoryImpl implements CartRepository {
 
   @override
   Stream<List<ServiceEntity>> streamCartItems() {
-    return _firestore.collection('cart').snapshots().map((snapshot) =>
+    return firestore.collection('cart').snapshots().map((snapshot) =>
         snapshot.docs
             .map((doc) => CartModel.fromFirestore(doc).toEntity())
             .toList());
@@ -36,6 +36,6 @@ class CartRepositoryImpl implements CartRepository {
 
   @override
   Future<void> removeFromCart(String serviceId) async {
-    await _firestore.collection('cart').doc(serviceId).delete();
+    await firestore.collection('cart').doc(serviceId).delete();
   }
 }

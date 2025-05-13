@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:testing_firebase/services/domain/entites/item_entity.dart';
 
 import '../../domain/entites/service_entity.dart';
 
@@ -16,5 +17,5 @@ class ServiceModel{
       description: doc['description'],
     );
   }
-  ServiceEntity toEntity() => ServiceEntity(id: id, name: name, description: description);
+  ServiceEntity toServiceEntity() => ServiceEntity(id: id, name: name, description: description);
 }
