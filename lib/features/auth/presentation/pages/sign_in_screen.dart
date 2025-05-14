@@ -2,8 +2,11 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testing_firebase/features/auth/presentation/pages/sign_up_screen.dart';
+import 'package:testing_firebase/features/profile/presentation/pages/ProfileMenuScreen.dart';
+import '../../../../core/widgets/custom_button.dart';
+import '../../../../core/widgets/custom_text_field.dart';
+import '../../../../core/widgets/password_text_field.dart';
 
-import '../../../profile/presentation/ProfileMenuScreen.dart';
 import '../bloc/auth_bloc.dart';
 import '../bloc/auth_event.dart';
 import '../bloc/auth_state.dart';
@@ -71,7 +74,9 @@ class _SignInScreenState extends State<SignInScreen> {
         }
       },
       builder: (context, state) {
-        if (state is AuthLoading) {
+        bool isLoading = state is AuthLoading;
+
+        if (isLoading) {
           return const Scaffold(
             body: Center(child: CircularProgressIndicator()),
           );
@@ -104,22 +109,10 @@ class _SignInScreenState extends State<SignInScreen> {
                       ),
                     ),
                     const SizedBox(height: 40),
-                    TextFormField(
+                    CustomTextField(
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
-                        hintText: 'Email',
-                        filled: true,
-                        fillColor: Colors.grey[100],
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                          borderSide: BorderSide.none,
-                        ),
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 14,
-                        ),
-                      ),
+                      hintText: 'Email',
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Email is required';
@@ -132,23 +125,9 @@ class _SignInScreenState extends State<SignInScreen> {
                       },
                     ),
                     const SizedBox(height: 16),
-                    TextFormField(
+                    PasswordTextField(
                       controller: _passwordController,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        hintText: 'Password',
-                        filled: true,
-                        fillColor: Colors.grey[100],
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                          borderSide: BorderSide.none,
-                        ),
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 14,
-                        ),
-                        suffixIcon: const Icon(Icons.visibility_off),
-                      ),
+                      hintText: 'Password',
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Password is required';
@@ -177,7 +156,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => ForgotPasswordPage(),
+                                builder: (context) => const ForgotPasswordPage(),
                               ),
                             );
                           },
@@ -189,7 +168,8 @@ class _SignInScreenState extends State<SignInScreen> {
                       ],
                     ),
                     const SizedBox(height: 20),
-                    ElevatedButton(
+                    CustomButton(
+                      text: 'Sign In',
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           context.read<AuthBloc>().add(LoginEvent(
@@ -198,17 +178,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           ));
                         }
                       },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF5E5BFF),
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      child: const Text(
-                        'Sign In',
-                        style: TextStyle(color: Colors.white, fontSize: 16),
-                      ),
+                      isLoading: isLoading,
                     ),
                     const SizedBox(height: 30),
                     const Row(
@@ -256,7 +226,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           onPressed: () {
                             Navigator.push(
                                 context,MaterialPageRoute(builder: (context) =>
-                                SignUpScreen())
+                            const SignUpScreen())
                             );
                           },
                           child: const Text(

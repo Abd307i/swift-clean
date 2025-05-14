@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../core/constants/PickColorHelper.dart';
+import '../../../../core/constants/PickColorHelper.dart';
 
 class BuildTabBar extends StatelessWidget {
   final Function(int) onTabChanged;

@@ -1,30 +1,23 @@
-
 import 'package:flutter/material.dart';
-import 'package:testing_firebase/features/auth/presentation/pages/sign_in_screen.dart';
 import 'package:testing_firebase/core/constants/appTheme.dart';
 import 'package:testing_firebase/core/constants/PickColorHelper.dart';
-import 'package:testing_firebase/features/profile/presentation/HelpCenterScreen.dart';
-import 'package:testing_firebase/features/notification/presentation/NotificationsScreen.dart';
-import 'package:testing_firebase/core/widgets/BuildMenuItemsWidget.dart';
+import 'package:testing_firebase/features/auth/presentation/pages/sign_in_screen.dart';
+import 'package:testing_firebase/features/notification/presentation/pages/NotificationsScreen.dart';
+import 'package:testing_firebase/features/order%20history/presentation/pages/OrderHistoryScreen.dart';
+import 'package:testing_firebase/features/profile/presentation/pages/HelpCenterScreen.dart';
+import 'package:testing_firebase/features/profile/presentation/pages/InviteFriendsScreen.dart';
+import 'package:testing_firebase/features/profile/presentation/widgets/BuildMenuItemsWidget.dart';
+import 'package:testing_firebase/features/profile/presentation/widgets/BuildSignOutWidget.dart';
 
-import 'package:testing_firebase/features/profile/domain/entities/profile_entity.dart';
 
-import '../../../../core/widgets/BuildSignOutWidget.dart';
-import '../../../order history/presentation/OrderHistoryScreen.dart';
-import 'edit_profile_screen.dart';
-
-class ProfileMenuScreen extends StatefulWidget{
-  final ProfileEntity user;
-  const ProfileMenuScreen({super.key, required this.user});
+class SSwitchTheme extends StatefulWidget{
+  const SSwitchTheme({super.key});
 
   @override
-  ProfileScreen createState() => ProfileScreen(user);
+  ProfileScreen createState() => ProfileScreen();
 }
 
-class ProfileScreen extends State<ProfileMenuScreen> {
-  final ProfileEntity user;
-  ProfileScreen(this.user);
-
+class ProfileScreen extends State<SSwitchTheme> {
   @override
   Widget build(BuildContext context) {
     appTheme().theme = 'Light';
@@ -39,15 +32,6 @@ class ProfileScreen extends State<ProfileMenuScreen> {
                 appTheme().theme = (appTheme().theme == 'Light'?'Dark':'Light');
               });
             }),
-        actions: [
-          IconButton(onPressed:() {
-            Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => EditProfileScreen(user: user)
-                )
-            );
-          },icon: Icon(Icons.settings,color: ColorPickerHelper.colorHelper('mainTextColor'),))
-        ],
         backgroundColor: ColorPickerHelper.colorHelper('backgroundColor'),
       ),
       backgroundColor: ColorPickerHelper.colorHelper('backgroundColor'),
@@ -138,9 +122,17 @@ class ProfileScreen extends State<ProfileMenuScreen> {
                       buildMenuItem(
                           Icons.local_offer, 'Offer',ColorPickerHelper.colorHelper('fieldBackgroundColor')
                           ,ColorPickerHelper.colorHelper('mainTextColor')),
-                      buildMenuItem(
-                          Icons.group_add, 'Invite Friends',ColorPickerHelper.colorHelper('fieldBackgroundColor')
-                          ,ColorPickerHelper.colorHelper('mainTextColor')),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => InviteFriendsScreen()),
+                          );
+                        },
+                        child: buildMenuItem(
+                            Icons.group_add, 'Invite Friends',ColorPickerHelper.colorHelper('fieldBackgroundColor')
+                            ,ColorPickerHelper.colorHelper('mainTextColor')),
+                      ),
                       GestureDetector(
                         onDoubleTap:(){
                           Navigator.push(

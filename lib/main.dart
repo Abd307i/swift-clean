@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:testing_firebase/features/auth/presentation/pages/sign_in_screen.dart';
 import 'package:testing_firebase/features/order history/data/datasources/remote/firebase_order_history.dart';
 import 'package:testing_firebase/features/order history/data/repositories/order_history_repository_imp.dart';
 import 'package:testing_firebase/features/order history/domain/repositories/order_history_repository.dart';
@@ -86,7 +87,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: ServicesPage(),
+        home: SignInScreen(),
       ),
     );
   }

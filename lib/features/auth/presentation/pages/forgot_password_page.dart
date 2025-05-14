@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/widgets/custom_button.dart';
+import '../../../../core/widgets/custom_text_field.dart';
 
 import '../bloc/auth_bloc.dart';
 import '../bloc/auth_event.dart';
 import '../bloc/auth_state.dart';
-
 
 class ForgotPasswordPage extends StatefulWidget {
   static const String routeName = '/forgot-password';
@@ -42,7 +43,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           }
         },
         builder: (context, state) {
-          if (state is AuthLoading) {
+          bool isLoading = state is AuthLoading;
+
+          if (isLoading) {
             return const Center(child: CircularProgressIndicator());
           }
 
@@ -72,23 +75,11 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       ),
                     ),
                     const SizedBox(height: 40),
-                    TextFormField(
+                    CustomTextField(
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
-                        hintText: 'Email Address',
-                        filled: true,
-                        fillColor: Colors.grey[100],
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                          borderSide: BorderSide.none,
-                        ),
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 14,
-                        ),
-                        prefixIcon: const Icon(Icons.email_outlined, color: Colors.grey),
-                      ),
+                      hintText: 'Email Address',
+                      prefixIcon: const Icon(Icons.email_outlined, color: Colors.grey),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Email is required';
@@ -101,7 +92,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       },
                     ),
                     const SizedBox(height: 30),
-                    ElevatedButton(
+                    CustomButton(
+                      text: 'Send',
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           context.read<AuthBloc>().add(ForgotPasswordEvent(
@@ -109,17 +101,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                           ));
                         }
                       },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF5E5BFF),
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      child: const Text(
-                        'Send',
-                        style: TextStyle(color: Colors.white, fontSize: 16),
-                      ),
+                      isLoading: isLoading,
                     ),
                     const SizedBox(height: 16),
                     TextButton(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:testing_firebase/features/order%20history/presentation/OrderTrackingScreen.dart';
+import 'package:testing_firebase/features/order%20history/presentation/pages/OrderTrackingScreen.dart';
 
-import 'package:testing_firebase/features/order history/presentation/OrderHistoryModel.dart';
+import 'package:testing_firebase/features/order%20history/presentation/pages/OrderHistoryModel.dart';
 
 class BuildOrderList extends StatelessWidget {
   final List<OrderHistoryModel> orders;

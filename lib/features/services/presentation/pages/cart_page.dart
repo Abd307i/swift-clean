@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:testing_firebase/core/widgets/BuildNotificationWidget.dart';
+import 'package:testing_firebase/features/notification/presentation/widgets/BuildNotificationWidget.dart';
 import 'package:testing_firebase/features/services/presentation/bloc/cart_bloc.dart';
 import 'package:testing_firebase/features/services/presentation/bloc/cart_event.dart';
 import '../../dependency_injection.dart';

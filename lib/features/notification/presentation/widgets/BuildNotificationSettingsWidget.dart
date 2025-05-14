@@ -1,8 +1,8 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:testing_firebase/core/constants/PickColorHelper.dart';
 
-import '../constants/PickColorHelper.dart';
 
 Widget notificationSettings(String switchText, bool isClicked){
   return Container(
@@ -15,7 +15,7 @@ Widget notificationSettings(String switchText, bool isClicked){
       children: [
         Text(switchText,
             style: TextStyle(
-              fontSize: 18.0,
+                fontSize: 18.0,
                 color: ColorPickerHelper.colorHelper('mainTextColor')
             )
         ),

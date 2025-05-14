@@ -2,11 +2,13 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testing_firebase/features/auth/presentation/pages/sign_in_screen.dart';
+import '../../../../core/widgets/custom_button.dart';
+import '../../../../core/widgets/custom_text_field.dart';
+import '../../../../core/widgets/password_text_field.dart';
 
 import '../bloc/auth_bloc.dart';
 import '../bloc/auth_event.dart';
 import '../bloc/auth_state.dart';
-import '../widgets/auth_text_field.dart';
 
 class SignUpScreen extends StatefulWidget {
   static const String routeName = '/sign-up';
@@ -28,13 +30,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   void dispose() {
-      _firstNameController.dispose();
-      _lastNameController.dispose();
-      _emailController.dispose();
-      _passwordController.dispose();
-      _confirmPasswordController.dispose();
-      _phoneNumberController.dispose();
-      super.dispose();
+    _firstNameController.dispose();
+    _lastNameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    _phoneNumberController.dispose();
+    super.dispose();
   }
 
   @override
@@ -98,7 +100,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                       const SizedBox(height: 40),
 
-                      AuthTextField(
+                      CustomTextField(
                         controller: _firstNameController,
                         hintText: 'First Name',
                         validator: (value) {
@@ -109,32 +111,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         },
                       ),
 
-                      /*TextFormField(
-                        controller: _firstNameController,
-                        decoration: InputDecoration(
-                          hintText: 'Full Name',
-                          filled: true,
-                          fillColor: Colors.grey[100],
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide.none,
-                          ),
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 14,
-                          ),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Full name is required';
-                          }
-                          return null;
-                        },
-                      ),*/
-
                       const SizedBox(height: 16),
 
-                      AuthTextField(
+                      CustomTextField(
                         controller: _lastNameController,
                         hintText: 'Last Name',
                         validator: (value) {
@@ -147,9 +126,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                       const SizedBox(height: 16),
 
-                      AuthTextField(
+                      CustomTextField(
                         controller: _emailController,
                         hintText: 'Email',
+                        keyboardType: TextInputType.emailAddress,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Email is required';
@@ -162,37 +142,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         },
                       ),
 
-                      /*TextFormField(
-                        controller: _emailController,
-                        keyboardType: TextInputType.emailAddress,
-                        decoration: InputDecoration(
-                          hintText: 'Email Address',
-                          filled: true,
-                          fillColor: Colors.grey[100],
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide.none,
-                          ),
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 14,
-                          ),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Email is required';
-                          }
-                          if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
-                              .hasMatch(value)) {
-                            return 'Enter a valid email';
-                          }
-                          return null;
-                        },
-                      ),*/
-
                       const SizedBox(height: 16),
 
-                      AuthTextField(
+                      PasswordTextField(
                         controller: _passwordController,
                         hintText: 'Password',
                         validator: (value) {
@@ -206,39 +158,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         },
                       ),
 
-                      /*TextFormField(
-                        controller: _passwordController,
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          hintText: 'Password',
-                          filled: true,
-                          fillColor: Colors.grey[100],
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide.none,
-                          ),
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 14,
-                          ),
-                          suffixIcon: const Icon(Icons.visibility_off),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Password is required';
-                          }
-                          if (value.length < 6) {
-                            return 'Password must be 6+ characters';
-                          }
-                          return null;
-                        },
-                      ),*/
-
                       const SizedBox(height: 16),
 
-                      AuthTextField(
+                      PasswordTextField(
                         controller: _confirmPasswordController,
                         hintText: 'Confirm Password',
+                        isConfirmPassword: true,
+                        passwordController: _passwordController,
                         validator: (value) {
                           if (value != _passwordController.text) {
                             return 'Passwords do not match';
@@ -247,37 +173,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         },
                       ),
 
-                      /*TextFormField(
-                        controller: _confirmPasswordController,
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          hintText: 'Confirm Password',
-                          filled: true,
-                          fillColor: Colors.grey[100],
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide.none,
-                          ),
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 14,
-                          ),
-                          suffixIcon: const Icon(Icons.visibility_off),
-                        ),
-                        validator: (value) {
-                          if (value != _passwordController.text) {
-                            return 'Passwords do not match';
-                          }
-                          return null;
-                        },
-                      ),*/
-
                       const SizedBox(height: 16),
 
-                      AuthTextField(
+                      CustomTextField(
                         controller: _phoneNumberController,
                         hintText: 'Phone Number',
+                        keyboardType: TextInputType.phone,
                         validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Phone number is required';
+                          }
                           if (value.toString().length != 10) {
                             return 'Phone Number Must Be 10 Digits Start with 07 xxxx xxxx';
                           }
@@ -287,7 +192,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                       const SizedBox(height: 30),
 
-                      ElevatedButton(
+                      CustomButton(
+                        text: 'Sign Up',
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
                             context.read<AuthBloc>().add(
@@ -301,18 +207,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             );
                           }
                         },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF5E5BFF),
-                          padding: const EdgeInsets.symmetric(vertical: 14),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                        child: const Text(
-                          'Sign Up',
-                          style: TextStyle(color: Colors.white, fontSize: 16),
-                        ),
+                        isLoading: state is AuthLoading,
                       ),
+
                       const SizedBox(height: 30),
                       const Row(
                         children: [
@@ -376,7 +273,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
           ),
         );
-
       },
     );
   }

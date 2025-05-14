@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../../core/constants/PickColorHelper.dart';
-import 'package:testing_firebase/core/widgets/BuildOrderListWidget.dart';
-import 'package:testing_firebase/core/widgets/BuildTabWidget.dart';
+import '../../../../core/constants/PickColorHelper.dart';
+import 'package:testing_firebase/features/order%20history/presentation/widgets/BuildOrderListWidget.dart';
+import 'package:testing_firebase/features/order%20history/presentation/widgets/BuildTabWidget.dart';
 import 'OrderHistoryModel.dart';
 
 class OrderHistoryScreen extends StatefulWidget {

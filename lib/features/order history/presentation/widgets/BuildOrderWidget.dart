@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:testing_firebase/core/constants/PickColorHelper.dart';
 
-import '../../features/order history/presentation/OrderHistoryModel.dart';
+import '../pages/OrderHistoryModel.dart';
 
 Widget BuildOrderCard(OrderHistoryModel order) {
   return Card(

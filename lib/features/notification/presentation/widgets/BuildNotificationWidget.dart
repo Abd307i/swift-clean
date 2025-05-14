@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 
-Widget buildMenuItem(IconData icon, String title, Color fieldBackgroundColor, Color mainTextColor) {
+Widget buildNotificationWidget(IconData icon, String title,String desc, Color fieldBackgroundColor, Color mainTextColor, Color secondaryTextColor) {
   return Container(
     decoration: BoxDecoration(
         color: fieldBackgroundColor,
@@ -14,13 +14,21 @@ Widget buildMenuItem(IconData icon, String title, Color fieldBackgroundColor, Co
           )
         ]
     ),
-    height: 60.0,
-    margin: EdgeInsets.fromLTRB(5.0, 5.0, 0.0, 5.0),
+    padding: EdgeInsets.all(7.0),
+    margin: EdgeInsets.fromLTRB(3, 0, 3, 8),
     child: ListTile(
       leading: Icon(icon, color: Colors.blue),
-      title: Text(
-        title,
-        style: TextStyle(fontSize: 16,color: mainTextColor),
+      title: Column(
+        children: [
+          Text(
+            title,
+            style: TextStyle(fontSize: 16,color: mainTextColor),
+          ),
+          Text(
+            desc,
+            style: TextStyle(fontSize: 14,color: secondaryTextColor),
+          )
+        ],
       ),
       onTap: () {
         // Handle menu item tap
