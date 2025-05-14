@@ -1,8 +1,9 @@
+import 'package:testing_firebase/services/domain/repositories/service_repository.dart';
+
 import '../entites/service_entity.dart';
-import '../repositories/cart_repository.dart';
 
 class AddToCart {
-  final CartRepository repository;
+  final ServiceRepository repository;
 
   AddToCart(this.repository);
 

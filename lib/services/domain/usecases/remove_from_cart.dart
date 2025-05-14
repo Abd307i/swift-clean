@@ -1,7 +1,7 @@
-import '../repositories/cart_repository.dart';
+import 'package:testing_firebase/services/domain/repositories/service_repository.dart';
 
 class RemoveFromCart {
-  final CartRepository repository;
+  final ServiceRepository repository;
 
   RemoveFromCart(this.repository);
 
