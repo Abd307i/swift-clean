@@ -4,11 +4,12 @@ import 'package:testing_firebase/core/constants/PickColorHelper.dart';
 import 'package:testing_firebase/features/auth/presentation/pages/sign_in_screen.dart';
 import 'package:testing_firebase/features/notification/presentation/pages/NotificationsScreen.dart';
 import 'package:testing_firebase/features/order%20history/presentation/pages/OrderHistoryScreen.dart';
+import 'package:testing_firebase/features/profile/domain/entities/profile_entity.dart';
 import 'package:testing_firebase/features/profile/presentation/pages/HelpCenterScreen.dart';
 import 'package:testing_firebase/features/profile/presentation/pages/InviteFriendsScreen.dart';
 import 'package:testing_firebase/features/profile/presentation/widgets/BuildMenuItemsWidget.dart';
 import 'package:testing_firebase/features/profile/presentation/widgets/BuildSignOutWidget.dart';
-
+import 'package:testing_firebase/features/profile/presentation/pages/edit_profile_screen.dart'; // Added import for EditProfileScreen
 
 class SSwitchTheme extends StatefulWidget{
   const SSwitchTheme({super.key});
@@ -18,6 +19,16 @@ class SSwitchTheme extends StatefulWidget{
 }
 
 class ProfileScreen extends State<SSwitchTheme> {
+  // Mock user profile data - replace with actual user data from your auth system
+  final user = ProfileEntity(
+      userId: "user123",
+      firstName: "Ali",
+      lastName: "Dweik",
+      phone: "",
+      imgUrl: "",
+      address: "Los Angeles, United States"
+  );
+
   @override
   Widget build(BuildContext context) {
     appTheme().theme = 'Light';
@@ -32,6 +43,20 @@ class ProfileScreen extends State<SSwitchTheme> {
                 appTheme().theme = (appTheme().theme == 'Light'?'Dark':'Light');
               });
             }),
+        actions: [
+          // Added edit icon button
+          IconButton(
+            icon: Icon(Icons.edit, color: ColorPickerHelper.colorHelper('mainTextColor')),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => EditProfileScreen(user: user),
+                ),
+              );
+            },
+          ),
+        ],
         backgroundColor: ColorPickerHelper.colorHelper('backgroundColor'),
       ),
       backgroundColor: ColorPickerHelper.colorHelper('backgroundColor'),
