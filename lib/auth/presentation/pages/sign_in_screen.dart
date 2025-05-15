@@ -2,6 +2,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testing_firebase/auth/presentation/pages/sign_up_screen.dart';
+import 'package:testing_firebase/information_gathering/presentation/pages/EditProfile.dart';
 
 import '../../../presentation/screens/ProfileMenuScreen.dart';
 import '../bloc/auth_bloc.dart';
@@ -256,7 +257,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           onPressed: () {
                             Navigator.push(
                                 context,MaterialPageRoute(builder: (context) =>
-                                SignUpScreen())
+                                EditProfilePage())
                             );
                           },
                           child: const Text(

@@ -6,7 +6,7 @@ class UserInfoModel {
   final String lastName;
   final String phone;
   final String address;
-  final String? email; //from firebase auth
+  final String email; //from firebase auth
   final Timestamp? createdAt; //automatically set to current time
 
   UserInfoModel({
@@ -15,7 +15,7 @@ class UserInfoModel {
     required this.lastName,
     required this.phone,
     required this.address,
-    this.email,
+    required this.email,
     this.createdAt,
   });
 
@@ -26,7 +26,7 @@ class UserInfoModel {
         'lastName': lastName,
         'phone': phone,
         'address': address,
-        if (email != null) 'email': email,
+        'email': email,
         if (createdAt != null) 'createdAt': createdAt,
       };
 
@@ -38,7 +38,7 @@ class UserInfoModel {
       lastName: json['lastName'] as String,
       phone: json['phone'] as String,
       address: json['address'] as String,
-      email: json['email'] as String?,
+      email: json['email'] as String,
       createdAt: json['createdAt'] as Timestamp?,
     );
   }

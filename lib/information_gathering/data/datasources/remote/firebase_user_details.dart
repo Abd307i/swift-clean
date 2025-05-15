@@ -33,7 +33,7 @@ class InfoGatheringDataSourceImpl implements InfoGatheringDataSource {
         lastName: userInfo.lastName,
         phone: userInfo.phone,
         address: userInfo.address,
-        email: currentUser.email, // Automatically set from Firebase Auth
+        email: userInfo.email, // Automatically set from Firebase Auth
         createdAt: Timestamp.now(), // Automatically set to current time
       );
 
