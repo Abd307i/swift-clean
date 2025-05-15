@@ -121,7 +121,7 @@ class ProfileScreen extends State<SSwitchTheme> {
                         onDoubleTap: (){
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => NotificationsMenu()),
+                            MaterialPageRoute(builder: (context) => NotificationsMenu()) ,
                           );
                         },
                         child: buildMenuItem(
