@@ -16,6 +16,9 @@ import 'package:testing_firebase/features/services/presentation/pages/service_pa
 
 import 'features/auth/dependency_injection.dart' as di;
 import 'features/profile/dependency_injection.dart' as dii;
+import 'features/profile/domain/usecases/get_profile_data.dart';
+import 'features/profile/presentation/bloc/profile_bloc.dart';
+import 'features/profile/presentation/bloc/profile_event.dart';
 import 'features/services/dependency_injection.dart' as diii;
 import 'features/auth/presentation/bloc/auth_bloc.dart';
 import 'features/auth/presentation/bloc/auth_event.dart';

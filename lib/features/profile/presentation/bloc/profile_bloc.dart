@@ -9,16 +9,16 @@ import '../../domain/usecases/delete_profile_image.dart';
 
 class ProfileBloc extends Bloc<ProfileEvent,ProfileState>{
   final LoadProfileData loadProfileData;
-  final DeleteProfileImage deleteProfileImage;
-  final UpdateProfileData updateProfileData;
-  final UploadProfileImage uploadProfileImage;
+  final DeleteProfileImage? deleteProfileImage;
+  final UpdateProfileData? updateProfileData;
+  final UploadProfileImage? uploadProfileImage;
 
   ProfileBloc({
     required this.loadProfileData,
-    required this.deleteProfileImage,
-    required this.updateProfileData,
-    required this.uploadProfileImage
-}):super(ProfileLoading()){
+     this.deleteProfileImage,
+     this.updateProfileData,
+     this.uploadProfileImage
+}):super(ProfileInitial()){
     on<LoadProfileEvent> (_onLoadProfile);
     on<DeleteProfileImageEvent> (_onDeleteProfileImage);
     on<UpdateProfileEvent> (_onUpdateProfile);
@@ -42,7 +42,7 @@ class ProfileBloc extends Bloc<ProfileEvent,ProfileState>{
       Emitter<ProfileState> emit,
       ) async {
     try {
-      await updateProfileData.call(event.profile);
+      await updateProfileData?.call(event.profile);
       emit(ProfileUpdated());
     } catch (e) {
       emit(ProfileError(e.toString()));
@@ -54,7 +54,7 @@ class ProfileBloc extends Bloc<ProfileEvent,ProfileState>{
       Emitter<ProfileState> emit,
       ) async {
     try {
-      await deleteProfileImage.call(event.imageUrl);
+      await deleteProfileImage?.call(event.imageUrl);
       emit(ProfileImageDeleted());
     } catch (e) {
       emit(ProfileError(e.toString()));
@@ -66,7 +66,7 @@ class ProfileBloc extends Bloc<ProfileEvent,ProfileState>{
       Emitter<ProfileState> emit,
       ) async {
     try {
-      await uploadProfileImage.call(UploadImageParams(userId:event.userId, image:event.image));
+      await uploadProfileImage?.call(UploadImageParams(userId:event.userId, image:event.image));
       emit(ProfileImageDeleted());
     } catch (e) {
       emit(ProfileError(e.toString()));

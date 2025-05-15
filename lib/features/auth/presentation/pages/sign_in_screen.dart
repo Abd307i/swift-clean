@@ -2,6 +2,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testing_firebase/features/auth/presentation/pages/sign_up_screen.dart';
+import 'package:testing_firebase/features/profile/domain/entities/profile_entity.dart';
 import 'package:testing_firebase/features/profile/presentation/pages/ProfileMenuScreen.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_text_field.dart';
@@ -47,7 +48,8 @@ class _SignInScreenState extends State<SignInScreen> {
             btnOkOnPress: () => {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => SSwitchTheme()),
+                MaterialPageRoute(builder: (context) => ProfilePage(state.user.id,)
+                )
               )
             },
             desc: state.message,

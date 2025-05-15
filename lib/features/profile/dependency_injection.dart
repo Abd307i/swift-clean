@@ -1,5 +1,7 @@
 // Profile Feature
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:testing_firebase/features/profile/data/datasources/remote/profile_remote_datasource.dart';
 import 'package:testing_firebase/features/profile/data/repositories/profile_repository_imp.dart';
@@ -33,7 +35,7 @@ Future<void> init() async{
   );
 
   sl.registerLazySingleton<ProfileRemoteDataSources>(
-        () => ProfileRemoteDataSources(sl(), sl()),
+        () => ProfileRemoteDataSources(FirebaseFirestore.instance, FirebaseStorage.instance),
   );
 }
 

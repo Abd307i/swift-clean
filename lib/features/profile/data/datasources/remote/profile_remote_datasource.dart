@@ -16,6 +16,7 @@ class ProfileRemoteDataSources {
       final doc =  await _firestore.collection('users').doc(userId).get();
       return ProfileModel.fromJson(doc.data()!);
     } catch(e){
+      print(e.toString());
       throw e.toString();
     }
   }

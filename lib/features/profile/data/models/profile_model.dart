@@ -30,14 +30,43 @@ class ProfileModel extends ProfileEntity{
   }
 
   factory ProfileModel.fromJson(Map<String,dynamic> json){
-    return ProfileModel(
-      userId: json['userId'],
-      firstName: json['firstName'],
-      lastName: json['lastName'],
-      phone: json['phone'],
-      imgUrl: json['imgUrl'],
-      address: json['address']
-    );
+    print(json);
+    if(json['imgUrl'] != null && json['address'] != null) {
+      print('ssssssssssssssssssssssssss');
+      return ProfileModel(
+          userId: json['userId'],
+          firstName: json['firstName'],
+          lastName: json['lastName'],
+          phone: json['phone'],
+          imgUrl: json['imgUrl']??'',
+          address: json['address']??''
+      );
+    }
+    else if(json['imgUrl'] != null)
+      return ProfileModel(
+          userId: json['userId'],
+          firstName: json['firstName'],
+          lastName: json['lastName'],
+          phone: json['phone'],
+          imgUrl: json['imgUrl'],
+      );
+    else if(json['address'] != null)
+      return ProfileModel(
+        userId: json['userId'],
+        firstName: json['firstName'],
+        lastName: json['lastName'],
+        phone: json['phone'],
+        imgUrl: json['address'],
+      );
+    else {
+      print('HIHIHIHIHIHI');
+      return ProfileModel(
+        userId: json['userId'],
+        firstName: json['firstName'],
+        lastName: json['lastName'],
+        phone: json['phone'],
+      );
+    }
   }
 
   factory ProfileModel.fromEntity(ProfileEntity entity){
@@ -58,8 +87,8 @@ class ProfileModel extends ProfileEntity{
     'firstName':firstName,
     'lastName':lastName,
     'phone':phone,
-    'imageUrl':imgUrl,
-    'address':address
+    'imageUrl':imgUrl??"",
+    'address':address??""
   };
 
 }

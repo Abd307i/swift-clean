@@ -22,7 +22,7 @@ class RegisterUserParams {
   final String firstName;
   final String lastName;
   final String phone; // With country code
-  final AddressEntity? address;
+  final String? address;
 
   RegisterUserParams({
     required this.email,

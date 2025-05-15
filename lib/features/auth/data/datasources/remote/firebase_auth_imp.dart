@@ -30,13 +30,8 @@ class FirebaseAuthImp implements FirebaseAuthi{
         'firstName':params.firstName,
         'lastName':params.lastName,
         'phone': params.phone,
-        'address': AddressModel(
-          street: params.address?.street,
-          city: params.address?.city,
-          postalCode: params.address?.postalCode,
-          lat: params.address?.lat,
-          lng: params.address?.lng,
-        ).toJson(),
+        'email':params.email,
+        'address': params.address,
         'createdAt': FieldValue.serverTimestamp(),
       });
       return user;

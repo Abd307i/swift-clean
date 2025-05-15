@@ -26,7 +26,7 @@ class RegisterEvent extends AuthEvent {
   final String firstName;
   final String lastName;
   final String phone;
-  final AddressEntity? address;
+  final String? address;
 
   const RegisterEvent({required this.email,
     required this.password,
