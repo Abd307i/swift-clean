@@ -4,17 +4,20 @@
 
 import 'package:testing_firebase/features/notification/data/datasources/remote/notification_remote_data_source.dart';
 import 'package:testing_firebase/features/notification/data/models/notification_model.dart';
+import 'package:testing_firebase/features/notification/domain/entities/notification_entity.dart';
 
-abstract class NotificationRepository {
+import '../../domain/repositories/notification_repository.dart';
+/*
+abstract class NotificationsRepository {
   Future<void> createNotification(NotificationModel notification);
-  Future<List<NotificationModel>> fetchNotifications({
-    String? customerId,
+  Future<List<NotificationEntity>> fetchNotifications({
+    required String customerId,
     String? shopId,
   });
   Future<void> updateNotificationReadStatus(String notificationId);
   //Future<List<String>> getNearbyDrivers(GeoPoint shopLocation, double radiusInKm);
   Future<void> setOrderStatus(String orderId, String status);
-}
+}*/
 
 class NotificationRepositoryImpl implements NotificationRepository {
   final NotificationDataSource _dataSource;
@@ -22,13 +25,28 @@ class NotificationRepositoryImpl implements NotificationRepository {
   NotificationRepositoryImpl(this._dataSource);
 
   @override
+  Future<List<NotificationEntity>> getNotifications(String userId) async{
+    return await _dataSource.getNotifications(userId);
+  }
+
+  /*@override
+  Future<void> markAsRead(String notificationId) {
+
+  }
+
+  @override
+  Future<void> toggleMuteNotifications(bool isMuted) {
+
+  }*/
+/*
+  @override
   Future<void> createNotification(NotificationModel notification) async {
     await _dataSource.createNotification(notification);
   }
 
   @override
-  Future<List<NotificationModel>> fetchNotifications({
-    String? customerId,
+  Future<List<NotificationEntity>> fetchNotifications({
+    required String customerId,
     String? shopId,
   }) async {
     return await _dataSource.fetchNotifications(
@@ -51,4 +69,5 @@ class NotificationRepositoryImpl implements NotificationRepository {
   Future<void> setOrderStatus(String orderId, String status) async {
     await _dataSource.setOrderStatus(orderId, status);
   }
+*/
 }

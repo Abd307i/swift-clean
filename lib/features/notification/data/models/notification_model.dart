@@ -3,78 +3,38 @@
 // The model matches the Notifications collection schema in Firestore.
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:testing_firebase/features/notification/domain/entities/notification_entity.dart';
 
-class NotificationModel {
-  final String? id;
-  final String body;
-  final Timestamp createdAt;
-  final String? customerId;
-  final String? orderId;
-  final bool read;
-  final String? shopId;
-  final String title;
-  final String type;
-
-  NotificationModel({
-    this.id,
-    required this.body,
-    required this.createdAt,
-    this.customerId,
-    this.orderId,
-    required this.read,
-    this.shopId,
-    required this.title,
-    required this.type,
+class NotificationModel extends NotificationEntity {
+  const NotificationModel({
+    required super.id,
+    required super.title,
+    required super.body,
+    //required super.timestamp,
+    required super.type,
+    super.isRead = false
   });
 
   factory NotificationModel.fromJson(Map<String, dynamic> json) {
     return NotificationModel(
-      id: json['id'] as String?,
-      body: json['body'] as String,
-      createdAt: json['createdAt'] as Timestamp,
-      customerId: json['customerId'] as String?,
-      orderId: json['orderId'] as String?,
-      read: json['read'] as bool,
-      shopId: json['shopId'] as String?,
-      title: json['title'] as String,
-      type: json['type'] as String,
+      id: json['id'] ,
+      title: json['title'] ,
+      body: json['body'] ,
+      //timestamp: (json['timestamp'] as Timestamp).toDate(),
+      type: json['type'],
+      isRead: json['isRead']
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
       'body': body,
-      'createdAt': createdAt,
-      'customerId': customerId,
-      'orderId': orderId,
-      'read': read,
-      'shopId': shopId,
+      //'timestamp': timestamp,
+      'isRead': isRead,
       'title': title,
       'type': type,
     };
   }
 
-  NotificationModel copyWith({
-    String? id,
-    String? body,
-    Timestamp? createdAt,
-    String? customerId,
-    String? orderId,
-    bool? read,
-    String? shopId,
-    String? title,
-    String? type,
-  }) {
-    return NotificationModel(
-      id: id ?? this.id,
-      body: body ?? this.body,
-      createdAt: createdAt ?? this.createdAt,
-      customerId: customerId ?? this.customerId,
-      orderId: orderId ?? this.orderId,
-      read: read ?? this.read,
-      shopId: shopId ?? this.shopId,
-      title: title ?? this.title,
-      type: type ?? this.type,
-    );
-  }
 }

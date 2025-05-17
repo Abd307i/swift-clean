@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testing_firebase/features/notification/presentation/widgets/BuildNotificationWidget.dart';
+import 'package:testing_firebase/features/services/domain/usecases/get_items_by_service.dart';
+import 'package:testing_firebase/features/services/domain/usecases/get_services.dart';
 import 'package:testing_firebase/features/services/presentation/pages/cart_page.dart';
-import '../../dependency_injection.dart';
+import '../../dependency_injection.dart' as di;
 import '../../domain/entites/service_entity.dart';
 import '../bloc/service_bloc.dart';
 import '../bloc/service_event.dart';
@@ -11,44 +13,50 @@ import 'items_page.dart';
 
 
 class ServicesPage extends StatelessWidget {
-  const ServicesPage({Key? key}) : super(key: key);
+  final String userId;
+
+  const ServicesPage({Key? key, required this.userId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color(0xF5F6FA),
-        title: Text('Services',
+
+    return BlocProvider(
+      create: (context) => ServiceBloc(
+        getServices: di.sl<GetServices>(),
+        getItemByService: di.sl<GetItemByService>())..add(LoadServices()),
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Color(0xF5F6FA),
+          title: Text('Services',
           style: TextStyle(color: Color(0xFF333E63))
-        ),
-        centerTitle: true,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_rounded, color: Color(0xFF333E63)),
-          onPressed:() {
+          ),
+          centerTitle: true,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back_rounded, color: Color(0xFF333E63)),
+            onPressed:() {
             Navigator.pop(context);
           },),
           actions: [
             IconButton(onPressed:() {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => CartPage()
-                  )
-              );
+            Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => CartPage()
+            )
+            );
             },icon: Icon(Icons.shopping_cart,color: Color(0xFF333E63)))
 
           ],
         )
-      ,
-      body: BlocProvider(
-        create: (context) => sl<ServiceBloc>()..add(LoadServices()),
-        child: const ServicesGridView(),
-      ),
+        ,
+        body: ServicesGridView(userId: userId,),
+        ),
     );
   }
 }
 
 class ServicesGridView extends StatelessWidget {
-  const ServicesGridView({Key? key}) : super(key: key);
+  final String userId;
+  const ServicesGridView({Key? key, required this.userId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +91,7 @@ class ServicesGridView extends StatelessWidget {
                   ),onTap: () =>
                       //_navigateToItemsPage(context,state.services[index])
                   Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => ItemsPage(service: state.services[index])))
+                    MaterialPageRoute(builder: (context) => ItemsPage(userId,state.services[index].id,state.services[index].name)))
                   );
 
                   /*return buildNotificationWidget(
@@ -105,15 +113,6 @@ class ServicesGridView extends StatelessWidget {
     );
   }
 
-
-  void _navigateToItemsPage(BuildContext context, ServiceEntity service) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ItemsPage(service: service),
-      ),
-    );
-  }
 }
 
 class ServiceCard extends StatelessWidget {

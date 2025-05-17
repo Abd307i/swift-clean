@@ -3,10 +3,10 @@ import 'package:testing_firebase/features/services/domain/entites/service_entity
 
 abstract class ServiceRepository{
   Future<List<ServiceEntity>> getServices();
-  Future<void> addToCart(ServiceEntity service);
-  Future<void> removeFromCart(String serviceId);
+  Future<void> addToCart(String userId, String serviceId, String itemId);
+  Future<void> removeFromCart(String serviceId, String itemId);
   Stream<List<ServiceEntity>> streamServices();
-  Future<List<ServiceEntity>> getCartItems();
+  Future<List<ItemEntity>> getCartItems();
   Future<List<ItemEntity>> getItemsByService(String serviceId);
 
 }

@@ -7,17 +7,17 @@ import 'package:testing_firebase/features/notification/presentation/bloc/notific
 
 class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   final GetNotifications getNotifications;
-  final MarkAsRead markAsRead;
-  final ToggleMuteNotification toggleMuteNotification;
+  //final MarkAsRead markAsRead;
+  // ToggleMuteNotification toggleMuteNotification;
 
   NotificationBloc({
     required this.getNotifications,
-    required this.markAsRead,
-    required this.toggleMuteNotification,
+    //required this.markAsRead,
+    //required this.toggleMuteNotification,
   }) : super(NotificationInitial()) {
     on<GetNotificationsEvent>(_onGetNotifications);
-    on<MarkNotificationAsReadEvent>(_onMarkNotificationAsRead);
-    on<ToggleNotificationMuteEvent>(_onToggleNotificationMute);
+    //on<MarkNotificationAsReadEvent>(_onMarkNotificationAsRead);
+    //on<ToggleNotificationMuteEvent>(_onToggleNotificationMute);
   }
 
   Future<void> _onGetNotifications(
@@ -32,7 +32,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
       emit(NotificationError(e.toString()));
     }
   }
-
+/*
   Future<void> _onMarkNotificationAsRead(
       MarkNotificationAsReadEvent event,
       Emitter<NotificationState> emit,
@@ -69,5 +69,5 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
     } catch (e) {
       emit(NotificationError(e.toString()));
     }
-  }
+  }*/
 }

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:testing_firebase/features/services/domain/entites/item_entity.dart';
 
 class ItemModel{
@@ -24,6 +25,16 @@ class ItemModel{
         price: json['price'],
         description: json['description'],
         imgUrl: json['imgUrl']
+    );
+  }
+  factory ItemModel.fromFirestore(DocumentSnapshot doc) {
+    return ItemModel(
+      id: doc.id,
+      name: doc['name'],
+      description: doc['description'],
+      serviceId: doc['serviceId'],
+      price: doc['price'],
+      imgUrl: doc['imgUrl']
     );
   }
 

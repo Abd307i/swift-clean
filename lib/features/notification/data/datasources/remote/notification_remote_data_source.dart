@@ -6,28 +6,30 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:testing_firebase/features/notification/data/models/notification_model.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:testing_firebase/features/notification/domain/entities/notification_entity.dart';
 //import 'package:geoflutterfire2/geoflutterfire2.dart';
 //import 'package:geoflutterfire/geoflutterfire.dart';
 
 class NotificationDataSource {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseFirestore _firestore;
   //final GeoFlutterFire _geo = GeoFlutterFire(); // geoflutterfire2 for geolocation queries
-  final FirebaseMessaging _messaging = FirebaseMessaging.instance; // FirebaseMessaging for push notifications
+ //final FirebaseMessaging _messaging; // FirebaseMessaging for push notifications
 
+  NotificationDataSource(this._firestore);
+/*
   // Creates a new notification in Firestore and sends a push notification.
   Future<void> createNotification(NotificationModel notification) async {
     try {
       final docRef = await _firestore.collection('Notifications').add(notification.toJson());
       // Pass the generated ID to the notification for push notification
-      await _sendPushNotification(notification.copyWith(id: docRef.id));
+      await _sendPushNotification(notification.copyWith());
     } catch (e) {
       throw Exception('Error creating notification: $e');
     }
   }
 
   // Fetches notifications for a specific customer or shop, sorted by creation time.
-  Future<List<NotificationModel>> fetchNotifications({
+  Future<List<NotificationEntity>> fetchNotifications({
     String? customerId,
     String? shopId,
   }) async {
@@ -42,7 +44,7 @@ class NotificationDataSource {
       return snapshot.docs.map((doc) {
         final data = doc.data();
         data['id'] = doc.id; // Add document ID to the data
-        return NotificationModel.fromJson(data);
+        return NotificationModel.fromJson(data).toEntity();
       }).toList();
     } catch (e) {
       throw Exception('Error fetching notifications: $e');
@@ -119,4 +121,22 @@ class NotificationDataSource {
       throw Exception('Error sending push notification: $e');
     }
   }
+ */
+
+  Future<List<NotificationEntity>> getNotifications(String userId) async{
+    try{
+      final snapshot = await _firestore
+          .collection('users')
+          .doc(userId)
+          .collection('notifications')
+          //.orderBy('timestamp', descending: true)
+          .get();
+      print(snapshot.docs.map((doc) => NotificationModel.fromJson(doc.data())).toList());
+      return snapshot.docs.map((doc) => NotificationModel.fromJson(doc.data())).toList();
+    } catch (e){
+      print(e.toString());
+      throw e.toString();
+    }
+  }
+
 }

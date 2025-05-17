@@ -36,7 +36,7 @@ Future<void> _onLoadItemsByService(
     LoadItemsByService event,
     Emitter<ServiceState> emit,
     ) async{
-      emit(ItemsLoading(event.serviceId));
+      emit(ItemsLoading());
       try{
         final result = await getItemByService(event.serviceId);
         emit(ItemsLoaded(event.serviceId,result));

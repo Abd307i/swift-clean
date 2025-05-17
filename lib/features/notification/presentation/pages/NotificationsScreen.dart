@@ -1,102 +1,115 @@
 import 'package:flutter/material.dart';
-import 'package:testing_firebase/NotificationModel.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testing_firebase/core/constants/PickColorHelper.dart';
-import 'package:testing_firebase/core/constants/appTheme.dart';
+import 'package:testing_firebase/features/notification/domain/usecases/get_notifications.dart';
+import 'package:testing_firebase/features/notification/domain/usecases/mark_as_read.dart';
+import 'package:testing_firebase/features/notification/domain/usecases/toggle_mute_notifications.dart';
+import 'package:testing_firebase/features/notification/presentation/bloc/notification_bloc.dart';
+import 'package:testing_firebase/features/notification/presentation/bloc/notification_event.dart';
+import 'package:testing_firebase/features/notification/presentation/bloc/notification_state.dart';
 import 'package:testing_firebase/features/notification/presentation/widgets/BuildNotificationWidget.dart';
 
+import '../../dependency_injection.dart' as di;
 import 'NotificationSettingsScreen.dart';
 
-class NotificationsMenu extends StatelessWidget {
-  NotificationsMenu({super.key});
+class NotificationPage extends StatelessWidget{
+  final String userId;
 
-  final List<NotificationModel> notifications = [];
-  void _getNotifications(){
-    notifications.addAll(NotificationModel.getNotification());
-  }
+  const NotificationPage(this.userId);
 
   @override
   Widget build(BuildContext context) {
-    appTheme().theme = 'Light';
-    _getNotifications();
-    if(notifications.isEmpty){
-      return Scaffold(
+    return BlocProvider(create: (context) =>
+        NotificationBloc(
+          getNotifications: di.sl<GetNotifications>())..add(GetNotificationsEvent(userId))
+          //markAsRead: di.sl<MarkAsRead>(),
+          //toggleMuteNotification: di.sl<ToggleMuteNotification>())..add(GetNotificationsEvent(userId))
+      ,child:
+        Scaffold(
           appBar: AppBar(
-            title: Text('Notification',
-                style: TextStyle(color: ColorPickerHelper.colorHelper('mainTextColor'))),
             centerTitle: true,
-            leading: IconButton(
-              icon: Icon(Icons.arrow_back_rounded, color: ColorPickerHelper.colorHelper('mainTextColor')),
-              onPressed:() {
-                Navigator.pop(context);
-              },),
+            title: Text('Notifications',style: TextStyle(color: ColorPickerHelper.colorHelper('mainTextColor'))),
+            leading: IconButton(onPressed: () => Navigator.pop(context),
+                icon: Icon(Icons.arrow_back), color: ColorPickerHelper.colorHelper('mainTextColor'),),
             actions: [
-              IconButton(onPressed:() {
-                Navigator.push(
+              IconButton(
+                icon: Icon(Icons.settings, color: ColorPickerHelper.colorHelper('mainTextColor')),
+                onPressed: () {
+                  Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => NotificationSettingsScreen()
-                    )
-                );
-              },icon: Icon(Icons.settings,color: ColorPickerHelper.colorHelper('mainTextColor'),))
+                    MaterialPageRoute(
+                      builder: (context) => NotificationSettingsScreen(userId: userId),
+                    ),
+                  );
+                },
+              ),
             ],
             backgroundColor: ColorPickerHelper.colorHelper('backgroundColor'),
           ),
-          body: Center(
-              child:Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children:[
-                  SizedBox(height: 150.0),
-                  Image.asset('assets/NoNotificationImage.png'),
-                  SizedBox(height: 20.0),
-                  Text('No Notification Here!',
-                    style: TextStyle(color: ColorPickerHelper.colorHelper('secondaryTextColor'),
-                        fontSize: 22.0),)
-                ],
-              )
-          ),
-          backgroundColor: ColorPickerHelper.colorHelper('backgroundColor')
-      );
-    }
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: ColorPickerHelper.colorHelper('backgroundColor'),
-        title: Text('Notification',
-            style: TextStyle(color: ColorPickerHelper.colorHelper('mainTextColor'))),
-        centerTitle: true,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_rounded, color: ColorPickerHelper.colorHelper('mainTextColor')),
-          onPressed:() {
-            Navigator.pop(context);
-          },),
-        actions: [
-          IconButton(onPressed:() {
-            Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => NotificationSettingsScreen()
+          body: NotificationsMenu(userId: userId),
+          backgroundColor: ColorPickerHelper.colorHelper('backgroundColor'),
+        ),
+    );
+  }
+
+
+}
+
+class NotificationsMenu extends StatelessWidget {
+  final String userId;
+  NotificationsMenu({super.key, required this.userId});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<NotificationBloc,NotificationState>(
+      listener: (context, state) {
+        if(state is NotificationError){
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.message)),
+          );
+        }
+      },
+      builder: (context, state) {
+        if(state is NotificationLoading){
+          return const Center(child: CircularProgressIndicator());
+        }else if(state is NotificationLoaded){
+          if(state.notifications.isEmpty){
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children:[
+                Center(
+                    child: Column(
+                      children: [
+                        SizedBox(height: 150.0),
+                        Image.asset('assets/NoNotificationImage.png'),
+                        SizedBox(height: 20.0),
+                        Text('No Notification Here!',
+                          style: TextStyle(color: ColorPickerHelper.colorHelper('secondaryTextColor'),
+                              fontSize: 22.0),
+                        )
+                      ]
+                  )
                 )
+              ],
             );
-          },icon: Icon(Icons.settings,color: ColorPickerHelper.colorHelper('mainTextColor')))
-        ],
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Expanded(
-            child: ListView.builder(
-              //padding: EdgeInsets.all(8),
-                itemBuilder: (context, index) {
-                  return buildNotificationWidget(notifications[index].icon,
-                      notifications[index].title,
-                      notifications[index].descirption,
-                      ColorPickerHelper.colorHelper('fieldBackgroundColor'),
-                      ColorPickerHelper.colorHelper('mainTextColor'),
-                      ColorPickerHelper.colorHelper('secondaryTextColor'));
-                },
-                itemCount: notifications.length
-            ),
-          )
-        ],
-      ),backgroundColor: ColorPickerHelper.colorHelper('backgroundColor'),
+          }else{
+            return ListView.builder(itemCount: state.notifications.length,
+              itemBuilder:(context, index) {
+                return buildNotificationWidget(
+                    Icons.access_alarm,
+                    state.notifications[index].title,
+                    state.notifications[index].body,
+                    ColorPickerHelper.colorHelper('fieldBackgroundColor'),
+                    ColorPickerHelper.colorHelper('mainTextColor'),
+                    ColorPickerHelper.colorHelper('secondaryTextColor')
+                );
+              }
+            );
+          }
+        }else{
+          return const Center(child: Text('Try Again Later'));
+        }
+      },
     );
   }
 }

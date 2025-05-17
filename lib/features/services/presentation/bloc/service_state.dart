@@ -19,12 +19,7 @@ class ServiceError extends ServiceState{
   ServiceError(this.message);
 }
 
-class ItemsLoading extends ServiceState {
-  final String serviceId;
-
-  ItemsLoading(this.serviceId);
-
-}
+class ItemsLoading extends ServiceState {}
 
 class ItemsLoaded extends ServiceState {
   final String serviceId;

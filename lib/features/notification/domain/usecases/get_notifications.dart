@@ -3,6 +3,8 @@ import 'package:testing_firebase/features/notification/domain/entities/notificat
 import 'package:testing_firebase/features/notification/domain/repositories/notification_repository.dart';
 import 'package:testing_firebase/features/notification/domain/usecases/usecase.dart';
 
+import '../../data/repositories/notification_repository_imp.dart';
+
 class GetNotifications implements UseCase<List<NotificationEntity>, String>{
   final NotificationRepository repository;
 

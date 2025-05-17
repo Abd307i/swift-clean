@@ -27,7 +27,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       ) async {
     emit(CartLoading());
     try {
-      await addToCart(event.item);
+      await addToCart(event.userId, event.serviceId, event.itemId);
       final items = await getCartItems();
       emit(CartLoaded(items));
     } catch (e) {
@@ -41,7 +41,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       ) async {
     emit(CartLoading());
     try {
-      await removeFromCart(event.itemId);
+      await removeFromCart(event.serviceId, event.itemId);
       final items = await getCartItems();
       emit(CartLoaded(items));
     } catch (e) {

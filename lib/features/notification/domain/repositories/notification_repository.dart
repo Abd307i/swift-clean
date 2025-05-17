@@ -5,8 +5,8 @@ abstract class NotificationRepository {
   Future<List<NotificationEntity>> getNotifications(String userId);
 
   // Toggle global mute
-  Future<void> toggleMuteNotifications(bool isMuted);
+  //Future<void> toggleMuteNotifications(bool isMuted);
 
   // Mark as read
-  Future<void> markAsRead(String notificationId);
+ // Future<void> markAsRead(String notificationId);
 }

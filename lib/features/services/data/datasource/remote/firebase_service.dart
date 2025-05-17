@@ -25,24 +25,23 @@ class FirebaseServiceDataSourceImp {
     snapshot.docs.map((doc) => ServiceModel.fromFirestore(doc)).toList());
   }
 
-  Future<void> addToCart(String userId, ServiceModel service) async{
-    await _firestore.collection('users/$userId/cart').doc(service.id).set({
-      'name':service.name,
-      'description':service.description,
+  Future<void> addToCart(String userId, String serviceId, String itemId) async{
+    await _firestore.collection('users/$userId/cart').doc(serviceId).set({
+      'itemId' : itemId,
       'addedAt': FieldValue.serverTimestamp()
     });
   }
 // TODO
   // Implement this function
-  Future<void> removeFromCart(String serviceId) async {
+  Future<void> removeFromCart(String serviceId,String itemId) async {
     await _firestore.collection('users//cart').doc(serviceId).delete();
   }
 
   // TODO
   // Implement this function
-  Future<List<ServiceModel>> getCartItems() async {
+  Future<List<ItemModel>> getCartItems() async {
     final snapshot = await _firestore.collection('users/current_user_id/cart').get();
-    return snapshot.docs.map((doc) => ServiceModel.fromFirestore(doc)).toList();
+    return snapshot.docs.map((doc) => ItemModel.fromFirestore(doc)).toList();
   }
 
 }

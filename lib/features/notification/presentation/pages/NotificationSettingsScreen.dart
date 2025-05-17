@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:testing_firebase/core/constants/PickColorHelper.dart';
 
 class NotificationSettingsScreen extends StatefulWidget {
-  const NotificationSettingsScreen({Key? key}) : super(key: key);
+  final String userId;
+
+  const NotificationSettingsScreen({Key? key, required this.userId,}) : super(key: key);
 
   @override
   State<NotificationSettingsScreen> createState() => _NotificationSettingsScreenState();

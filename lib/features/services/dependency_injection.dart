@@ -1,9 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get_it/get_it.dart';
 import 'package:testing_firebase/features/services/data/datasource/remote/firebase_service.dart';
-import 'package:testing_firebase/features/services/data/repositories/cart_repository_imp.dart';
 import 'package:testing_firebase/features/services/data/repositories/service_repositories_imp.dart';
-import 'package:testing_firebase/features/services/domain/repositories/cart_repository.dart';
 import 'package:testing_firebase/features/services/domain/repositories/service_repository.dart';
 import 'package:testing_firebase/features/services/domain/usecases/add_to_cart.dart';
 import 'package:testing_firebase/features/services/domain/usecases/get_cart_items.dart';
@@ -32,10 +30,6 @@ Future<void> inti() async{
 
   sl.registerLazySingleton<ServiceRepository>(
       () => ServiceRepositoryImp(dataSource: sl())
-  );
-  
-  sl.registerLazySingleton<CartRepository>(
-      () => CartRepositoryImpl(firestore:  sl())
   );
 
   sl.registerLazySingleton(

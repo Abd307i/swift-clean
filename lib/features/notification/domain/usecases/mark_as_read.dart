@@ -1,7 +1,7 @@
 import 'package:testing_firebase/features/notification/domain/repositories/notification_repository.dart';
 import 'package:testing_firebase/features/notification/domain/usecases/usecase.dart';
 
-class MarkAsRead implements UseCase<void, String>{
+/*class MarkAsRead implements UseCase<void, String>{
   final NotificationRepository repository;
 
   MarkAsRead(this.repository);
@@ -11,4 +11,4 @@ class MarkAsRead implements UseCase<void, String>{
     return await repository.markAsRead(notificationId);
   }
 
-}
+}*/

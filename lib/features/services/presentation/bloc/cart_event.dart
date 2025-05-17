@@ -1,19 +1,18 @@
-import 'package:testing_firebase/features/services/domain/entites/item_entity.dart';
-
-import '../../domain/entites/service_entity.dart';
-
 abstract class CartEvent {}
 
 class AddItemToCart extends CartEvent {
-  final ItemEntity item;
+  final String userId;
+  final String serviceId;
+  final String itemId;
 
-  AddItemToCart(this.item);
+  AddItemToCart(this.userId, this.serviceId, this.itemId);
 }
 
 class RemoveItemFromCart extends CartEvent {
+  final String serviceId;
   final String itemId;
 
-  RemoveItemFromCart(this.itemId);
+  RemoveItemFromCart(this.serviceId, this.itemId);
 }
 
 class LoadCartItems extends CartEvent {}

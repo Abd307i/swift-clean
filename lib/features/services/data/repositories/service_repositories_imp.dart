@@ -3,20 +3,13 @@ import 'package:testing_firebase/features/services/domain/entites/item_entity.da
 import 'package:testing_firebase/features/services/domain/entites/service_entity.dart';
 import 'package:testing_firebase/features/services/domain/repositories/service_repository.dart';
 
-import '../models/service_model.dart';
-
 class ServiceRepositoryImp extends ServiceRepository{
   final FirebaseServiceDataSourceImp dataSource;
   ServiceRepositoryImp({required this.dataSource});
 
   @override
-  Future<void> addToCart(ServiceEntity service) async{
-    await dataSource.addToCart(service.id,
-        ServiceModel(
-        id: service.id,
-        name: service.name,
-        description: service.description,)
-    );
+  Future<void> addToCart(String userId, String serviceId, String itemId) async{
+    await dataSource.addToCart(userId, serviceId, itemId);
   }
 
   @override
@@ -34,22 +27,22 @@ class ServiceRepositoryImp extends ServiceRepository{
   }
 
   @override
-  Future<List<ServiceEntity>> getCartItems() async {
+  Future<List<ItemEntity>> getCartItems() async {
     try {
       final cartItems = await dataSource.getCartItems();
-      return cartItems.map((model) => model.toServiceEntity()).toList();
+      return cartItems.map((model) => model.toItemEntity()).toList();
     } catch (e) {
       throw Exception(e.toString());
     }
   }
 
   @override
-  Future<void> removeFromCart(String serviceId) async{
+  Future<void> removeFromCart(String serviceId, String itemId) async{
     try {
       if (serviceId.isEmpty) {
         throw ArgumentError('Empty Service');
       }
-      await dataSource.removeFromCart(serviceId);
+      await dataSource.removeFromCart(serviceId,itemId);
     } catch (e) {
       throw Exception(e.toString());
     }

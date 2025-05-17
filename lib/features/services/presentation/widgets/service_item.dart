@@ -4,18 +4,21 @@ import 'package:flutter/material.dart';
 import '../../domain/entites/service_entity.dart';
 
 class ServiceItem extends StatelessWidget {
-  final ServiceEntity service;
+  final String serviceName;
+  final String description;
   final VoidCallback onAddToCart;
 
   const ServiceItem({
     Key? key,
-    required this.service,
+    required this.serviceName,
+    required this.description,
     required this.onAddToCart,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Card(
+
       elevation: 2,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
@@ -23,6 +26,7 @@ class ServiceItem extends StatelessWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
         child: Column(
+
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             // جزء صورة الخدمة
@@ -39,7 +43,7 @@ class ServiceItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    service.name,
+                    serviceName,
                     style: Theme
                         .of(context)
                         .textTheme
@@ -52,7 +56,7 @@ class ServiceItem extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    service.description,
+                    description,
                     style: Theme
                         .of(context)
                         .textTheme
@@ -72,7 +76,7 @@ class ServiceItem extends StatelessWidget {
                             .primaryColor,
                         iconSize: 20,
                         padding: EdgeInsets.zero,
-                        constraints: const BoxConstraints(),
+                        constraints: const BoxConstraints(maxHeight: 40.0),
                         onPressed: onAddToCart,
                       ),
                     ],

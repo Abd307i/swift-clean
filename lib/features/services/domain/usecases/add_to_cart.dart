@@ -1,17 +1,17 @@
 import 'package:testing_firebase/features/services/domain/entites/item_entity.dart';
-import 'package:testing_firebase/features/services/domain/repositories/cart_repository.dart';
+import 'package:testing_firebase/features/services/domain/repositories/service_repository.dart';
 
 import '../entites/service_entity.dart';
 
 class AddToCart {
-  final CartRepository repository;
+  final ServiceRepository repository;
 
   AddToCart(this.repository);
 
-  Future<void> call(ItemEntity item) async {
-    if (item.id.isEmpty) {
+  Future<void> call(String userId, String serviceId, String itemId) async {
+    if (itemId.isEmpty) {
       throw ArgumentError('Service ID cannot be empty');
     }
-    await repository.addToCart(item);
+    await repository.addToCart(userId,serviceId,itemId);
   }
 }

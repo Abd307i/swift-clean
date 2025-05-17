@@ -14,6 +14,7 @@ import 'package:testing_firebase/features/profile/presentation/pages/InviteFrien
 import 'package:testing_firebase/features/profile/presentation/widgets/BuildMenuItemsWidget.dart';
 import 'package:testing_firebase/features/profile/presentation/widgets/BuildSignOutWidget.dart';
 import 'package:testing_firebase/features/profile/presentation/pages/edit_profile_screen.dart';
+import 'package:testing_firebase/features/services/presentation/pages/service_page.dart';
 
 import '../../dependency_injection.dart' as di;
 
@@ -136,7 +137,7 @@ class ProfileScreen extends StatelessWidget {
                           onDoubleTap: (){
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => NotificationsMenu()) ,
+                              MaterialPageRoute(builder: (context) => NotificationPage(userId,)) ,
                             );
                           },
                           child: buildMenuItem(
@@ -178,7 +179,7 @@ class ProfileScreen extends StatelessWidget {
                             Navigator.push(
                                 context,
                                MaterialPageRoute(builder: (context) => HelpCenterScreen()));
-                        },
+                          },
                           child: buildMenuItem(
                               Icons.help, 'Help Center',ColorPickerHelper.colorHelper('fieldBackgroundColor')
                               ,ColorPickerHelper.colorHelper('mainTextColor')),
@@ -186,7 +187,18 @@ class ProfileScreen extends StatelessWidget {
                         buildMenuItem(
                             Icons.info, 'About Us',ColorPickerHelper.colorHelper('fieldBackgroundColor')
                             ,ColorPickerHelper.colorHelper('mainTextColor')),
+                        GestureDetector(
+                          onDoubleTap:(){
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => ServicesPage(userId: userId,)));
+                          },
+                          child: buildMenuItem(
+                              Icons.help, 'Services',ColorPickerHelper.colorHelper('fieldBackgroundColor')
+                              ,ColorPickerHelper.colorHelper('mainTextColor')),
+                        )
                       ],
+
                     ),
                     SizedBox(height: 20),
 
@@ -208,7 +220,7 @@ class ProfileScreen extends StatelessWidget {
             ],
           );
         }
-        return const Center(child: Text('No items available'));
+        return const Center(child: CircularProgressIndicator());
       },
     );
   }
