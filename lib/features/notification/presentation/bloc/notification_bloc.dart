@@ -7,17 +7,38 @@ import 'package:testing_firebase/features/notification/presentation/bloc/notific
 
 class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   final GetNotifications getNotifications;
+  final GetStreamNotifications getStreamNotifications;
   //final MarkAsRead markAsRead;
   // ToggleMuteNotification toggleMuteNotification;
 
   NotificationBloc({
     required this.getNotifications,
+    required this.getStreamNotifications
     //required this.markAsRead,
     //required this.toggleMuteNotification,
   }) : super(NotificationInitial()) {
     on<GetNotificationsEvent>(_onGetNotifications);
+    on<GetStreamNotificationsEvent>(_onGetStreamNotifications);
     //on<MarkNotificationAsReadEvent>(_onMarkNotificationAsRead);
     //on<ToggleNotificationMuteEvent>(_onToggleNotificationMute);
+  }
+
+  void _onGetStreamNotifications(
+      GetStreamNotificationsEvent event,
+      Emitter<NotificationState> emit
+      )  {
+    emit(StreamNotificationsLoading());
+    try{
+      final notifications = getStreamNotifications(event.userId)..listen((notifications){
+        if(notifications.isNotEmpty){
+          final latest = notifications.last;
+          emit(NewNotificationArrived(latest));
+        }
+      });
+        emit(StreamNotificationsLoaded(notifications));
+    } catch (e){
+      emit(NotificationError(e.toString()));
+    }
   }
 
   Future<void> _onGetNotifications(

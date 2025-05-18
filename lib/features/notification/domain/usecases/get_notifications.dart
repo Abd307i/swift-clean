@@ -16,3 +16,16 @@ class GetNotifications implements UseCase<List<NotificationEntity>, String>{
   }
 
 }
+
+class GetStreamNotifications implements UseCaseStream<List<NotificationEntity>, String>{
+  final NotificationRepository repository;
+
+  const GetStreamNotifications(this.repository);
+
+  @override
+  Stream<List<NotificationEntity>> call(String userId) {
+    return repository.getStreamNotificaiotns(userId);
+  }
+
+
+}

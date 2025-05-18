@@ -78,13 +78,13 @@ class ProfileScreen extends StatelessWidget {
         }
         else if (state is ProfileLoaded) {
           return ListView(
-              children: [
-                Container(
-                  alignment: Alignment.bottomCenter,
-                  decoration: BoxDecoration(
-                    color: ColorPickerHelper.colorHelper('fieldBackgroundColor'),
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(40.0),
+                    children: [
+                    Container(
+                    alignment: Alignment.bottomCenter,
+                      decoration: BoxDecoration(
+                        color: ColorPickerHelper.colorHelper('fieldBackgroundColor'),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(40.0),
                       topRight: Radius.circular(40.0),
                     ),
                   ),

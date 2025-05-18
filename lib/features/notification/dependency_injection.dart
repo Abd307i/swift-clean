@@ -30,12 +30,14 @@ Future<void> init() async {
 
   // Use Cases
   sl.registerLazySingleton(() => GetNotifications(sl()));
+  sl.registerLazySingleton(() => GetStreamNotifications(sl()));
   //sl.registerLazySingleton(() => ToggleMuteNotification(sl()));
   //sl.registerLazySingleton(() => MarkAsRead(sl()));
 
   // BLoC
   sl.registerFactory(() => NotificationBloc(
     getNotifications: sl(),
+    getStreamNotifications: sl()
     //markAsRead: sl(),
     //toggleMuteNotification: sl(),
   ));

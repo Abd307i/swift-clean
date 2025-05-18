@@ -29,6 +29,10 @@ class NotificationRepositoryImpl implements NotificationRepository {
     return await _dataSource.getNotifications(userId);
   }
 
+  Stream<List<NotificationEntity>> getStreamNotificaiotns(String userId){
+    return _dataSource.getStreamNotifications(userId);
+  }
+
   /*@override
   Future<void> markAsRead(String notificationId) {
 

@@ -12,6 +12,23 @@ class NotificationInitial extends NotificationState {}
 
 class NotificationLoading extends NotificationState {}
 
+class StreamNotificationsLoading extends NotificationState {}
+
+class StreamNotificationsLoaded extends NotificationState{
+  final Stream<List<NotificationEntity>> notifications;
+
+  const StreamNotificationsLoaded(this.notifications);
+
+  @override
+  List<Object> get props => [notifications];
+}
+
+class NewNotificationArrived extends NotificationState {
+  final NotificationEntity notifications;
+
+  NewNotificationArrived(this.notifications);
+}
+
 class NotificationLoaded extends NotificationState {
   final List<NotificationEntity> notifications;
 

@@ -16,6 +16,15 @@ class GetNotificationsEvent extends NotificationEvent {
   List<Object> get props => [userId];
 }
 
+class GetStreamNotificationsEvent extends NotificationEvent{
+  final String userId;
+  const GetStreamNotificationsEvent(this.userId);
+  // May be error
+  @override
+  List<Object> get props => [userId];
+}
+
+
 class MarkNotificationAsReadEvent extends NotificationEvent {
   final String notificationId;
 

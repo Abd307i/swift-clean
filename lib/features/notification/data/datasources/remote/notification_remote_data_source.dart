@@ -139,4 +139,14 @@ class NotificationDataSource {
     }
   }
 
+  Stream<List<NotificationEntity>> getStreamNotifications(String userId){
+    return _firestore
+        .collection('users')
+        .doc(userId)
+        .collection('notifications')
+        .snapshots()
+        .map((querySnapshot) => querySnapshot.docs
+        .map((doc) => NotificationModel.fromJson(doc.data()))
+        .toList());
+  }
 }

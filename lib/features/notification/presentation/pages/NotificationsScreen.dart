@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testing_firebase/core/constants/PickColorHelper.dart';
@@ -21,7 +22,8 @@ class NotificationPage extends StatelessWidget{
   Widget build(BuildContext context) {
     return BlocProvider(create: (context) =>
         NotificationBloc(
-          getNotifications: di.sl<GetNotifications>())..add(GetNotificationsEvent(userId))
+          getNotifications: di.sl<GetNotifications>(),
+          getStreamNotifications: di.sl<GetStreamNotifications>())..add(GetStreamNotificationsEvent(userId))
           //markAsRead: di.sl<MarkAsRead>(),
           //toggleMuteNotification: di.sl<ToggleMuteNotification>())..add(GetNotificationsEvent(userId))
       ,child:
@@ -58,9 +60,9 @@ class NotificationPage extends StatelessWidget{
 class NotificationsMenu extends StatelessWidget {
   final String userId;
   NotificationsMenu({super.key, required this.userId});
-
   @override
   Widget build(BuildContext context) {
+    int count = 0;
     return BlocConsumer<NotificationBloc,NotificationState>(
       listener: (context, state) {
         if(state is NotificationError){
@@ -68,44 +70,60 @@ class NotificationsMenu extends StatelessWidget {
             SnackBar(content: Text(state.message)),
           );
         }
+        if(state is NewNotificationArrived){
+          AwesomeDialog(
+            context: context,
+            dialogType: DialogType.success,
+            animType: AnimType.topSlide,
+            title: 'ff',
+            desc: 'ss',
+          ).show();
+        }
       },
       builder: (context, state) {
-        if(state is NotificationLoading){
+        if(state is StreamNotificationsLoading){
           return const Center(child: CircularProgressIndicator());
-        }else if(state is NotificationLoaded){
-          if(state.notifications.isEmpty){
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children:[
-                Center(
-                    child: Column(
-                      children: [
-                        SizedBox(height: 150.0),
-                        Image.asset('assets/NoNotificationImage.png'),
-                        SizedBox(height: 20.0),
-                        Text('No Notification Here!',
-                          style: TextStyle(color: ColorPickerHelper.colorHelper('secondaryTextColor'),
-                              fontSize: 22.0),
+        }else if(state is StreamNotificationsLoaded){
+            return StreamBuilder(
+                stream: state.notifications,
+                builder: (context, snapshot){
+                  final notifications = snapshot.data!;
+                  if(notifications.isEmpty){
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children:[
+                        Center(
+                            child: Column(
+                                children: [
+                                  SizedBox(height: 150.0),
+                                  Image.asset('assets/NoNotificationImage.png'),
+                                  SizedBox(height: 20.0),
+                                  Text('No Notification Here!',
+                                    style: TextStyle(color: ColorPickerHelper.colorHelper('secondaryTextColor'),
+                                        fontSize: 22.0),
+                                  )
+                                ]
+                            )
                         )
-                      ]
-                  )
-                )
-              ],
+                      ],
+                    );
+                  }else{
+                    return ListView.builder(itemCount: notifications.length,
+                        itemBuilder:(context, index) {
+                          return buildNotificationWidget(
+                              Icons.access_alarm,
+                              notifications[index].title,
+                              notifications[index].body,
+                              ColorPickerHelper.colorHelper('fieldBackgroundColor'),
+                              ColorPickerHelper.colorHelper('mainTextColor'),
+                              ColorPickerHelper.colorHelper('secondaryTextColor')
+                          );
+                        }
+                    );
+                  }
+                }
             );
-          }else{
-            return ListView.builder(itemCount: state.notifications.length,
-              itemBuilder:(context, index) {
-                return buildNotificationWidget(
-                    Icons.access_alarm,
-                    state.notifications[index].title,
-                    state.notifications[index].body,
-                    ColorPickerHelper.colorHelper('fieldBackgroundColor'),
-                    ColorPickerHelper.colorHelper('mainTextColor'),
-                    ColorPickerHelper.colorHelper('secondaryTextColor')
-                );
-              }
-            );
-          }
+
         }else{
           return const Center(child: Text('Try Again Later'));
         }
