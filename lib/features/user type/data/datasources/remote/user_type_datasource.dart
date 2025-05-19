@@ -1,7 +1,3 @@
-// 1. DATA LAYER STRUCTURE FOR USER TYPE FEATURE
-
-// 1.1. Data Sources - user_type_datasource.dart
-// This file handles the direct communication with Firebase
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
