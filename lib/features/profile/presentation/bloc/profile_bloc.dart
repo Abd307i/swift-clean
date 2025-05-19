@@ -1,0 +1,85 @@
+// FILE 5: profile_bloc.dart
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:testing_firebase/features/profile/domain/usecases/get_profile_data.dart';
+import 'package:testing_firebase/features/profile/domain/usecases/update_profile_data.dart';
+import 'package:testing_firebase/features/profile/domain/usecases/upload_profile_image.dart';
+import 'package:testing_firebase/features/profile/presentation/bloc/profile_event.dart';
+import 'package:testing_firebase/features/profile/presentation/bloc/profile_state.dart';
+
+import '../../domain/usecases/delete_profile_image.dart';
+
+class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
+  final LoadProfileData loadProfileData;
+  final DeleteProfileImage? deleteProfileImage;
+  final UpdateProfileData? updateProfileData;
+  final UploadProfileImage? uploadProfileImage;
+
+  ProfileBloc({
+    required this.loadProfileData,
+    this.deleteProfileImage,
+    this.updateProfileData,
+    this.uploadProfileImage
+  }) : super(ProfileInitial()) {
+    on<LoadProfileEvent>(_onLoadProfile);
+    on<DeleteProfileImageEvent>(_onDeleteProfileImage);
+    on<UpdateProfileEvent>(_onUpdateProfile);
+    on<UploadProfileImageEvent>(_onUploadProfileImage);
+  }
+
+  Future<void> _onLoadProfile(
+      LoadProfileEvent event,
+      Emitter<ProfileState> emit,
+      ) async {
+    emit(ProfileLoading());
+    try {
+      final profile = await loadProfileData.call(event.userId);
+      emit(ProfileLoaded(profile));
+    } catch (e) {
+      emit(ProfileError(e.toString()));
+    }
+  }
+
+  Future<void> _onUpdateProfile(
+      UpdateProfileEvent event,
+      Emitter<ProfileState> emit,
+      ) async {
+    emit(ProfileLoading());
+    try {
+      await updateProfileData?.call(event.profile);
+      // Reload profile after update to get the latest data
+      final updatedProfile = await loadProfileData.call(event.profile.userId);
+      emit(ProfileUpdated());
+      emit(ProfileLoaded(updatedProfile));
+    } catch (e) {
+      emit(ProfileError(e.toString()));
+    }
+  }
+
+  Future<void> _onDeleteProfileImage(
+      DeleteProfileImageEvent event,
+      Emitter<ProfileState> emit,
+      ) async {
+    try {
+      await deleteProfileImage?.call(event.imageUrl);
+      emit(ProfileImageDeleted());
+    } catch (e) {
+      emit(ProfileError(e.toString()));
+    }
+  }
+
+  Future<void> _onUploadProfileImage(
+      UploadProfileImageEvent event,
+      Emitter<ProfileState> emit,
+      ) async {
+    try {
+      await uploadProfileImage?.call(UploadImageParams(userId: event.userId, image: event.image));
+      emit(ProfileImageUpdated());
+
+      // Reload profile after upload to get the updated image URL
+      final updatedProfile = await loadProfileData.call(event.userId);
+      emit(ProfileLoaded(updatedProfile));
+    } catch (e) {
+      emit(ProfileError(e.toString()));
+    }
+  }
+}
