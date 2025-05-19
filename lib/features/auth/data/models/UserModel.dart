@@ -15,7 +15,7 @@ class UserModel extends UserEntity{
     required super.emailVerified,
   });
 
-  factory UserModel.fromJson(Map<String, dynamic> json){
+  factory UserModel.fromJson(Map<String, dynamic> json, String id){
     return UserModel(
         id: json['id'],
         email: json['email'],
