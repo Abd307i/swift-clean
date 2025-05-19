@@ -1,3 +1,4 @@
+// FILE 3: profile_remote_datasource.dart
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -11,42 +12,41 @@ class ProfileRemoteDataSources {
 
   ProfileRemoteDataSources(this._firestore, this._storage);
 
-  Future<ProfileEntity> loadProfile(String userId) async{
-    try{
-      final doc =  await _firestore.collection('users').doc(userId).get();
+  Future<ProfileEntity> loadProfile(String userId) async {
+    try {
+      final doc = await _firestore.collection('users').doc(userId).get();
       return ProfileModel.fromJson(doc.data()!);
-    } catch(e){
+    } catch(e) {
       print(e.toString());
       throw e.toString();
     }
   }
 
-  Future<void> updateProfile(ProfileModel profile) async{
-    try{
+  Future<void> updateProfile(ProfileModel profile) async {
+    try {
       await _firestore.collection('users').doc(profile.userId).update(profile.toJson());
-    } catch(e){
+    } catch(e) {
       throw e.toString();
     }
   }
 
-  Future<void> deleteImage(String imageUrl) async{
-    try{
+  Future<void> deleteImage(String imageUrl) async {
+    try {
       await _storage.refFromURL(imageUrl).delete();
-    } catch (e){
+    } catch (e) {
       throw e.toString();
     }
   }
 
-  Future<String> uploadImage(String userId, File image)async{
-    try{
+  Future<String> uploadImage(String userId, File image) async {
+    try {
       final ref = _storage.ref('profile_images/${userId}.jpg');
       await ref.putFile(image);
-      final imageUrl =  await ref.getDownloadURL();
-      await _firestore.collection('users').doc(userId).update({'imageUrl' : imageUrl});
+      final imageUrl = await ref.getDownloadURL();
+      await _firestore.collection('users').doc(userId).update({'imageUrl': imageUrl});
       return imageUrl;
-    } catch(e){
+    } catch(e) {
       throw e.toString();
     }
   }
-
 }
