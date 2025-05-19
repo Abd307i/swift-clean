@@ -8,10 +8,7 @@ class AddToCart {
 
   AddToCart(this.repository);
 
-  Future<void> call(String userId, String serviceId, String itemId) async {
-    if (itemId.isEmpty) {
-      throw ArgumentError('Service ID cannot be empty');
-    }
-    await repository.addToCart(userId,serviceId,itemId);
+  Future<void> call(String userId, String serviceName, String itemName, double subPrice, int count) async {
+    await repository.addToCart(userId,serviceName,itemName,subPrice,count);
   }
 }

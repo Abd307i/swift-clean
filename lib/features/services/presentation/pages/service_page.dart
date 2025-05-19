@@ -40,7 +40,7 @@ class ServicesPage extends StatelessWidget {
             IconButton(onPressed:() {
             Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => CartPage()
+            MaterialPageRoute(builder: (context) => CartScreen(userId)
             )
             );
             },icon: Icon(Icons.shopping_cart,color: Color(0xFF333E63)))

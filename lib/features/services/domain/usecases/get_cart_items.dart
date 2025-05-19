@@ -8,7 +8,7 @@ class GetCartItems {
 
   GetCartItems(this.repository);
 
-  Future<List<ItemEntity>> call() async {
-    return await repository.getCartItems();
+  Future<List<ItemEntity>> call(String userId) async {
+    return await repository.getCartItems(userId);
   }
 }

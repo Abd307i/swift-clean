@@ -3,37 +3,36 @@ import 'package:testing_firebase/features/services/domain/entites/item_entity.da
 
 class ItemModel{
   final String id;
-  final String serviceId;
-  final String name;
-  final double price;
-  final String description;
+  final String itemName;
+  final double subPrice;
+  final String? description;
   final String? imgUrl;
 
   const ItemModel({
     required this.id,
-    required this.serviceId,
-    required this.name,
-    required this.price,
-    required this.description,
+    required this.itemName,
+    required this.subPrice,
+    this.description,
     this.imgUrl
 });
 
   factory ItemModel.fromJson(Map<String, dynamic> json){
-    return ItemModel(id: json['id'],
-        serviceId: json['serviceId'],
-        name: json['name'],
-        price: json['price'],
+    return ItemModel(
+        id: json['id'],
+        itemName: json['itemName'],
+        subPrice: json['subPrice'],
         description: json['description'],
         imgUrl: json['imgUrl']
     );
   }
+
+
   factory ItemModel.fromFirestore(DocumentSnapshot doc) {
     return ItemModel(
-      id: doc.id,
-      name: doc['name'],
+      id: doc['id'],
+      itemName: doc['itemName'],
       description: doc['description'],
-      serviceId: doc['serviceId'],
-      price: doc['price'],
+      subPrice: doc['subPrice'],
       imgUrl: doc['imgUrl']
     );
   }
@@ -41,13 +40,13 @@ class ItemModel{
   Map<String, dynamic> toJson(){
     return{
       'id':id,
-      'serviceId':serviceId,
-      'name': name,
-      'price': price,
+      'itemName': itemName,
+      'description': description,
+      'subPrice': subPrice,
       'imgUrl': imgUrl
     };
   }
 
-  ItemEntity toItemEntity() => ItemEntity(id: id, serviceId: serviceId, name: name, price: price,imgUrl: imgUrl, description:description);
+  ItemEntity toItemEntity() => ItemEntity(id: id, itemName: itemName, subPrice: subPrice, imgUrl: imgUrl, description: description);
 
 }

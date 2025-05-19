@@ -2,22 +2,20 @@ import 'package:equatable/equatable.dart';
 
 class ItemEntity extends Equatable{
   final String id;
-  final String serviceId;
-  final String name;
-  final double price;
+  final String itemName;
+  final double subPrice;
   final String? imgUrl;
-  final String description;
+  final String? description;
 
   ItemEntity({
     required this.id,
-    required this.serviceId,
-    required this.name,
-    required this.price,
+    required this.itemName,
+    required this.subPrice,
     this.imgUrl,
-    required this.description
+    this.description
 });
 
   @override
-  List<Object?> get props => [id,serviceId,name,price,imgUrl,description];
+  List<Object?> get props => [id,itemName,subPrice,imgUrl,description];
 
 }

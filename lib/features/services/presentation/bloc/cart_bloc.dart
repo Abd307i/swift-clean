@@ -27,8 +27,8 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       ) async {
     emit(CartLoading());
     try {
-      await addToCart(event.userId, event.serviceId, event.itemId);
-      final items = await getCartItems();
+      await addToCart(event.userId, event.serviceName, event.itemName, event.subPrice, event.count);
+      final items = await getCartItems(event.userId);
       emit(CartLoaded(items));
     } catch (e) {
       emit(CartError('Failed to add item to cart'));
@@ -41,8 +41,8 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       ) async {
     emit(CartLoading());
     try {
-      await removeFromCart(event.serviceId, event.itemId);
-      final items = await getCartItems();
+      await removeFromCart(event.userId, event.serviceName, event.itemName);
+      final items = await getCartItems(event.userId);
       emit(CartLoaded(items));
     } catch (e) {
       emit(CartError('Failed to remove item from cart'));
@@ -55,7 +55,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       ) async {
     emit(CartLoading());
     try {
-      final items = await getCartItems();
+      final items = await getCartItems(event.userId);
       emit(CartLoaded(items));
     } catch (e) {
       emit(CartError('Failed to load cart items'));
