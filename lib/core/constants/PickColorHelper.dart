@@ -3,7 +3,9 @@ import 'dart:ui';
 import 'package:testing_firebase/core/constants/appTheme.dart';
 
 class ColorPickerHelper{
+
   static Color colorHelper(String color){
+    appTheme().theme = 'Light';
     if(color == 'backgroundColor'){
       return (appTheme().theme == 'Light'? Color(0xFFF5F6FA) : Color(0xFF101832));
     }else if(color == 'buttonColor') {
