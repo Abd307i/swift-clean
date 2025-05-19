@@ -2,11 +2,14 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testing_firebase/features/auth/presentation/pages/sign_up_screen.dart';
+import 'package:testing_firebase/features/home%20page/Presentation/pages/Home%20Page.dart';
 import 'package:testing_firebase/features/profile/domain/entities/profile_entity.dart';
 import 'package:testing_firebase/features/profile/presentation/pages/ProfileMenuScreen.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_text_field.dart';
 import '../../../../core/widgets/password_text_field.dart';
+
+// Import HomePage
 
 import '../bloc/auth_bloc.dart';
 import '../bloc/auth_event.dart';
@@ -46,15 +49,14 @@ class _SignInScreenState extends State<SignInScreen> {
             animType: AnimType.topSlide,
             title: 'Success',
             btnOkOnPress: () => {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ProfilePage(state.user.id,)
-                )
+              // Navigate to HomePage instead of ProfilePage
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomePage(userId: state.user.id))
               )
             },
             desc: state.message,
           ).show();
-
         }
         if (state is VerificationEmailSent) {
           AwesomeDialog(
