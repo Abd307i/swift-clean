@@ -16,8 +16,14 @@ class FirebaseServiceDataSourceImp {
   }
 
   Future<List<ItemEntity>> getItemsByService(String serviceId) async{
-    final snapshot = await _firestore.collection('services/$serviceId/items/').get();
-    return snapshot.docs.map((doc) => ItemModel.fromJson(doc.data()).toItemEntity()).toList();
+    final doc = await _firestore.collection('services').doc(serviceId).get();
+    if(doc.exists){
+      final data = doc.data();
+      final List<dynamic> items = data?['items'] ?? [];
+      return items.map((item) => ItemModel.fromJson(item).toItemEntity()).toList();
+    }else{
+      return [];
+    }
   }
 
   Stream<List<ServiceModel>> streamServices(){
@@ -25,23 +31,101 @@ class FirebaseServiceDataSourceImp {
     snapshot.docs.map((doc) => ServiceModel.fromFirestore(doc)).toList());
   }
 
-  Future<void> addToCart(String userId, String serviceId, String itemId) async{
-    await _firestore.collection('users/$userId/cart').doc(serviceId).set({
-      'itemId' : itemId,
-      'addedAt': FieldValue.serverTimestamp()
-    });
-  }
-// TODO
-  // Implement this function
-  Future<void> removeFromCart(String serviceId,String itemId) async {
-    await _firestore.collection('users//cart').doc(serviceId).delete();
+  Future<void> addToCart(String userId, String serviceName, String itemName, double subPrice, int count)
+  async{
+
+    final cartRef = await _firestore.collection('users/$userId/cart').doc(serviceName);
+    final doc = await cartRef.get();
+
+    if(doc.exists) {
+
+      final data = doc.data() as Map<String, dynamic>;
+      final List<Map<String, dynamic>> items = List.from(data['items'] ?? []);
+
+      items.add({
+        'id':'${items.length}',
+        'count': count,
+        'description':'',
+        'imgUrl':'',
+        'itemName': itemName,
+        'subPrice': subPrice,
+      });
+
+      double totalPrice = items.fold(0, (sum, item) => sum + (item['subPrice'] * item['count']));
+
+      cartRef.update({
+        'items': items,
+        'totalPrice': totalPrice,
+        'updatedAt': FieldValue.serverTimestamp(),
+      });
+      
+    }else {
+      await cartRef.set({
+        'items': [{
+          'count': count,
+          'itemName': itemName,
+          'subPrice': subPrice,
+        }],
+        'totalPrice': subPrice * count,
+        'createdAt': FieldValue.serverTimestamp(),
+      });
+    }
   }
 
   // TODO
   // Implement this function
-  Future<List<ItemModel>> getCartItems() async {
-    final snapshot = await _firestore.collection('users/current_user_id/cart').get();
-    return snapshot.docs.map((doc) => ItemModel.fromFirestore(doc)).toList();
+  Future<void> removeFromCart(String userId, String serviceName,String itemName) async {
+    final cartRef = _firestore.collection('users/$userId/cart').doc(serviceName);
+    final doc = await cartRef.get();
+
+    if (!doc.exists) {
+      return;
+    }
+    final data = doc.data() as Map<String, dynamic>;
+    final List<dynamic> items = List.from(data['items'] ?? []);
+    double totalPrice = data['totalPrice'] ?? 0.0;
+
+    // Find the first matching item
+    bool itemFound = false;
+    for (int i = 0; i < items.length; i++) {
+      final item = items[i] as Map<String, dynamic>;
+      if (item['itemName'] == itemName) {
+        // Subtract this item's contribution from total price
+        totalPrice -= (item['subPrice'] ?? 0.0) * (item['count'] ?? 1);
+        items.removeAt(i);
+        itemFound = true;
+        break; // Remove just one instance
+      }
+    }
+
+    if (!itemFound) {
+      return;
+    }
+
+    await cartRef.update({
+      'items': items,
+      'totalPrice': totalPrice,
+      'updatedAt': FieldValue.serverTimestamp(),
+    });
+  }
+
+
+  Future<List<ItemModel>> getCartItems(String userId) async {
+    try {
+      final querySnapshot = await _firestore.collection('users/$userId/cart')
+          .get();
+
+      return querySnapshot.docs
+          .expand((doc) {
+        final items = doc.data()['items'] as List? ?? [];
+        return items.whereType<Map<String, dynamic>>();
+      })
+          .map((itemData) => ItemModel.fromJson(itemData))
+          .toList();
+    }catch(e){
+      print(userId + '  ..  ' + e.toString());
+      throw e.toString();
+    }
   }
 
 }

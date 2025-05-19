@@ -8,8 +8,8 @@ class ServiceRepositoryImp extends ServiceRepository{
   ServiceRepositoryImp({required this.dataSource});
 
   @override
-  Future<void> addToCart(String userId, String serviceId, String itemId) async{
-    await dataSource.addToCart(userId, serviceId, itemId);
+  Future<void> addToCart(String userId, String serviceName, String itemName, double subPrice, int count) async{
+    await dataSource.addToCart(userId,serviceName,itemName,subPrice,count);
   }
 
   @override
@@ -27,9 +27,9 @@ class ServiceRepositoryImp extends ServiceRepository{
   }
 
   @override
-  Future<List<ItemEntity>> getCartItems() async {
+  Future<List<ItemEntity>> getCartItems(String userId) async {
     try {
-      final cartItems = await dataSource.getCartItems();
+      final cartItems = await dataSource.getCartItems(userId);
       return cartItems.map((model) => model.toItemEntity()).toList();
     } catch (e) {
       throw Exception(e.toString());
@@ -37,12 +37,12 @@ class ServiceRepositoryImp extends ServiceRepository{
   }
 
   @override
-  Future<void> removeFromCart(String serviceId, String itemId) async{
+  Future<void> removeFromCart(String userId, String serviceName, String itemName) async{
     try {
-      if (serviceId.isEmpty) {
+      if (serviceName.isEmpty) {
         throw ArgumentError('Empty Service');
       }
-      await dataSource.removeFromCart(serviceId,itemId);
+      await dataSource.removeFromCart(userId,serviceName,itemName);
     } catch (e) {
       throw Exception(e.toString());
     }

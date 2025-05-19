@@ -5,10 +5,10 @@ class RemoveFromCart {
 
   RemoveFromCart(this.repository);
 
-  Future<void> call(String serviceId, String itemId,) async {
-    if (itemId.isEmpty) {
+  Future<void> call(String userId, String serviceName, String itemName) async {
+    if (itemName.isEmpty) {
       throw ArgumentError('Service ID cannot be empty');
     }
-    await repository.removeFromCart(serviceId,itemId);
+    await repository.removeFromCart(userId,serviceName,itemName);
   }
 }

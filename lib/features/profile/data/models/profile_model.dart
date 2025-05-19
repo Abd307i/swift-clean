@@ -32,7 +32,6 @@ class ProfileModel extends ProfileEntity{
   factory ProfileModel.fromJson(Map<String,dynamic> json){
     print(json);
     if(json['imgUrl'] != null && json['address'] != null) {
-      print('ssssssssssssssssssssssssss');
       return ProfileModel(
           userId: json['userId'],
           firstName: json['firstName'],

@@ -46,7 +46,7 @@ class ItemsPage extends StatelessWidget{
               IconButton(onPressed:() {
                 Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => CartPage()
+                    MaterialPageRoute(builder: (context) => CartScreen(userId)
                     )
                 );
               },icon: Icon(Icons.shopping_cart,color: Color(0xFF333E63)))
@@ -59,7 +59,7 @@ class ItemsPage extends StatelessWidget{
               },
             )
           ),
-          body: ItemPage(userId: userId, serviceId: serviceId),
+          body: ItemPage(userId: userId, serviceName: serviceName),
         ),
       );
   }
@@ -68,9 +68,9 @@ class ItemsPage extends StatelessWidget{
 
 class ItemPage extends StatelessWidget {
   final String userId;
-  final String serviceId;
+  final String serviceName;
 
-  const ItemPage({Key? key, required this.userId ,required this.serviceId}) : super(key: key);
+  const ItemPage({Key? key, required this.userId ,required this.serviceName}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -107,13 +107,22 @@ class ItemPage extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Icon(Icons.ac_unit_rounded,color: Colors.black,),
-                          Text(state.items[index].name),
+                          Text(state.items[index].itemName),
                           IconButton(
                             onPressed: (){
                               context.read<CartBloc>().add(
-                              AddItemToCart(userId,serviceId,state.items[index].id));
+                                AddItemToCart(userId,
+                                  serviceName,
+                                  state.items[index].itemName,
+                                  state.items[index].subPrice,
+                                  1
+                                )
+                              );
                             },
                             icon: Icon(Icons.add)),
+                          IconButton(
+                              onPressed:() => context.read<CartBloc>().add(RemoveItemFromCart(userId,serviceName,state.items[index].itemName)),
+                              icon: Icon(Icons.minimize_rounded))
                         ],
                       );
                     }
