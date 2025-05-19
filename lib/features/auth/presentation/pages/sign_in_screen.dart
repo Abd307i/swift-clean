@@ -2,7 +2,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testing_firebase/features/auth/presentation/pages/sign_up_screen.dart';
-import 'package:testing_firebase/features/home%20page/Presentation/pages/Home%20Page.dart';
+import 'package:testing_firebase/features/home%20page/Presentation/pages/Home%20Page%20User.dart';
 import 'package:testing_firebase/features/profile/domain/entities/profile_entity.dart';
 import 'package:testing_firebase/features/profile/presentation/pages/ProfileMenuScreen.dart';
 import '../../../../core/widgets/custom_button.dart';
