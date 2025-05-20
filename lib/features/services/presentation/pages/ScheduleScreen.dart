@@ -128,7 +128,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
 
     // Create the order entity
     final orderEntity = OrderEntity(
-        orderId: '11111',
+        orderId: '111d11',
         customerId: customerId,
         items: items,
         status: 'In Progress',
