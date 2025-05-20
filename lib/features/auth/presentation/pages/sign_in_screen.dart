@@ -54,7 +54,7 @@ class _SignInScreenState extends State<SignInScreen> {
               // Navigate to HomePage instead of ProfilePage
               Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => DeliveryHomePage(userId: state.user.id))
+                  MaterialPageRoute(builder: (context) => HomePage(userId: state.user.id))
               )
             },
             desc: state.message,

@@ -59,7 +59,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       ) async {
     emit(CartLoading());
     try {
-      await removeFromCart(event.userId, event.serviceId, event.itemId);
+      await removeFromCart(event.userId, event.serviceId, event.itemName);
       final items = await getCartItems(event.userId);
 
       final totalPrice = await getCartTotalPrice(event.userId);

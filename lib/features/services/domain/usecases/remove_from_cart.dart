@@ -5,7 +5,7 @@ class RemoveFromCart {
 
   RemoveFromCart(this.repository);
 
-  Future<void> call(String userId, String serviceId, String itemId) async {
-    await repository.removeFromCart(userId,serviceId,itemId);
+  Future<void> call(String userId, String serviceId, String itemName) async {
+    await repository.removeFromCart(userId,serviceId,itemName);
   }
 }

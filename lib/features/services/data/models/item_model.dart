@@ -1,5 +1,3 @@
-import 'dart:nativewrappers/_internal/vm/lib/ffi_allocation_patch.dart';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:testing_firebase/features/services/domain/entites/item_entity.dart';
 
@@ -7,7 +5,6 @@ class ItemModel{
   final String id;
   final String itemName;
   final double subPrice;
-  final String serviceId;
   final int? count;
   final String? description;
   final String? imgUrl;
@@ -16,30 +13,31 @@ class ItemModel{
     required this.id,
     required this.itemName,
     required this.subPrice,
-    required this.serviceId,
-    this.description,
     this.count,
+    this.description,
     this.imgUrl
-});
+  });
 
   factory ItemModel.fromJson(Map<String, dynamic> json){
     return ItemModel(
         id: json['id'],
         itemName: json['itemName'],
         subPrice: json['subPrice'],
-        serviceId: json['serviceId'],
-        count: json['count']
+        count: json['count'],
+        description: json['description'],
+        imgUrl: json['imgUrl']
     );
   }
 
 
   factory ItemModel.fromFirestore(DocumentSnapshot doc) {
     return ItemModel(
-      id: doc['id'],
-      itemName: doc['itemName'],
-      subPrice: doc['subPrice'],
-      serviceId: doc['serviceId'],
-      count: doc['count']
+        id: doc['id'],
+        itemName: doc['itemName'],
+        description: doc['description'],
+        count: doc['count'],
+        subPrice: doc['subPrice'],
+        imgUrl: doc['imgUrl']
     );
   }
 
@@ -47,12 +45,13 @@ class ItemModel{
     return{
       'id':id,
       'itemName': itemName,
-      'serviceId':serviceId,
+      'description': description,
+      'count':count,
       'subPrice': subPrice,
-      'count':count
+      'imgUrl': imgUrl
     };
   }
 
-  ItemEntity toItemEntity() => ItemEntity(id: id,itemId:  serviceId ,itemName: itemName, subPrice: subPrice, imgUrl: imgUrl, description: description);
+  ItemEntity toItemEntity() => ItemEntity(id: id, itemName: itemName, subPrice: subPrice, imgUrl: imgUrl, description: description, itemId: '',count:count);
 
 }

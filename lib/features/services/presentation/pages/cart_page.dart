@@ -82,7 +82,7 @@ class CartPage extends StatelessWidget {
                           return buildNotificationWidget(
                               Icons.ac_unit_sharp,
                               state.items[index].itemName,
-                              state.items[index].subPrice.toString(),
+                              (state.items[index].count) .toString(),
                               Colors.white,
                               Color(0xFF333E63),
                               Color(0xFF333E63));

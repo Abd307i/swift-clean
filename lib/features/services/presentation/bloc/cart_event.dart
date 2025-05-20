@@ -13,9 +13,9 @@ class AddItemToCart extends CartEvent {
 class RemoveItemFromCart extends CartEvent {
   final String userId;
   final String serviceId;
-  final String itemId;
+  final String itemName;
 
-  RemoveItemFromCart(this.userId, this.serviceId, this.itemId);
+  RemoveItemFromCart(this.userId, this.serviceId, this.itemName);
 }
 
 class LoadCartItems extends CartEvent {

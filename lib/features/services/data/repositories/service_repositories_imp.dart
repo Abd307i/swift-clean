@@ -37,9 +37,9 @@ class ServiceRepositoryImp extends ServiceRepository{
   }
 
   @override
-  Future<void> removeFromCart(String userId, String serviceId, String itemId) async{
+  Future<void> removeFromCart(String userId, String serviceId, String itemName) async{
     try {
-      await dataSource.removeFromCart(userId,serviceId,itemId);
+      await dataSource.removeFromCart(userId,serviceId,itemName);
     } catch (e) {
       throw Exception(e.toString());
     }

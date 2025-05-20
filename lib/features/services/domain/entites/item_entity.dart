@@ -5,6 +5,7 @@ class ItemEntity extends Equatable{
   final String itemName;
   final String itemId;
   final double subPrice;
+  final int? count;
   final String? imgUrl;
   final String? description;
 
@@ -14,10 +15,11 @@ class ItemEntity extends Equatable{
     required this.itemName,
     required this.subPrice,
     this.imgUrl,
+    this.count,
     this.description
 });
 
   @override
-  List<Object?> get props => [id,itemName,subPrice,imgUrl,description];
+  List<Object?> get props => [id,itemName,subPrice,imgUrl,count,description];
 
 }

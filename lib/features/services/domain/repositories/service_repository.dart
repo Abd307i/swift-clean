@@ -4,7 +4,7 @@ import 'package:testing_firebase/features/services/domain/entites/service_entity
 abstract class ServiceRepository{
   Future<List<ServiceEntity>> getServices();
   Future<void> addToCart(String userId, String serviceId,String itemId ,String itemName, double subPrice);
-  Future<void> removeFromCart(String userId, String serviceId, String itemId);
+  Future<void> removeFromCart(String userId, String serviceId, String itemName);
   Stream<List<ServiceEntity>> streamServices();
   Future<List<ItemEntity>> getCartItems(String userId);
   Future<List<ItemEntity>> getItemsByService(String serviceId);

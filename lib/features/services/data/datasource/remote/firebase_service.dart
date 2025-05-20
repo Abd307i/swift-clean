@@ -77,45 +77,53 @@ class FirebaseServiceDataSourceImp {
     });
   }
 
-  Future<void> removeFromCart(String userId, String serviceId, String itemId) async {
-    final cartRef = _firestore.collection('users').doc(userId).collection('cart').doc('user_cart');
+  Future<void> removeFromCart(String userId, String serviceId, String itemName) async {
+    try{
+      final cartRef = _firestore.collection('users').doc(userId).collection('cart').doc('user_cart');
 
-    return _firestore.runTransaction((transaction) async {
-      final doc = await transaction.get(cartRef);
+      return _firestore.runTransaction((transaction) async {
 
-      if (!doc.exists) {
-        return;
-      }
+        final doc = await transaction.get(cartRef);
 
-      final data = doc.data()!;
-      final List<dynamic> items = List.from(data['items'] ?? []);
-      double totalPrice = data['totalPrice'] ?? 0.0;
-
-      for (int i = 0; i < items.length; i++) {
-        final item = items[i] as Map<String, dynamic>;
-        if (item['id'] == itemId && item['serviceId'] == serviceId) {
-          final int currentCount = item['count'] ?? 1;
-          final double itemPrice = item['subPrice'] ?? 0.0;
-
-          if (currentCount > 1) {
-            // Decrement count
-            items[i]['count'] = currentCount - 1;
-            totalPrice -= itemPrice;
-          } else {
-            // Remove item completely
-            items.removeAt(i);
-            totalPrice -= itemPrice;
-          }
-
-          transaction.update(cartRef, {
-            'items': items,
-            'totalPrice': totalPrice,
-            'updatedAt': FieldValue.serverTimestamp(),
-          });
+        if (!doc.exists) {
           return;
         }
-      }
-    });
+
+        final data = doc.data()!;
+        final List<dynamic> items = List.from(data['items'] ?? []);
+        double totalPrice = data['totalPrice'] ?? 0.0;
+
+        for (int i = 0; i < items.length; i++) {
+          final item = items[i] as Map<String, dynamic>;
+          print(item['itemName']);
+          print(itemName);
+          if (item['itemName'] == itemName && item['serviceId'] == serviceId) {
+            final int currentCount = item['count'] ?? 1;
+            final double itemPrice = item['subPrice'] ?? 0.0;
+
+            if (currentCount > 1) {
+              // Decrement count
+              items[i]['count'] = currentCount - 1;
+              totalPrice -= itemPrice;
+            } else {
+              // Remove item completely
+              items.removeAt(i);
+              totalPrice -= itemPrice;
+            }
+
+            transaction.update(cartRef, {
+              'items': items,
+              'totalPrice': totalPrice,
+              'updatedAt': FieldValue.serverTimestamp(),
+            });
+            return;
+          }
+        }
+      });
+    }catch(e){
+      print(e.toString());
+    }
+
   }
 
   Future<List<ItemModel>> getCartItemsByService(String userId, String serviceId) async {
