@@ -151,7 +151,7 @@ class ProfileScreen extends StatelessWidget {
                           onDoubleTap: (){
                             Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => OrderHistoryScreen()));
+                                MaterialPageRoute(builder: (context) => OrderHistoryScreen(userId: userId,)));
                           },
                           child: buildMenuItem(
                               Icons.history, 'Order History',ColorPickerHelper.colorHelper('fieldBackgroundColor')

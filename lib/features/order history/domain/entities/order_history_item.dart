@@ -1,25 +1,21 @@
-import 'order_item.dart';
+import 'package:equatable/equatable.dart';
 
-class OrderHistoryItem{
+class OrderHistoryItemEntity extends Equatable {
   final String id;
-  final DateTime date;
-  final double total;
-  final String status;
-  final bool isExpanded;
-  final List<OrderItem> items;
+  final String itemName;
+  final double subPrice;
+  final String? imgUrl;
+  final String? description;
   
 
-  OrderHistoryItem({
+  OrderHistoryItemEntity({
     required this.id,
-    required this.date,
-    required this.total,
-    required this.status,
-    this.isExpanded = false,
-    required this.items});
+    required this.itemName,
+    required this.subPrice,
+    this.imgUrl,
+    this.description
+  });
 
-  OrderHistoryItem copyWith({
-    bool? isExpanded,
-}){
-    return OrderHistoryItem(id: id, date: date, total: total, status: status, items: items, isExpanded: isExpanded ?? this.isExpanded);
-  }
+  @override
+  List<Object?> get props => [id,itemName,subPrice,imgUrl,description];
 }

@@ -1,57 +1,188 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:testing_firebase/features/order%20history/data/models/order_history_model.dart';
-//import 'package:testing_firebase/features/order_history/data/models/order_history_model.dart';
+import 'package:testing_firebase/features/order history/data/models/order_history_model.dart';
+import 'package:testing_firebase/features/order%20history/domain/entities/order_history.dart';
+
+import '../../../domain/entities/order_history_item.dart';
+
 
 class FirebaseOrderHistory {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseFirestore _firestore;
 
-  Future<List<OrderHistoryModel>> getOrdersByStatus(
-      String userType, String status) async {
-    QuerySnapshot querySnapshot;
+  FirebaseOrderHistory(this._firestore);
 
-    // Define valid statuses based on user type
+  // Get order history for a customer
+  Future<List<OrderHistoryEntity>> getOrderHistory(String userId) async {
+    try {
+      final QuerySnapshot orderSnapshot = await _firestore
+          .collection('Orders')
+          .where('customerId', isEqualTo: userId)
+         // .orderBy('createdAt', descending: true)
+          .get();
 
-    /*
-    if user type was customer >> status will have three values : 1-in progress(the order that is being taked care of at the moment)
-                                                             2-delivered(after in progress it goes to deliverd after the whole process is finished)
-                                                             3-all :all orders
-if user type was drycleaner>> status will have four values : 1-avaliable(orders that is avalabile to take )
-                                                             2-in progress(the order that is being taked care of at the moment)
-                                                             3-delivered(after in progress it goes to deliverd after the whole process is finished)
-                                                             4-all :all orders
+      return orderSnapshot.docs.map((doc) {
+        final data = doc.data() as Map<String, dynamic>;
 
-if user type was drycleaner>> status will have four values : 1-avaliable(orders that is avalabile to take )
-                                                             2-in progress(the order that is being taked care of at the moment)
-                                                             3-delivered(after in progress it goes to deliverd after the whole process is finished)
-                                                             4-all :all orders
-     */
-    final validStatuses = {
-      'customer': ['in progress', 'delivered', 'all'],
-      'dry_cleaner': ['available', 'in progress', 'delivered', 'all'],
-      'delivery': ['available', 'in progress', 'delivered', 'all'],
-    };
+        // Convert items with proper typing
+        final List<OrderHistoryItemEntity> orderItems = (data['items'] as List? ?? [])
+            .whereType<Map<String, dynamic>>()
+            .map((item) => OrderHistoryItemEntity(
+          id: item['id'] as String? ?? '',
+          itemName: item['itemType'] as String? ?? 'Unknown',
+          subPrice: (item['subPrice'] as double?)?.toDouble() ?? 0.0,
+          imgUrl: item['imgUrl'] as String?,
+          description: item['description'] as String?,
+        ))
+            .toList();
 
-    if (!validStatuses[userType]!.contains(status)) {
-      throw ArgumentError('Invalid status for user type: $userType');
+        // Handle Timestamp conversions
+        final createdAt = data['createdAt'] != null
+            ? (data['createdAt'] as Timestamp).toDate()
+            : null;
+        final deliveryTime = data['deliveryTime'] != null
+            ? (data['deliveryTime'] as Timestamp).toDate()
+            : null;
+        final lastUpdate = data['lastUpdate'] != null
+            ? (data['lastUpdate'] as Timestamp).toDate()
+            : null;
+
+        return OrderHistoryEntity(
+          orderId: doc.id,
+          customerId: data['customerId'] as String? ?? userId,
+          items: orderItems,
+          status: data['status'] as String? ?? 'unknown',
+          totalPrice: (data['totalPrice'] as double?)?.toDouble() ?? 0.0,
+          instructions: data['instructions'] as String?,
+          deliveryId: data['deliveryId'] as String?,
+          createdAt: createdAt,
+          deliveryTime: deliveryTime,
+          shopId: data['shopId'] as String?,
+          lastUpdate: lastUpdate,
+        );
+      }).toList();
+    } on FirebaseException catch (e) {
+      throw Exception('Firestore error: ${e.message}');
+    } on FormatException catch (e) {
+      throw Exception('Data format error: ${e.message}');
+    } catch (e) {
+      throw Exception('Unexpected error fetching order history: $e');
     }
-
-    if (status == 'all') {
-      querySnapshot = await _firestore.collection('orders').get();
-    } else {
-      querySnapshot =
-          await _firestore.collection('orders').where('status', isEqualTo: status).get();
-    }
-
-    return querySnapshot.docs.map((doc) {
-      return OrderHistoryModel.fromJson({
-        'id': doc.id,
-        'date': doc['createdAt'],
-        'total': doc['totalPrice'],
-        'status': doc['status'],
-        'items': doc['items'] ?? [], // Assuming items are stored
-        'deliveryTime': doc['deliveryTime'],
-        'itemCount': doc['itemCount'] ?? 0,
-      });
-    }).toList();
   }
+    // Get order details by ID
+  Future<OrderHistoryModel> getOrderDetails(String orderId) async {
+    try {
+      if (orderId.isEmpty) {
+        throw ArgumentError('Order ID cannot be empty');
+      }
+
+      final DocumentSnapshot orderDoc =
+      await _firestore.collection('Orders').doc(orderId).get();
+
+      if (!orderDoc.exists) {
+        throw Exception('Order not found');
+      }
+
+      final data = orderDoc.data() as Map<String, dynamic>;
+
+      // Convert items to OrderHistoryItemEntity
+      final List<OrderHistoryItemEntity> orderItems = (data['items'] as List? ?? [])
+          .whereType<Map<String, dynamic>>()
+          .map((item) => OrderHistoryItemEntity(
+        id: item['id'] as String? ?? '',
+        itemName: item['itemType'] as String? ?? 'Unknown',
+        subPrice: (item['subPrice'] as double?)?.toDouble() ?? 0.0,
+        imgUrl: item['imgUrl'] as String?,
+        description: item['description'] as String?,
+      ))
+          .toList();
+
+      // Handle Timestamp conversions
+      final createdAt = data['createdAt'] != null
+          ? (data['createdAt'] as Timestamp).toDate()
+          : null;
+      final deliveryTime = data['deliveryTime'] != null
+          ? (data['deliveryTime'] as Timestamp).toDate()
+          : null;
+      final lastUpdate = data['lastUpdate'] != null
+          ? (data['lastUpdate'] as Timestamp).toDate()
+          : null;
+
+      return OrderHistoryModel(
+        orderId: orderDoc.id,
+        customerId: data['customerId'] as String? ?? '',
+        items: orderItems,
+        status: data['status'] as String? ?? 'unknown',
+        totalPrice: (data['totalPrice'] as double?)?.toDouble() ?? 0.0,
+        instructions: data['instructions'] as String?,
+        deliveryId: data['deliveryId'] as String?,
+        createdAt: createdAt,
+        deliveryTime: deliveryTime,
+        shopId: data['shopId'] as String?,
+        lastUpdate: lastUpdate,
+      );
+    } on FirebaseException catch (e) {
+      throw Exception('Firestore error: ${e.message}');
+    } on FormatException catch (e) {
+      throw Exception('Data format error: ${e.message}');
+    } catch (e) {
+      throw Exception('Failed to fetch order details: $e');
+    }
+  }
+
+  Future<List<OrderHistoryEntity>> getOrdersByStatus(String userType, String userId, String status) async{
+    try {
+      final QuerySnapshot orderSnapshot = await _firestore
+          .collection('Orders')
+          .where('customerId', isEqualTo: userId,).where('status', isEqualTo: status)
+      // .orderBy('createdAt', descending: true)
+          .get();
+
+      return orderSnapshot.docs.map((doc) {
+        final data = doc.data() as Map<String, dynamic>;
+
+        // Convert items with proper typing
+        final List<OrderHistoryItemEntity> orderItems = (data['items'] as List? ?? [])
+            .whereType<Map<String, dynamic>>()
+            .map((item) => OrderHistoryItemEntity(
+          id: item['id'] as String? ?? '',
+          itemName: item['itemType'] as String? ?? 'Unknown',
+          subPrice: (item['subPrice'] as double?)?.toDouble() ?? 0.0,
+          imgUrl: item['imgUrl'] as String?,
+          description: item['description'] as String?,
+        ))
+            .toList();
+
+        // Handle Timestamp conversions
+        final createdAt = data['createdAt'] != null
+            ? (data['createdAt'] as Timestamp).toDate()
+            : null;
+        final deliveryTime = data['deliveryTime'] != null
+            ? (data['deliveryTime'] as Timestamp).toDate()
+            : null;
+        final lastUpdate = data['lastUpdate'] != null
+            ? (data['lastUpdate'] as Timestamp).toDate()
+            : null;
+
+        return OrderHistoryEntity(
+          orderId: doc.id,
+          customerId: data['customerId'] as String? ?? userId,
+          items: orderItems,
+          status: data['status'] as String? ?? 'unknown',
+          totalPrice: (data['totalPrice'] as double?)?.toDouble() ?? 0.0,
+          instructions: data['instructions'] as String?,
+          deliveryId: data['deliveryId'] as String?,
+          createdAt: createdAt,
+          deliveryTime: deliveryTime,
+          shopId: data['shopId'] as String?,
+          lastUpdate: lastUpdate,
+        );
+      }).toList();
+    } on FirebaseException catch (e) {
+      throw Exception('Firestore error: ${e.message}');
+    } on FormatException catch (e) {
+      throw Exception('Data format error: ${e.message}');
+    } catch (e) {
+      throw Exception('Unexpected error fetching order history: $e');
+    }
+  }
+
 }

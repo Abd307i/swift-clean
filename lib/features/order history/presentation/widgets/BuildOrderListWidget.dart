@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:testing_firebase/features/order%20history/domain/entities/order_history.dart';
+import 'package:testing_firebase/features/order%20history/domain/entities/order_history_item.dart';
 import 'package:testing_firebase/features/order%20history/presentation/pages/OrderTrackingScreen.dart';
 
 import 'package:testing_firebase/features/order%20history/presentation/pages/OrderHistoryModel.dart';
 
 class BuildOrderList extends StatelessWidget {
-  final List<OrderHistoryModel> orders;
+  final List<OrderHistoryEntity> orders;
 
   const BuildOrderList(this.orders, {Key? key}) : super(key: key);
 
@@ -30,7 +32,7 @@ class BuildOrderList extends StatelessWidget {
     );
   }
 
-  Widget _buildOrderCard(BuildContext context, OrderHistoryModel order) {
+  Widget _buildOrderCard(BuildContext context, OrderHistoryEntity order) {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       padding: const EdgeInsets.all(16),
@@ -52,14 +54,14 @@ class BuildOrderList extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Order #${order.orderNumber}',
+                'Order #${order.orderId}',
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
                 ),
               ),
               Text(
-                '\$ ${order.price}',
+                '\$ ${order.totalPrice}',
                 style: const TextStyle(
                   color: Colors.blue,
                   fontWeight: FontWeight.bold,
@@ -70,7 +72,7 @@ class BuildOrderList extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            order.dateTime,
+            order.lastUpdate.toString(),
             style: const TextStyle(
               color: Colors.grey,
               fontSize: 14,
@@ -81,7 +83,7 @@ class BuildOrderList extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                '${order.numberOfItems} Items',
+                '${order.items.length} Items',
                 style: const TextStyle(
                   fontSize: 15,
                 ),

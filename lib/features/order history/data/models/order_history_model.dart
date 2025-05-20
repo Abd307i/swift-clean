@@ -1,54 +1,65 @@
-import 'package:testing_firebase/features/order%20history/domain/entities/order_history_item.dart';
-import 'package:testing_firebase/features/order%20history/domain/entities/order_item.dart';
 
-class OrderHistoryModel {
-  final String id;
-  final DateTime date;
-  final double total;
-  final String status;
-  final List<dynamic> items;
-  final DateTime? deliveryTime; // Added for delivery scheduling
-  final int itemCount; // Added from screenshot
+import 'package:testing_firebase/features/order history/domain/entities/order_history.dart';
 
-  OrderHistoryModel({
-    required this.id,
-    required this.date,
-    required this.total,
-    required this.status,
-    required this.items,
-    this.deliveryTime,
-    required this.itemCount,
-  });
+class OrderHistoryModel extends OrderHistoryEntity{
+  const OrderHistoryModel({
+    required super.orderId,
+    required super.customerId,
+    required super.items,
+    required super.status,
+    required super.totalPrice,
+    super.instructions,
+    super.deliveryId,
+    super.createdAt,
+    super.deliveryTime,
+    super.shopId,
+    super.lastUpdate
+});
 
   factory OrderHistoryModel.fromJson(Map<String, dynamic> json) {
     return OrderHistoryModel(
-      id: json['id'],
-      date: json['date'].toDate(), // Assuming Firestore Timestamp
-      total: (json['total'] as num).toDouble(),
-      status: json['status'],
+      orderId: json['orderId'],
+      customerId: json['customerId'],
       items: json['items'],
-      deliveryTime: json['deliveryTime'] != null
-          ? (json['deliveryTime'] as dynamic).toDate()
-          : null,
-      itemCount: json['itemCount'] ?? 0,
+      status: json['status'],
+      totalPrice: json['totalPrice'],
+      instructions: json['instructions'],
+      deliveryId: json['deliveryId'],
+      createdAt: json['createdAt'],
+      deliveryTime: json['deliveryTime'],
+      shopId: json['shopId'],
+      lastUpdate: json['lastUpdate'],
     );
   }
 
-  OrderHistoryItem toEntity(OrderHistoryModel model) {
-    return OrderHistoryItem(
-      id: model.id,
-      date: model.date,
-      total: model.total,
-      status: model.status,
-      items: model.items.map((item) => OrderItem(
-            id: id,
-            name: item['name'],
-            price: (item['price'] as num).toDouble(),
-            serviceType: item['serviceType'],
-            quantity: item['quantity'],
-          )).toList(),
-      deliveryTime: model.deliveryTime, //OrderHistoryItem entity need to be updated
-      itemCount: model.itemCount,
+  Map<String, dynamic> toJson() => {
+    'orderId': orderId,
+    'customerId': customerId,
+    'items':items,
+    'status':status,
+    'totalPrice':totalPrice,
+    'instructions':instructions,
+    'deliveryId':deliveryId,
+    'createdAt':createdAt,
+    'deliveryTime':deliveryTime,
+    'shopId':shopId,
+    'lastUpdate':lastUpdate,
+  };
+
+  factory OrderHistoryModel.fromEntity(OrderHistoryEntity order){
+    return OrderHistoryModel(
+        orderId: order.orderId,
+        customerId: order.customerId,
+        items: order.items,
+        status: order.status,
+        totalPrice: order.totalPrice,
+        instructions: order.instructions,
+        deliveryId: order.deliveryId,
+        createdAt: order.createdAt,
+        deliveryTime: order.deliveryTime,
+        shopId: order.shopId,
+        lastUpdate: order.lastUpdate
     );
   }
+
 }

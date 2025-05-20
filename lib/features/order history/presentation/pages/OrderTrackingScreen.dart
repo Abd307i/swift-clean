@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:testing_firebase/features/order%20history/domain/entities/order_history.dart';
 import '../../../../core/constants/PickColorHelper.dart';
 import 'OrderHistoryModel.dart';
 
 
 class OrderTrackingScreen extends StatefulWidget {
-  final OrderHistoryModel order;
+  final OrderHistoryEntity order;
 
   const OrderTrackingScreen({Key? key, required this.order}) : super(key: key);
 
@@ -29,7 +30,7 @@ class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
       appBar: AppBar(
         backgroundColor: ColorPickerHelper.colorHelper('backgroundColor'),
         title: Text(
-          'Track Order #${widget.order.orderNumber}',
+          'Track Order #${widget.order.orderId}',
           style: TextStyle(
             color: ColorPickerHelper.colorHelper('mainTextColor'),
           ),
@@ -175,7 +176,7 @@ class DeliveryTimeline extends StatelessWidget {
 }
 
 class OrderInfoCard extends StatelessWidget {
-  final OrderHistoryModel order;
+  final OrderHistoryEntity order;
 
   const OrderInfoCard({Key? key, required this.order}) : super(key: key);
 
@@ -193,14 +194,14 @@ class OrderInfoCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Order #${order.orderNumber}',
+                  'Order #${order.orderId}',
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
                   ),
                 ),
                 Text(
-                  '\$ ${order.price}',
+                  '\$ ${order.totalPrice}',
                   style: const TextStyle(
                     color: Colors.blue,
                     fontWeight: FontWeight.bold,
@@ -211,7 +212,7 @@ class OrderInfoCard extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              order.dateTime,
+              order.lastUpdate.toString(),
               style: TextStyle(
                 color: Colors.grey,
                 fontSize: 14,
@@ -228,7 +229,7 @@ class OrderInfoCard extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '${order.numberOfItems}',
+                  '${order.items.length}',
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 15,

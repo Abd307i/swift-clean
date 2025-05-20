@@ -18,7 +18,9 @@ class ServiceCardWidget extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 80,
+        padding: EdgeInsets.all(8.0),
+        width: 100,
+        height: 200,
         child: Column(
           children: [
             Container(

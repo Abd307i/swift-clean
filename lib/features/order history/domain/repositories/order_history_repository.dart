@@ -1,5 +1,7 @@
-import 'package:testing_firebase/features/order history/domain/entities/order_history_item.dart';
+
+import '../entities/order_history.dart';
 
 abstract class OrderHistoryRepository{
-  Future <List<OrderHistoryItem>> getOrderHistory(String userId);
+  Future <List<OrderHistoryEntity>> getOrderHistory(String userId);
+  Future<List<OrderHistoryEntity>> getOrdersByStatus(String userType,String userId,String status);
 }
