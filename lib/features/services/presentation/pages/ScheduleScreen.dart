@@ -130,7 +130,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     final orderEntity = OrderEntity(
         orderId: '11111',
         customerId: customerId,
-        items: items.toList(),
+        items: items,
         status: 'In Progress',
         totalPrice: totalPrice,
     );
