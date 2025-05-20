@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testing_firebase/features/auth/presentation/pages/sign_up_screen.dart';
 import 'package:testing_firebase/features/home%20page/Presentation/pages/Home%20Page%20User.dart';
+import 'package:testing_firebase/features/home%20page/Presentation/pages/home_page_delivery.dart';
+import 'package:testing_firebase/features/home%20page/Presentation/pages/home_page_drycleaner.dart';
 import 'package:testing_firebase/features/profile/domain/entities/profile_entity.dart';
 import 'package:testing_firebase/features/profile/presentation/pages/ProfileMenuScreen.dart';
 import '../../../../core/widgets/custom_button.dart';
@@ -52,7 +54,7 @@ class _SignInScreenState extends State<SignInScreen> {
               // Navigate to HomePage instead of ProfilePage
               Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => HomePage(userId: state.user.id))
+                  MaterialPageRoute(builder: (context) => DeliveryHomePage(userId: state.user.id))
               )
             },
             desc: state.message,

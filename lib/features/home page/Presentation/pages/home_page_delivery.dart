@@ -12,10 +12,10 @@ import 'package:testing_firebase/features/profile/domain/usecases/get_profile_da
 import '../../../order%20history/dependency_injection.dart' as di;
 import '../../../profile/dependency_injection.dart' as profile_di;
 
-class DrycleanerHomePage extends StatelessWidget {
+class DeliveryHomePage extends StatelessWidget {
   final String userId;
 
-  const DrycleanerHomePage({Key? key, required this.userId}) : super(key: key);
+  const DeliveryHomePage({Key? key, required this.userId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class DrycleanerHomePage extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) => di.sl<OrderHistoryBloc>()
-            ..add(GetOrderHistoryByUserType('drycleaner', userId, 'pending')),
+            ..add(GetOrderHistoryByUserType('delivery', userId, 'ready_for_pickup')),
         ),
         BlocProvider(
           create: (context) => ProfileBloc(
@@ -51,7 +51,7 @@ class DrycleanerHomePage extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      'Welcome to SwiftClean Drycleaner :)',
+                      'Welcome to SwiftClean Delivery :)',
                       style: TextStyle(
                         color: Color(0xFF7A5CF8),
                         fontSize: 12,
@@ -62,7 +62,7 @@ class DrycleanerHomePage extends StatelessWidget {
                 );
               } else {
                 return Text(
-                  'Drycleaner Dashboard',
+                  'Delivery Dashboard',
                   style: TextStyle(
                     color: Color(0xFF333E63),
                     fontWeight: FontWeight.bold,
@@ -92,22 +92,22 @@ class DrycleanerHomePage extends StatelessWidget {
             ),
           ],
         ),
-        body: DrycleanerHomePageContent(userId),
+        body: DeliveryHomePageContent(userId),
       ),
     );
   }
 }
 
-class DrycleanerHomePageContent extends StatefulWidget {
+class DeliveryHomePageContent extends StatefulWidget {
   final String userId;
 
-  DrycleanerHomePageContent(this.userId);
+  DeliveryHomePageContent(this.userId);
 
   @override
-  _DrycleanerHomePageContentState createState() => _DrycleanerHomePageContentState();
+  _DeliveryHomePageContentState createState() => _DeliveryHomePageContentState();
 }
 
-class _DrycleanerHomePageContentState extends State<DrycleanerHomePageContent> with SingleTickerProviderStateMixin {
+class _DeliveryHomePageContentState extends State<DeliveryHomePageContent> with SingleTickerProviderStateMixin {
   int _selectedIndex = 1; // Default to home page (middle icon)
   late TabController _tabController;
 
@@ -121,20 +121,20 @@ class _DrycleanerHomePageContentState extends State<DrycleanerHomePageContent> w
         String status;
         switch (_tabController.index) {
           case 0:
-            status = 'pending';
+            status = 'ready_for_pickup';
             break;
           case 1:
-            status = 'processing';
+            status = 'out_for_delivery';
             break;
           case 2:
-            status = 'completed';
+            status = 'delivered';
             break;
           default:
-            status = 'pending';
+            status = 'ready_for_pickup';
         }
 
         context.read<OrderHistoryBloc>().add(
-            GetOrderHistoryByUserType('drycleaner', widget.userId, status)
+            GetOrderHistoryByUserType('delivery', widget.userId, status)
         );
       }
     });
@@ -156,7 +156,7 @@ class _DrycleanerHomePageContentState extends State<DrycleanerHomePageContent> w
           Padding(
             padding: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 16.0),
             child: Text(
-              'Manage your laundry orders',
+              'Manage your delivery orders',
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -181,9 +181,9 @@ class _DrycleanerHomePageContentState extends State<DrycleanerHomePageContent> w
               labelColor: Colors.white,
               unselectedLabelColor: Colors.grey[700],
               tabs: [
-                Tab(text: 'Pending'),
-                Tab(text: 'Processing'),
-                Tab(text: 'Completed'),
+                Tab(text: 'For Pickup'),
+                Tab(text: 'Delivering'),
+                Tab(text: 'Delivered'),
               ],
             ),
           ),
@@ -219,7 +219,7 @@ class _DrycleanerHomePageContentState extends State<DrycleanerHomePageContent> w
             if (index == _selectedIndex) return;
 
             if (index == 0) {
-              // Navigate to orders page
+              // Navigate to orders history page
               // You can implement this later
             } else if (index == 2) {
               Navigator.push(
@@ -243,8 +243,8 @@ class _DrycleanerHomePageContentState extends State<DrycleanerHomePageContent> w
           type: BottomNavigationBarType.fixed,
           items: [
             BottomNavigationBarItem(
-              icon: Icon(Icons.assessment),
-              label: 'Orders',
+              icon: Icon(Icons.history),
+              label: 'History',
             ),
             BottomNavigationBarItem(
               icon: Container(
@@ -254,7 +254,7 @@ class _DrycleanerHomePageContentState extends State<DrycleanerHomePageContent> w
                 ),
                 padding: EdgeInsets.all(12),
                 child: Icon(
-                  Icons.local_laundry_service,
+                  Icons.delivery_dining,
                   color: Colors.white,
                 ),
               ),
@@ -322,6 +322,45 @@ class _DrycleanerHomePageContentState extends State<DrycleanerHomePageContent> w
   }
 
   Widget _buildOrderCard(order) {
+    // Determine which actions to show based on order status
+    Widget actionButtons;
+
+    if (order.status == 'ready_for_pickup') {
+      actionButtons = Row(
+        children: [
+          _buildActionButton(
+            'Pick Up',
+            Color(0xFF7A5CF8),
+                () {
+              // Add logic to pickup order
+            },
+          ),
+        ],
+      );
+    } else if (order.status == 'out_for_delivery') {
+      actionButtons = Row(
+        children: [
+          _buildActionButton(
+            'Mark Delivered',
+            Colors.green,
+                () {
+              // Add logic to mark as delivered
+            },
+          ),
+          SizedBox(width: 8),
+          _buildActionButton(
+            'Issue',
+            Colors.red,
+                () {
+              // Add logic to report issue
+            },
+          ),
+        ],
+      );
+    } else {
+      actionButtons = SizedBox.shrink(); // No actions for delivered orders
+    }
+
     return Card(
       margin: EdgeInsets.only(bottom: 16.0),
       elevation: 2,
@@ -349,12 +388,31 @@ class _DrycleanerHomePageContentState extends State<DrycleanerHomePageContent> w
             ),
             Divider(height: 24),
             Text(
-              'Customer: ${order.userName}',
+              'Customer: ${order.userName ?? "Customer"}',
               style: TextStyle(
                 fontSize: 14,
                 color: Colors.grey[700],
               ),
             ),
+            SizedBox(height: 8),
+            // Show pickup location for ready_for_pickup
+            if (order.status == 'ready_for_pickup')
+              Text(
+                'Pickup: ${order.shopName ?? "Laundry Shop"}',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.grey[700],
+                ),
+              ),
+            // Show delivery address for out_for_delivery
+            if (order.status == 'out_for_delivery' || order.status == 'delivered')
+              Text(
+                'Delivery Address: ${order.deliveryAddress ?? "Customer Address"}',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.grey[700],
+                ),
+              ),
             SizedBox(height: 8),
             Text(
               'Items: ${order.items.length}',
@@ -377,40 +435,13 @@ class _DrycleanerHomePageContentState extends State<DrycleanerHomePageContent> w
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Date: ${_formatDate(order.orderDate)}',
+                  'Date: ${_formatDate(order.orderDate ?? DateTime.now())}',
                   style: TextStyle(
                     fontSize: 12,
                     color: Colors.grey[600],
                   ),
                 ),
-                if (order.status == 'pending')
-                  Row(
-                    children: [
-                      _buildActionButton(
-                        'Accept',
-                        Colors.green,
-                            () {
-                          // Add logic to accept order
-                        },
-                      ),
-                      SizedBox(width: 8),
-                      _buildActionButton(
-                        'Reject',
-                        Colors.red,
-                            () {
-                          // Add logic to reject order
-                        },
-                      ),
-                    ],
-                  )
-                else if (order.status == 'processing')
-                  _buildActionButton(
-                    'Mark as Ready',
-                    Color(0xFF7A5CF8),
-                        () {
-                      // Add logic to mark as ready
-                    },
-                  ),
+                actionButtons,
               ],
             ),
           ],
@@ -421,18 +452,24 @@ class _DrycleanerHomePageContentState extends State<DrycleanerHomePageContent> w
 
   Widget _buildStatusChip(String status) {
     Color chipColor;
+    String displayStatus;
+
     switch (status.toLowerCase()) {
-      case 'pending':
-        chipColor = Colors.orange;
+      case 'ready_for_pickup':
+        chipColor = Colors.blue;
+        displayStatus = 'FOR PICKUP';
         break;
-      case 'processing':
+      case 'out_for_delivery':
         chipColor = Color(0xFF7A5CF8);
+        displayStatus = 'DELIVERING';
         break;
-      case 'completed':
+      case 'delivered':
         chipColor = Colors.green;
+        displayStatus = 'DELIVERED';
         break;
       default:
         chipColor = Colors.grey;
+        displayStatus = status.toUpperCase();
     }
 
     return Container(
@@ -443,7 +480,7 @@ class _DrycleanerHomePageContentState extends State<DrycleanerHomePageContent> w
         border: Border.all(color: chipColor),
       ),
       child: Text(
-        status.toUpperCase(),
+        displayStatus,
         style: TextStyle(
           color: chipColor,
           fontWeight: FontWeight.bold,

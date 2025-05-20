@@ -7,20 +7,39 @@ class OrderHistoryBloc extends Bloc<OrderHistoryEvent, OrderHistoryState>{
   final GetOrderHistory getOrderHistory;
 
   OrderHistoryBloc({required this.getOrderHistory}):super(OrderHistoryInitialState()){
-    on<GetOrderHistoryEvent> (_onGetOrderHistory);
+    on<GetOrderHistoryEvent>(_onGetOrderHistory);
+    on<GetOrderHistoryByUserType>(_onGetOrderHistoryByUserType); // Add handler for this event
   }
 
   Future<void> _onGetOrderHistory(
       GetOrderHistoryEvent event,
-      Emitter <OrderHistoryState> emit
+      Emitter<OrderHistoryState> emit
       ) async {
     emit(OrderHistoryLoading());
     try{
       final orders = await getOrderHistory(event.userId);
       emit(OrderHistoryLoaded(orders));
-    }catch(e){
+    } catch(e){
       emit(OrderHistoryErrorState(e.toString()));
     }
   }
 
+  // New method to handle GetOrderHistoryByUserType event
+  Future<void> _onGetOrderHistoryByUserType(
+      GetOrderHistoryByUserType event,
+      Emitter<OrderHistoryState> emit
+      ) async {
+    emit(OrderHistoryLoading());
+    try {
+      // Update the method to handle filtering by status as well
+      final orders = await getOrderHistory.getOrdersByStatus(
+          event.userType,
+          event.userId,
+          event.status
+      );
+      emit(OrderHistoryLoaded(orders));
+    } catch(e) {
+      emit(OrderHistoryErrorState(e.toString()));
+    }
+  }
 }
