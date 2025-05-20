@@ -9,8 +9,6 @@ class FirebaseServiceDataSourceImp {
 
   FirebaseServiceDataSourceImp(this._firestore);
 
-  // [Previous methods remain unchanged...]
-
   Future<void> addToCart(
       String userId,
       String serviceId, // Added service ID parameter
@@ -95,9 +93,9 @@ class FirebaseServiceDataSourceImp {
 
         for (int i = 0; i < items.length; i++) {
           final item = items[i] as Map<String, dynamic>;
-          print(item['itemName']);
-          print(itemName);
+          print(item['itemName']+' '+itemName +' '+ item['serviceId'] +' '+ serviceId);
           if (item['itemName'] == itemName && item['serviceId'] == serviceId) {
+            print('sssssssss');
             final int currentCount = item['count'] ?? 1;
             final double itemPrice = item['subPrice'] ?? 0.0;
 

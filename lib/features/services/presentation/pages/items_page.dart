@@ -62,7 +62,7 @@ class ItemsPage extends StatelessWidget{
               },
             )
           ),
-          body: ItemPage(userId: userId, serviceName: serviceName),
+          body: ItemPage(userId: userId, serviceName: serviceName, serviceId: serviceId,),
         ),
       );
   }
@@ -72,8 +72,8 @@ class ItemsPage extends StatelessWidget{
 class ItemPage extends StatelessWidget {
   final String userId;
   final String serviceName;
-
-  const ItemPage({Key? key, required this.userId ,required this.serviceName}) : super(key: key);
+  final String serviceId;
+  const ItemPage({Key? key, required this.userId ,required this.serviceName, required this.serviceId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -124,7 +124,7 @@ class ItemPage extends StatelessWidget {
                             },
                             icon: Icon(Icons.add)),
                           IconButton(
-                              onPressed:() => context.read<CartBloc>().add(RemoveItemFromCart(userId,serviceName,state.items[index].itemName)),
+                              onPressed:() => context.read<CartBloc>().add(RemoveItemFromCart(userId,serviceId,state.items[index].itemName)),
                               icon: Icon(Icons.minimize_rounded))
                         ],
                       );
