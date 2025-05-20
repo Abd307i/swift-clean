@@ -45,20 +45,67 @@ class _SignInScreenState extends State<SignInScreen> {
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthAuthenticated) {
-          AwesomeDialog(
-            context: context,
-            dialogType: DialogType.success,
-            animType: AnimType.topSlide,
-            title: 'Success',
-            btnOkOnPress: () => {
-              // Navigate to HomePage instead of ProfilePage
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => HomePage(userId: state.user.id))
-              )
-            },
-            desc: state.message,
-          ).show();
+          if(state.user.userType == 'Customer'){
+            AwesomeDialog(
+              context: context,
+              dialogType: DialogType.success,
+              animType: AnimType.topSlide,
+              title: 'Success',
+              btnOkOnPress: () => {
+                // Navigate to HomePage instead of ProfilePage
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => HomePage(userId: state.user.id))
+                )
+              },
+              desc: state.message,
+            ).show();
+          }else{
+              if(!state.user.verified) {
+                AwesomeDialog(
+                  context: context,
+                  dialogType: DialogType.info,
+                  animType: AnimType.topSlide,
+                  title: 'Alert',
+                  btnOkOnPress: () =>
+                  {
+                  },
+                  desc: 'Please Call Us To Approve Your Request\n0780680780',
+                ).show();
+              }else{
+                if(state.user.userType == 'Drycleaner'){
+                  AwesomeDialog(
+                    context: context,
+                    dialogType: DialogType.success,
+                    animType: AnimType.topSlide,
+                    title: 'Success',
+                    btnOkOnPress: () => {
+                      // Navigate to HomePage instead of ProfilePage
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => DrycleanerHomePage(userId: state.user.id))
+                      )
+                    },
+                    desc: state.message,
+                  ).show();
+                }else{
+                  AwesomeDialog(
+                    context: context,
+                    dialogType: DialogType.success,
+                    animType: AnimType.topSlide,
+                    title: 'Success',
+                    btnOkOnPress: () => {
+                      // Navigate to HomePage instead of ProfilePage
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => DeliveryHomePage(userId: state.user.id))
+                      )
+                    },
+                    desc: state.message,
+                  ).show();
+                }
+            }
+          }
         }
         if (state is VerificationEmailSent) {
           AwesomeDialog(

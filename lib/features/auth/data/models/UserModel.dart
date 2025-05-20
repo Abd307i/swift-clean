@@ -11,6 +11,8 @@ class UserModel extends UserEntity{
     required super.firstName,
     required super.lastName,
     required super.phone,
+    required super.userType,
+    required super.verified,
     super.address,
     required super.emailVerified,
   });
@@ -23,6 +25,8 @@ class UserModel extends UserEntity{
         lastName: json['lastName'],
         phone:json['phone'],
         address: json['address'],
+        userType: json['userType'],
+        verified: json['verified'],
         emailVerified: json['emailVerified']
     );
   }
@@ -34,6 +38,8 @@ class UserModel extends UserEntity{
       'firstName': firstName,
       'lastName': lastName,
       'phone': phone,
+      'userType':userType,
+      'verified':verified,
       'address': address,
       'emailVerified': emailVerified
     };
@@ -45,6 +51,8 @@ class UserModel extends UserEntity{
       firstName: data?['firstName'] ?? '',
       lastName: data?['lastName'] ?? '',
       phone: data?['phone'] ?? '',
+      userType: data?['userType']??'',
+      verified: data?['verified']??false ,
       address: data?['address'] != null
           ? AddressModel.fromJson(data!['address'])
           : const AddressModel( // Default empty address

@@ -65,6 +65,7 @@ class AuthBloc extends Bloc<AuthEvent,AuthState>{
         lastName: event.lastName,
         phone: event.phone,
         address: event.address,
+        userType: event.userType,
       ));
       emit(RegistrationSuccess(message: "Check Your Email For Verification"));
 

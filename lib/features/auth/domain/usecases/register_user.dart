@@ -23,6 +23,7 @@ class RegisterUserParams {
   final String lastName;
   final String phone; // With country code
   final String? address;
+  final String userType;
 
   RegisterUserParams({
     required this.email,
@@ -30,6 +31,7 @@ class RegisterUserParams {
     required this.firstName,
     required this.lastName,
     required this.phone,
+    required this.userType,
     this.address,
 });
 }

@@ -8,6 +8,8 @@ abstract class UserEntity {
   final String phone;
   final AddressEntity? address;
   final bool emailVerified;
+  final String userType;
+  final bool verified;
 
   const UserEntity({
     required this.id,
@@ -15,6 +17,8 @@ abstract class UserEntity {
     required this.firstName,
     required this.lastName,
     required this.phone,
+    required this.userType,
+    required this.verified,
     this.address,
     this.emailVerified = false,
 });

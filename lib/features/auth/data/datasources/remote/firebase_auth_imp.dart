@@ -26,14 +26,30 @@ class FirebaseAuthImp implements FirebaseAuthi{
         email: params.email,
         password: params.password,
       );
-      await _firestore.collection('users').doc(user.user!.uid).set({
-        'firstName':params.firstName,
-        'lastName':params.lastName,
-        'phone': params.phone,
-        'email':params.email,
-        'address': params.address,
-        'createdAt': FieldValue.serverTimestamp(),
-      });
+
+      if(params.userType == 'Customer') {
+        await _firestore.collection('users').doc(user.user!.uid).set({
+          'firstName': params.firstName,
+          'lastName': params.lastName,
+          'phone': params.phone,
+          'email': params.email,
+          'address': params.address,
+          'createdAt': FieldValue.serverTimestamp(),
+          'userType':'User',
+          'verified': true
+        });
+      }else{
+        await _firestore.collection('users').doc(user.user!.uid).set({
+          'firstName': params.firstName,
+          'lastName': params.lastName,
+          'phone': params.phone,
+          'email': params.email,
+          'address': params.address,
+          'createdAt': FieldValue.serverTimestamp(),
+          'userType':params.userType,
+          'verified': false
+        });
+      }
       return user;
     } on FirebaseAuthException catch (e) {
       throw (e.message ?? 'Registration failed');

@@ -27,6 +27,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   final _phoneNumberController = TextEditingController();
+  String _selectedUserType = 'Customer'; // Default value
 
   @override
   void dispose() {
@@ -99,6 +100,36 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                       ),
                       const SizedBox(height: 40),
+
+                      // User Type Dropdown
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey.shade300),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton<String>(
+                            isExpanded: true,
+                            value: _selectedUserType,
+                            hint: const Text('Select User Type'),
+                            items: <String>['Customer', 'Drycleaner', 'Delivery']
+                                .map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                _selectedUserType = newValue!;
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(height: 16),
 
                       CustomTextField(
                         controller: _firstNameController,
@@ -199,10 +230,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             context.read<AuthBloc>().add(
                                 RegisterEvent(
                                   email: _emailController.text.trim(),
+                                  userType: _selectedUserType,
                                   password: _passwordController.text.trim(),
                                   firstName: _firstNameController.text.trim(),
                                   lastName: _lastNameController.text.trim(),
                                   phone: _phoneNumberController.text.trim(),
+                                  //     userType: _selectedUserType, // Assuming RegisterEvent supports userType
                                 )
                             );
                           }

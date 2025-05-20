@@ -13,7 +13,14 @@ class FirebaseOrder {
       await _firestore.collection('Orders').doc(order.orderId).set({
         'createdAt':Timestamp.now(),
         'customerId':order.customerId,
-        'items': order.items,
+        'items': order.items.map((item) => {
+          'itemName': item.itemName,
+          'itemId': item.itemId,
+          'subPrice': item.subPrice,
+          'count': item.count,
+          'imgUrl': item.imgUrl,
+          'description': item.description,
+        }).toList(),
         'status': order.status,
         'totalPrice': order.totalPrice,
         'deliveryId': order.deliveryId,
