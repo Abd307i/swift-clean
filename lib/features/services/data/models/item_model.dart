@@ -1,3 +1,5 @@
+import 'dart:nativewrappers/_internal/vm/lib/ffi_allocation_patch.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:testing_firebase/features/services/domain/entites/item_entity.dart';
 
@@ -5,6 +7,8 @@ class ItemModel{
   final String id;
   final String itemName;
   final double subPrice;
+  final String serviceId;
+  final int? count;
   final String? description;
   final String? imgUrl;
 
@@ -12,7 +16,9 @@ class ItemModel{
     required this.id,
     required this.itemName,
     required this.subPrice,
+    required this.serviceId,
     this.description,
+    this.count,
     this.imgUrl
 });
 
@@ -21,8 +27,8 @@ class ItemModel{
         id: json['id'],
         itemName: json['itemName'],
         subPrice: json['subPrice'],
-        description: json['description'],
-        imgUrl: json['imgUrl']
+        serviceId: json['serviceId'],
+        count: json['count']
     );
   }
 
@@ -31,9 +37,9 @@ class ItemModel{
     return ItemModel(
       id: doc['id'],
       itemName: doc['itemName'],
-      description: doc['description'],
       subPrice: doc['subPrice'],
-      imgUrl: doc['imgUrl']
+      serviceId: doc['serviceId'],
+      count: doc['count']
     );
   }
 
@@ -41,12 +47,12 @@ class ItemModel{
     return{
       'id':id,
       'itemName': itemName,
-      'description': description,
+      'serviceId':serviceId,
       'subPrice': subPrice,
-      'imgUrl': imgUrl
+      'count':count
     };
   }
 
-  ItemEntity toItemEntity() => ItemEntity(id: id, itemName: itemName, subPrice: subPrice, imgUrl: imgUrl, description: description);
+  ItemEntity toItemEntity() => ItemEntity(id: id,itemId:  serviceId ,itemName: itemName, subPrice: subPrice, imgUrl: imgUrl, description: description);
 
 }

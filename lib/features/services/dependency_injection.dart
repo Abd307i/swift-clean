@@ -9,6 +9,7 @@ import 'package:testing_firebase/features/services/domain/repositories/service_r
 import 'package:testing_firebase/features/services/domain/usecases/add_to_cart.dart';
 import 'package:testing_firebase/features/services/domain/usecases/confirm_order.dart';
 import 'package:testing_firebase/features/services/domain/usecases/get_cart_items.dart';
+import 'package:testing_firebase/features/services/domain/usecases/get_cart_totalprice.dart';
 import 'package:testing_firebase/features/services/domain/usecases/get_items_by_service.dart';
 import 'package:testing_firebase/features/services/domain/usecases/get_order.dart';
 import 'package:testing_firebase/features/services/domain/usecases/get_services.dart';
@@ -30,7 +31,8 @@ Future<void> inti() async{
   sl.registerFactory(()
   => CartBloc(addToCart: sl(),
       removeFromCart: sl(),
-      getCartItems: sl()));
+      getCartItems: sl(),
+      getCartTotalPrice: sl()));
 
   sl.registerLazySingleton(() => GetServices(sl()));
   sl.registerLazySingleton(() => GetItemByService(sl()));
@@ -39,6 +41,7 @@ Future<void> inti() async{
   sl.registerLazySingleton(() => RemoveFromCart(sl()));
   sl.registerLazySingleton(() => GetOrder(sl()));
   sl.registerLazySingleton(() => ConfirmOrder(sl()));
+  sl.registerLazySingleton(() => GetCartTotalPrice(sl()));
 
   sl.registerLazySingleton<OrderRepository>(
       () => OrderRepositoryImp(sl())

@@ -2,23 +2,28 @@ abstract class CartEvent {}
 
 class AddItemToCart extends CartEvent {
   final String userId;
-  final String serviceName;
+  final String serviceId;
+  final String itemId;
   final String itemName;
   final double subPrice;
-  final int count;
 
-  AddItemToCart(this.userId, this.serviceName, this.itemName, this.subPrice, this.count);
+  AddItemToCart(this.userId, this.serviceId, this.itemId, this.itemName, this.subPrice);
 }
 
 class RemoveItemFromCart extends CartEvent {
   final String userId;
-  final String serviceName;
-  final String itemName;
+  final String serviceId;
+  final String itemId;
 
-  RemoveItemFromCart(this.userId, this.serviceName, this.itemName);
+  RemoveItemFromCart(this.userId, this.serviceId, this.itemId);
 }
 
 class LoadCartItems extends CartEvent {
   final String userId;
   LoadCartItems(this.userId);
+}
+
+class GetCartTotalPriceEvent extends CartEvent{
+  final String userId;
+  GetCartTotalPriceEvent(this.userId);
 }

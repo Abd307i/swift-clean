@@ -3,12 +3,14 @@ import 'package:equatable/equatable.dart';
 class ItemEntity extends Equatable{
   final String id;
   final String itemName;
+  final String itemId;
   final double subPrice;
   final String? imgUrl;
   final String? description;
 
   ItemEntity({
     required this.id,
+    required this.itemId,
     required this.itemName,
     required this.subPrice,
     this.imgUrl,

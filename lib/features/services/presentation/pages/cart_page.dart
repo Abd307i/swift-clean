@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testing_firebase/features/notification/presentation/widgets/BuildNotificationWidget.dart';
+import 'package:testing_firebase/features/services/domain/usecases/get_cart_totalprice.dart';
 import 'package:testing_firebase/features/services/presentation/bloc/cart_bloc.dart';
 import 'package:testing_firebase/features/services/presentation/bloc/cart_event.dart';
 import '../../dependency_injection.dart' as di;
@@ -9,6 +10,7 @@ import '../../domain/usecases/add_to_cart.dart';
 import '../../domain/usecases/get_cart_items.dart';
 import '../../domain/usecases/remove_from_cart.dart';
 import '../bloc/cart_state.dart';
+import 'ScheduleScreen.dart';
 
 class CartScreen extends StatelessWidget{
   final String userId;
@@ -21,7 +23,8 @@ class CartScreen extends StatelessWidget{
         create: (context) => CartBloc(
             addToCart: di.sl<AddToCart>(),
             removeFromCart: di.sl<RemoveFromCart>(),
-            getCartItems: di.sl<GetCartItems>()
+            getCartItems: di.sl<GetCartItems>(),
+          getCartTotalPrice: di.sl<GetCartTotalPrice>()
         )..add(LoadCartItems(userId)),
       child: Scaffold(
         appBar: AppBar(
@@ -85,6 +88,14 @@ class CartPage extends StatelessWidget {
                               Color(0xFF333E63));
                         })
                 ),
+                ElevatedButton(
+                    onPressed: (){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ScheduleScreen(totalPrice: 25.5, customerId: userId, shopId: 'aa', items: state.items, instructions: 'Nothing',))
+                      );
+                    },
+                    child: Text('Schedule Your Order'))
               ]
           );
         }

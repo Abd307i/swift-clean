@@ -10,12 +10,23 @@ class CartLoading extends CartState {}
 
 class CartLoaded extends CartState {
   final List<ItemEntity> items;
+  final double totalPrice;
 
-  CartLoaded(this.items);
+  CartLoaded(this.items, this.totalPrice);
 }
 
 class CartError extends CartState {
   final String message;
 
   CartError(this.message);
+}
+
+class CartTotalPriceLoading extends CartState{
+}
+
+
+class CartTotalPriceLoaded extends CartState{
+  final double totalPrice;
+
+  CartTotalPriceLoaded(this.totalPrice);
 }

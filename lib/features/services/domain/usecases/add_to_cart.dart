@@ -8,7 +8,7 @@ class AddToCart {
 
   AddToCart(this.repository);
 
-  Future<void> call(String userId, String serviceName, String itemName, double subPrice, int count) async {
-    await repository.addToCart(userId,serviceName,itemName,subPrice,count);
+  Future<void> call(String userId, String serviceId,String itemId ,String itemName, double subPrice) async {
+    await repository.addToCart(userId,serviceId,itemId,itemName,subPrice);
   }
 }

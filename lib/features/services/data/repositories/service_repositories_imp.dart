@@ -8,8 +8,8 @@ class ServiceRepositoryImp extends ServiceRepository{
   ServiceRepositoryImp({required this.dataSource});
 
   @override
-  Future<void> addToCart(String userId, String serviceName, String itemName, double subPrice, int count) async{
-    await dataSource.addToCart(userId,serviceName,itemName,subPrice,count);
+  Future<void> addToCart(String userId, String serviceId,String itemId ,String itemName, double subPrice) async{
+    await dataSource.addToCart(userId, serviceId,itemId,itemName,subPrice);
   }
 
   @override
@@ -37,12 +37,9 @@ class ServiceRepositoryImp extends ServiceRepository{
   }
 
   @override
-  Future<void> removeFromCart(String userId, String serviceName, String itemName) async{
+  Future<void> removeFromCart(String userId, String serviceId, String itemId) async{
     try {
-      if (serviceName.isEmpty) {
-        throw ArgumentError('Empty Service');
-      }
-      await dataSource.removeFromCart(userId,serviceName,itemName);
+      await dataSource.removeFromCart(userId,serviceId,itemId);
     } catch (e) {
       throw Exception(e.toString());
     }
@@ -54,6 +51,15 @@ class ServiceRepositoryImp extends ServiceRepository{
       final items = await dataSource.getItemsByService(serviceId);
       return items;
     } catch(e){
+      throw e.toString();
+    }
+  }
+
+  @override
+  Future<double> getCartTotalPrice(String userId) async {
+    try{
+      return await dataSource.getCartTotalPrice(userId);
+    }catch(e){
       throw e.toString();
     }
   }

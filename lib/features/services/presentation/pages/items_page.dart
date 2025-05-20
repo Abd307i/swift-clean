@@ -14,6 +14,7 @@ import 'package:testing_firebase/features/services/presentation/widgets/service_
 import '../../domain/entites/item_entity.dart';
 import '../../domain/entites/service_entity.dart';
 import '../../dependency_injection.dart' as di;
+import '../../domain/usecases/get_cart_totalprice.dart';
 import '../bloc/service_bloc.dart';
 import '../bloc/service_state.dart';
 import 'cart_page.dart';
@@ -37,7 +38,9 @@ class ItemsPage extends StatelessWidget{
         BlocProvider(create: (context) => CartBloc(
             addToCart: di.sl<AddToCart>(),
             removeFromCart: di.sl<RemoveFromCart>(),
-            getCartItems: di.sl<GetCartItems>())),
+            getCartItems: di.sl<GetCartItems>(),
+            getCartTotalPrice: di.sl<GetCartTotalPrice>()),
+        ),
       ],
         child: Scaffold(
           appBar: AppBar(
@@ -112,10 +115,10 @@ class ItemPage extends StatelessWidget {
                             onPressed: (){
                               context.read<CartBloc>().add(
                                 AddItemToCart(userId,
-                                  serviceName,
+                                  state.serviceId,
+                                  state.items[index].itemId,
                                   state.items[index].itemName,
-                                  state.items[index].subPrice,
-                                  1
+                                  state.items[index].subPrice
                                 )
                               );
                             },

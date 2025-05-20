@@ -3,13 +3,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testing_firebase/core/widgets/custom_button.dart';
 import 'package:testing_firebase/features/services/domain/entites/item_entity.dart';
 import 'package:testing_firebase/features/services/domain/entites/order_entity.dart';
+import 'package:testing_firebase/features/services/domain/usecases/confirm_order.dart';
+import 'package:testing_firebase/features/services/domain/usecases/get_order.dart';
 import 'package:testing_firebase/features/services/presentation/bloc/order_bloc.dart';
 import 'package:testing_firebase/features/services/presentation/bloc/order_event.dart';
 import 'package:testing_firebase/features/services/presentation/bloc/order_state.dart';
 import 'package:get_it/get_it.dart';
 import 'package:uuid/uuid.dart';
+import '../../dependency_injection.dart' as di;
 
-class ScheduleScreen extends StatefulWidget {
+class ScheduleScreen extends StatelessWidget {
   final double totalPrice;
   final String customerId;
   final String shopId;
@@ -26,10 +29,28 @@ class ScheduleScreen extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<ScheduleScreen> createState() => _ScheduleScreenState();
+  Widget build(BuildContext context) {
+    return BlocProvider(create: (context){
+      return OrderBloc(
+          getOrder: di.sl<GetOrder>(),
+          confirmOrder: di.sl<ConfirmOrder>());
+    },
+      child: ScheduleScreenState(totalPrice,customerId,shopId,items,instructions),
+    );
+  }
+
 }
 
-class _ScheduleScreenState extends State<ScheduleScreen> {
+class ScheduleScreenState extends StatelessWidget {
+
+  final double totalPrice;
+  final String customerId;
+  final String shopId;
+  final List<ItemEntity> items;
+  final String? instructions;
+
+  ScheduleScreenState(this.totalPrice, this.customerId, this.shopId, this.items, this.instructions);
+
   final List<String> locations = ['Amman', 'Karak', 'Irbid', 'Zarqa'];
   String selectedLocation = 'Amman';
 
@@ -45,20 +66,6 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
 
   // Generate the date options for display
   List<Map<String, dynamic>> dateOptions = [];
-
-  @override
-  void initState() {
-    super.initState();
-    // Get the OrderBloc instance from the dependency injection
-    _orderBloc = GetIt.instance<OrderBloc>();
-    _generateDateOptions();
-  }
-
-  @override
-  void dispose() {
-    // No need to close the bloc here as it's managed by GetIt
-    super.dispose();
-  }
 
   void _generateDateOptions() {
     final DateTime now = DateTime.now();
@@ -88,17 +95,13 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   }
 
   void _selectDate(int index) {
-    setState(() {
-      selectedDay = dateOptions[index]['day'];
-      selectedMonth = dateOptions[index]['month'];
-      selectedWeekday = dateOptions[index]['weekday'];
-    });
+    selectedDay = dateOptions[index]['day'];
+    selectedMonth = dateOptions[index]['month'];
+    selectedWeekday = dateOptions[index]['weekday'];
   }
 
   void _selectTimeSlot(String timeSlot) {
-    setState(() {
-      selectedTimeSlot = timeSlot;
-    });
+    selectedTimeSlot = timeSlot;
   }
 
   void _proceedToPayment() {
@@ -122,12 +125,12 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     // Create the order entity
     final orderEntity = OrderEntity(
       orderId: const Uuid().v4(), // Generate a unique ID
-      customerId: widget.customerId,
-      items: widget.items,
+      customerId: customerId,
+      items: items,
       status: 'pending',
-      totalPrice: widget.totalPrice,
-      instructions: widget.instructions,
-      shopId: widget.shopId,
+      totalPrice: totalPrice,
+      instructions: instructions,
+      shopId: shopId,
       deliveryTime: deliveryTime,
       // Location is stored in instructions for now (alternatively, you can add a location field to your entity)
       // instructions: "${widget.instructions ?? ''}\nDelivery location: $selectedLocation",
@@ -165,12 +168,13 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     }
     },
     builder: (context, state) {
+    OrderEntity orderEntity;
     return Padding(
     padding: const EdgeInsets.all(16.0),
     child: Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-    const Text(
+    /*const Text(
     'Pickup Location',
     style: TextStyle(
     fontSize: 16,
@@ -190,9 +194,9 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     icon: const Icon(Icons.keyboard_arrow_down),
     padding: const EdgeInsets.symmetric(horizontal: 16),
     onChanged: (String? newValue) {
-    setState(() {
-    selectedLocation = newValue!;
-    });
+
+        selectedLocation = newValue!;
+      );
     },
     items: locations.map<DropdownMenuItem<String>>((String value) {
     return DropdownMenuItem<String>(
@@ -311,12 +315,21 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     ),
     ),
 
-    const Spacer(),
+    const Spacer(),*/
 
     CustomButton(
     text: 'Proceed To Pay',
     isLoading: state is OrderConfirmationLoading,
-    onPressed: _proceedToPayment,
+    onPressed: ()=> {
+      context.read<OrderBloc>().add(ConfirmOrderEvent(OrderEntity(
+    orderId: '1',
+    customerId: 'ewVPjMPcpPWaBLaufoIAthzwnr72',
+    items: [],
+    status: 'wait',
+    totalPrice: 0.0
+
+    )))
+    },
     backgroundColor: const Color(0xFF6556FF),
     ),
     ],
@@ -327,7 +340,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     ));
   }
 
-  Widget _buildTimeSlot(String time) {
+  /*Widget _buildTimeSlot(String time) {
     final bool isSelected = selectedTimeSlot == time;
 
     return Padding(
@@ -354,5 +367,5 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
         ),
       ),
     );
-  }
+  }*/
 }
