@@ -6,7 +6,8 @@ class ProductItemCard extends StatefulWidget {
   final double price;
   final Color iconBgColor;
   final int? initialQuantity;
-  final Function(int)? onQuantityChanged;
+  final Function onQuantityIncreased;
+  final Function onQuantityDecreased;
 
   const ProductItemCard({
     Key? key,
@@ -15,7 +16,8 @@ class ProductItemCard extends StatefulWidget {
     required this.price,
     this.iconBgColor = const Color(0xFFE8F5F7), // Default light blue background
     this.initialQuantity = 0,
-    this.onQuantityChanged,
+    required this.onQuantityIncreased,
+    required this.onQuantityDecreased
   }) : super(key: key);
 
   @override
@@ -32,23 +34,11 @@ class _ProductItemCardState extends State<ProductItemCard> {
   }
 
   void _decreaseQuantity() {
-    if (quantity > 0) {
-      setState(() {
-        quantity--;
-      });
-      if (widget.onQuantityChanged != null) {
-        widget.onQuantityChanged!(quantity);
-      }
-    }
+    widget.onQuantityDecreased;
   }
 
   void _increaseQuantity() {
-    setState(() {
-      quantity++;
-    });
-    if (widget.onQuantityChanged != null) {
-      widget.onQuantityChanged!(quantity);
-    }
+    widget.onQuantityIncreased;
   }
 
   @override

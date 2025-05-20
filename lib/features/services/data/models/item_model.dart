@@ -4,6 +4,7 @@ import 'package:testing_firebase/features/services/domain/entites/item_entity.da
 class ItemModel{
   final String id;
   final String itemName;
+  final String? itemId;
   final double subPrice;
   final int? count;
   final String? description;
@@ -14,6 +15,7 @@ class ItemModel{
     required this.itemName,
     required this.subPrice,
     this.count,
+    this.itemId,
     this.description,
     this.imgUrl
   });
@@ -25,7 +27,8 @@ class ItemModel{
         subPrice: json['subPrice'],
         count: json['count'],
         description: json['description'],
-        imgUrl: json['imgUrl']
+        imgUrl: json['imgUrl'],
+      itemId: json['itemId']
     );
   }
 
@@ -37,7 +40,8 @@ class ItemModel{
         description: doc['description'],
         count: doc['count'],
         subPrice: doc['subPrice'],
-        imgUrl: doc['imgUrl']
+        imgUrl: doc['imgUrl'],
+        itemId: doc['itemId']
     );
   }
 
@@ -48,10 +52,11 @@ class ItemModel{
       'description': description,
       'count':count,
       'subPrice': subPrice,
-      'imgUrl': imgUrl
+      'imgUrl': imgUrl,
+      'itemId':itemId
     };
   }
 
-  ItemEntity toItemEntity() => ItemEntity(id: id, itemName: itemName, subPrice: subPrice, imgUrl: imgUrl, description: description, itemId: '',count:count);
+  ItemEntity toItemEntity() => ItemEntity(id: id??'a', itemName: itemName, subPrice: subPrice, imgUrl: imgUrl??'b', description: description??'c', itemId: itemId??'d',count:count);
 
 }

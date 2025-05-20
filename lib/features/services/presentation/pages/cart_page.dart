@@ -4,6 +4,7 @@ import 'package:testing_firebase/features/notification/presentation/widgets/Buil
 import 'package:testing_firebase/features/services/domain/usecases/get_cart_totalprice.dart';
 import 'package:testing_firebase/features/services/presentation/bloc/cart_bloc.dart';
 import 'package:testing_firebase/features/services/presentation/bloc/cart_event.dart';
+import '../../../../core/widgets/custom_button.dart';
 import '../../dependency_injection.dart' as di;
 import '../../domain/entites/service_entity.dart';
 import '../../domain/usecases/add_to_cart.dart';
@@ -88,14 +89,17 @@ class CartPage extends StatelessWidget {
                               Color(0xFF333E63));
                         })
                 ),
-                ElevatedButton(
-                    onPressed: (){
+                Padding(
+                  padding: EdgeInsets.all(20.0),
+                  child: CustomButton(
+                    text: 'Schedule Your Order',
+                    onPressed: () {
                       Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => ScheduleScreen(totalPrice: 25.5, customerId: userId, shopId: 'aa', items: state.items, instructions: 'Nothing',))
+                          context,
+                          MaterialPageRoute(builder: (context) => ScheduleScreen(totalPrice: state.totalPrice, customerId: userId,  items: state.items ))
                       );
-                    },
-                    child: Text('Schedule Your Order'))
+                    },),
+                )
               ]
           );
         }

@@ -9,6 +9,7 @@ class FirebaseOrder {
 
   Future <void> confirmOrder(OrderEntity order) async {
     try{
+      print(order.items);
       await _firestore.collection('Orders').doc(order.orderId).set({
         'createdAt':Timestamp.now(),
         'customerId':order.customerId,
@@ -22,6 +23,7 @@ class FirebaseOrder {
         'lastUpdate': Timestamp.now()
       });
     }catch (e){
+      print(e.toString());
       throw e.toString();
     }
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:testing_firebase/core/widgets/custom_button.dart';
 import 'package:testing_firebase/features/services/domain/usecases/add_to_cart.dart';
 import 'package:testing_firebase/features/services/domain/usecases/get_cart_items.dart';
 import 'package:testing_firebase/features/services/domain/usecases/get_items_by_service.dart';
@@ -9,6 +10,7 @@ import 'package:testing_firebase/features/services/presentation/bloc/cart_bloc.d
 import 'package:testing_firebase/features/services/presentation/bloc/cart_event.dart';
 import 'package:testing_firebase/features/services/presentation/bloc/cart_state.dart';
 import 'package:testing_firebase/features/services/presentation/bloc/service_event.dart';
+import 'package:testing_firebase/features/services/presentation/widgets/product_item_card.dart';
 import 'package:testing_firebase/features/services/presentation/widgets/service_item.dart';
 
 import '../../domain/entites/item_entity.dart';
@@ -62,7 +64,7 @@ class ItemsPage extends StatelessWidget{
               },
             )
           ),
-          body: ItemPage(userId: userId, serviceName: serviceName),
+          body: ItemPage(userId: userId, serviceName: serviceName, serviceId:serviceId),
         ),
       );
   }
@@ -72,8 +74,8 @@ class ItemsPage extends StatelessWidget{
 class ItemPage extends StatelessWidget {
   final String userId;
   final String serviceName;
-
-  const ItemPage({Key? key, required this.userId ,required this.serviceName}) : super(key: key);
+  final String serviceId;
+  const ItemPage({Key? key, required this.userId ,required this.serviceName, required this.serviceId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -90,6 +92,7 @@ class ItemPage extends StatelessWidget {
         if(state is ItemsLoading){
           return const Center(child: CircularProgressIndicator());
         }else if(state is ItemsLoaded){
+
           return Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -98,38 +101,106 @@ class ItemPage extends StatelessWidget {
                 child: ListView.builder(
                     itemCount: state.items.length,
                     itemBuilder: (context, index) {
-                      /*return ServiceItem(
-                        onAddToCart: () {
-                          print('Hello');
-                        },
-                        serviceName: state.items[index].name,
-                        description: state.items[index].description,
-                      );*/
-                      return Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Icon(Icons.ac_unit_rounded,color: Colors.black,),
-                          Text(state.items[index].itemName),
-                          IconButton(
-                            onPressed: (){
-                              context.read<CartBloc>().add(
-                                AddItemToCart(userId,
-                                  state.serviceId,
-                                  state.items[index].itemId,
-                                  state.items[index].itemName,
-                                  state.items[index].subPrice
-                                )
-                              );
-                            },
-                            icon: Icon(Icons.add)),
-                          IconButton(
-                              onPressed:() => context.read<CartBloc>().add(RemoveItemFromCart(userId,serviceName,state.items[index].itemName)),
-                              icon: Icon(Icons.minimize_rounded))
-                        ],
+                      return Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.03),
+                              blurRadius: 8,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          children: [
+                            // Product image with colored background
+                            Container(
+                              width: 50,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              padding: const EdgeInsets.all(10),
+                              child: Image.asset(
+                                'assets/images/hoodi.png',
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                            const SizedBox(width: 16),
+                            // Product info
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    state.items[index].itemName,
+                                    style: const TextStyle(
+                                      color: Color(0xFF333F65),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    '\$${state.items[index].subPrice.toStringAsFixed(2)}',
+                                    style: const TextStyle(
+                                      color: Color(0xFF629BFC),
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            // Quantity controls
+                            Row(
+                              children: [
+                                // Decrease button
+                                _buildQuantityButton(
+                                  icon: Icons.remove,
+                                  onTap: (){
+                                    context.read<CartBloc>().add(RemoveItemFromCart(userId,serviceId,state.items[index].itemName));
+                                  },
+                                ),
+
+                                // Quantity display
+                                Container(
+                                  width: 30,
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    (state.items[index].count??0).toString(),
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                      color: Color(0xFF333F65),
+                                    ),
+                                  ),
+                                ),
+                                // Increase button
+                                _buildQuantityButton(
+                                  icon: Icons.add,
+                                  onTap: (){
+                                    context.read<CartBloc>().add(
+                                        AddItemToCart(userId,
+                                            state.serviceId,
+                                            state.items[index].itemId,
+                                            state.items[index].itemName,
+                                            state.items[index].subPrice
+                                        )
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       );
-                    }
-                    ),
+
+                    }),
               )
             ],
           );
@@ -138,5 +209,29 @@ class ItemPage extends StatelessWidget {
       },
     );
 
+  }
+
+  Widget _buildQuantityButton({
+    required IconData icon,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        width: 28,
+        height: 28,
+        decoration: BoxDecoration(
+          color: const Color(0xFFF5F5F5),
+          borderRadius: BorderRadius.circular(14),
+        ),
+        child: Center(
+          child: Icon(
+            icon,
+            size: 16,
+            color: const Color(0xFF9CA4AB),
+          ),
+        ),
+      ),
+    );
   }
 }

@@ -1,21 +1,19 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testing_firebase/core/widgets/custom_button.dart';
 import 'package:testing_firebase/features/services/domain/entites/item_entity.dart';
 import 'package:testing_firebase/features/services/domain/entites/order_entity.dart';
-import 'package:testing_firebase/features/services/domain/usecases/confirm_order.dart';
-import 'package:testing_firebase/features/services/domain/usecases/get_order.dart';
 import 'package:testing_firebase/features/services/presentation/bloc/order_bloc.dart';
 import 'package:testing_firebase/features/services/presentation/bloc/order_event.dart';
 import 'package:testing_firebase/features/services/presentation/bloc/order_state.dart';
 import 'package:get_it/get_it.dart';
 import 'package:uuid/uuid.dart';
-import '../../dependency_injection.dart' as di;
 
-class ScheduleScreen extends StatelessWidget {
+class ScheduleScreen extends StatefulWidget {
   final double totalPrice;
   final String customerId;
-  final String shopId;
   final List<ItemEntity> items;
   final String? instructions;
 
@@ -23,36 +21,24 @@ class ScheduleScreen extends StatelessWidget {
     Key? key,
     required this.totalPrice,
     required this.customerId,
-    required this.shopId,
     required this.items,
     this.instructions,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return BlocProvider(create: (context){
-      return OrderBloc(
-          getOrder: di.sl<GetOrder>(),
-          confirmOrder: di.sl<ConfirmOrder>());
-    },
-      child: ScheduleScreenState(totalPrice,customerId,shopId,items,instructions),
-    );
-  }
-
+  State<ScheduleScreen> createState() => _ScheduleScreenState(totalPrice,customerId,items,instructions);
 }
 
-class ScheduleScreenState extends StatelessWidget {
+class _ScheduleScreenState extends State<ScheduleScreen> {
+  final List<String> locations = ['Amman', 'Karak', 'Irbid', 'Zarqa'];
+  String selectedLocation = 'Amman';
 
   final double totalPrice;
   final String customerId;
-  final String shopId;
   final List<ItemEntity> items;
   final String? instructions;
 
-  ScheduleScreenState(this.totalPrice, this.customerId, this.shopId, this.items, this.instructions);
-
-  final List<String> locations = ['Amman', 'Karak', 'Irbid', 'Zarqa'];
-  String selectedLocation = 'Amman';
+  _ScheduleScreenState(this.totalPrice, this.customerId, this.items, this.instructions);
 
   late OrderBloc _orderBloc;
 
@@ -66,6 +52,20 @@ class ScheduleScreenState extends StatelessWidget {
 
   // Generate the date options for display
   List<Map<String, dynamic>> dateOptions = [];
+
+  @override
+  void initState() {
+    super.initState();
+    // Get the OrderBloc instance from the dependency injection
+    _orderBloc = GetIt.instance<OrderBloc>();
+    _generateDateOptions();
+  }
+
+  @override
+  void dispose() {
+    // No need to close the bloc here as it's managed by GetIt
+    super.dispose();
+  }
 
   void _generateDateOptions() {
     final DateTime now = DateTime.now();
@@ -95,13 +95,17 @@ class ScheduleScreenState extends StatelessWidget {
   }
 
   void _selectDate(int index) {
-    selectedDay = dateOptions[index]['day'];
-    selectedMonth = dateOptions[index]['month'];
-    selectedWeekday = dateOptions[index]['weekday'];
+    setState(() {
+      selectedDay = dateOptions[index]['day'];
+      selectedMonth = dateOptions[index]['month'];
+      selectedWeekday = dateOptions[index]['weekday'];
+    });
   }
 
   void _selectTimeSlot(String timeSlot) {
-    selectedTimeSlot = timeSlot;
+    setState(() {
+      selectedTimeSlot = timeSlot;
+    });
   }
 
   void _proceedToPayment() {
@@ -124,16 +128,11 @@ class ScheduleScreenState extends StatelessWidget {
 
     // Create the order entity
     final orderEntity = OrderEntity(
-      orderId: const Uuid().v4(), // Generate a unique ID
-      customerId: customerId,
-      items: items,
-      status: 'pending',
-      totalPrice: totalPrice,
-      instructions: instructions,
-      shopId: shopId,
-      deliveryTime: deliveryTime,
-      // Location is stored in instructions for now (alternatively, you can add a location field to your entity)
-      // instructions: "${widget.instructions ?? ''}\nDelivery location: $selectedLocation",
+        orderId: '11111',
+        customerId: customerId,
+        items: items.toList(),
+        status: 'In Progress',
+        totalPrice: totalPrice,
     );
 
     // Dispatch confirm order event
@@ -144,203 +143,193 @@ class ScheduleScreenState extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-        title: const Text('Book Your Schedule'),
-    leading: IconButton(
-    icon: const Icon(Icons.arrow_back),
-    onPressed: () => Navigator.pop(context),
-    ),
-    ),
-    body: BlocProvider.value(
-    value: _orderBloc,
-    child: BlocConsumer<OrderBloc, OrderState>(
-    listener: (context, state) {
-    if (state is OrderConfirmationLoaded) {
-    // Navigate to success or payment screen
-    ScaffoldMessenger.of(context).showSnackBar(
-    const SnackBar(content: Text('Order confirmed successfully!')),
-    );
-    // Navigate to payment screen or back to home
-    // Navigator.pushReplacementNamed(context, '/payment');
-    } else if (state is OrderError) {
-    ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(content: Text('Error: ${state.message}')),
-    );
-    }
-    },
-    builder: (context, state) {
-    OrderEntity orderEntity;
-    return Padding(
-    padding: const EdgeInsets.all(16.0),
-    child: Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-    /*const Text(
-    'Pickup Location',
-    style: TextStyle(
-    fontSize: 16,
-    fontWeight: FontWeight.w500,
-    ),
-    ),
-    const SizedBox(height: 8),
-    Container(
-    decoration: BoxDecoration(
-    border: Border.all(color: Colors.grey.shade300),
-    borderRadius: BorderRadius.circular(8),
-    ),
-    child: DropdownButtonHideUnderline(
-    child: DropdownButton<String>(
-    value: selectedLocation,
-    isExpanded: true,
-    icon: const Icon(Icons.keyboard_arrow_down),
-    padding: const EdgeInsets.symmetric(horizontal: 16),
-    onChanged: (String? newValue) {
+          title: const Text('Book Your Schedule'),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => Navigator.pop(context),
+          ),
+        ),
+        body: BlocProvider.value(
+          value: _orderBloc,
+          child: BlocConsumer<OrderBloc, OrderState>(
+            listener: (context, state) {
+              if (state is OrderConfirmationLoaded) {
+                // Navigate to success or payment screen
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Order confirmed successfully!')),
+                );
+                // Navigate to payment screen or back to home
+                // Navigator.pushReplacementNamed(context, '/payment');
+              } else if (state is OrderError) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Error: ${state.message}')),
+                );
+              }
+            },
+            builder: (context, state) {
+              return Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Pickup Location',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey.shade300),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          value: selectedLocation,
+                          isExpanded: true,
+                          icon: const Icon(Icons.keyboard_arrow_down),
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              selectedLocation = newValue!;
+                            });
+                          },
+                          items: locations.map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ),
 
-        selectedLocation = newValue!;
-      );
-    },
-    items: locations.map<DropdownMenuItem<String>>((String value) {
-    return DropdownMenuItem<String>(
-    value: value,
-    child: Text(value),
-    );
-    }).toList(),
-    ),
-    ),
-    ),
+                    const SizedBox(height: 24),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          'Pickup Date',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.refresh, size: 20),
+                          onPressed: _generateDateOptions,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    SizedBox(
+                      height: 80,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: dateOptions.length,
+                        itemBuilder: (context, index) {
+                          final date = dateOptions[index];
+                          final isSelected = date['day'] == selectedDay &&
+                              date['month'] == selectedMonth &&
+                              date['weekday'] == selectedWeekday;
 
-    const SizedBox(height: 24),
-    Row(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: [
-    const Text(
-    'Pickup Date',
-    style: TextStyle(
-    fontSize: 16,
-    fontWeight: FontWeight.w500,
-    ),
-    ),
-    IconButton(
-    icon: const Icon(Icons.refresh, size: 20),
-    onPressed: _generateDateOptions,
-    ),
-    ],
-    ),
-    const SizedBox(height: 8),
-    SizedBox(
-    height: 80,
-    child: ListView.builder(
-    scrollDirection: Axis.horizontal,
-    itemCount: dateOptions.length,
-    itemBuilder: (context, index) {
-    final date = dateOptions[index];
-    final isSelected = date['day'] == selectedDay &&
-    date['month'] == selectedMonth &&
-    date['weekday'] == selectedWeekday;
+                          return Padding(
+                            padding: const EdgeInsets.only(right: 8),
+                            child: GestureDetector(
+                              onTap: () => _selectDate(index),
+                              child: Container(
+                                width: 60,
+                                decoration: BoxDecoration(
+                                  color: isSelected ? const Color(0xFF6556FF) : Colors.white,
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(
+                                    color: isSelected ? const Color(0xFF6556FF) : Colors.grey.shade300,
+                                  ),
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      date['day'].toString().padLeft(2, '0'),
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: isSelected ? Colors.white : Colors.black,
+                                      ),
+                                    ),
+                                    Text(
+                                      date['month'],
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: isSelected ? Colors.white : Colors.grey,
+                                      ),
+                                    ),
+                                    Text(
+                                      date['weekday'],
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: isSelected ? Colors.white : Colors.grey,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
 
-    return Padding(
-    padding: const EdgeInsets.only(right: 8),
-    child: GestureDetector(
-    onTap: () => _selectDate(index),
-    child: Container(
-    width: 60,
-    decoration: BoxDecoration(
-    color: isSelected ? const Color(0xFF6556FF) : Colors.white,
-    borderRadius: BorderRadius.circular(8),
-    border: Border.all(
-    color: isSelected ? const Color(0xFF6556FF) : Colors.grey.shade300,
-    ),
-    ),
-    child: Column(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-    Text(
-    date['day'].toString().padLeft(2, '0'),
-    style: TextStyle(
-    fontWeight: FontWeight.bold,
-    color: isSelected ? Colors.white : Colors.black,
-    ),
-    ),
-    Text(
-    date['month'],
-    style: TextStyle(
-    fontSize: 12,
-    color: isSelected ? Colors.white : Colors.grey,
-    ),
-    ),
-    Text(
-    date['weekday'],
-    style: TextStyle(
-    fontSize: 12,
-    color: isSelected ? Colors.white : Colors.grey,
-    ),
-    ),
-    ],
-    ),
-    ),
-    ),
-    );
-    },
-    ),
-    ),
+                    const SizedBox(height: 24),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          'Time Slot',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.refresh, size: 20),
+                          onPressed: () {}, // Refresh time slots if needed
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    SizedBox(
+                      height: 50,
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        children: [
+                          _buildTimeSlot('09:00 AM'),
+                          _buildTimeSlot('12:00 PM'),
+                          _buildTimeSlot('02:00 PM'),
+                          _buildTimeSlot('03:00 PM'),
+                          _buildTimeSlot('04:00 PM'),
+                        ],
+                      ),
+                    ),
 
-    const SizedBox(height: 24),
-    Row(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: [
-    const Text(
-    'Time Slot',
-    style: TextStyle(
-    fontSize: 16,
-    fontWeight: FontWeight.w500,
-    ),
-    ),
-    IconButton(
-    icon: const Icon(Icons.refresh, size: 20),
-    onPressed: () {}, // Refresh time slots if needed
-    ),
-    ],
-    ),
-    const SizedBox(height: 8),
-    SizedBox(
-    height: 50,
-    child: ListView(
-    scrollDirection: Axis.horizontal,
-    children: [
-    _buildTimeSlot('09:00 AM'),
-    _buildTimeSlot('12:00 PM'),
-    _buildTimeSlot('02:00 PM'),
-    _buildTimeSlot('03:00 PM'),
-    _buildTimeSlot('04:00 PM'),
-    ],
-    ),
-    ),
+                    const Spacer(),
 
-    const Spacer(),*/
-
-    CustomButton(
-    text: 'Proceed To Pay',
-    isLoading: state is OrderConfirmationLoading,
-    onPressed: ()=> {
-      context.read<OrderBloc>().add(ConfirmOrderEvent(OrderEntity(
-    orderId: '1',
-    customerId: 'ewVPjMPcpPWaBLaufoIAthzwnr72',
-    items: [],
-    status: 'wait',
-    totalPrice: 0.0
-
-    )))
-    },
-    backgroundColor: const Color(0xFF6556FF),
-    ),
-    ],
-    ),
-    );
-    },
-    ),
-    ));
+                    CustomButton(
+                      text: 'Proceed To Pay',
+                      isLoading: state is OrderConfirmationLoading,
+                      onPressed: _proceedToPayment,
+                      backgroundColor: const Color(0xFF6556FF),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ));
   }
 
-  /*Widget _buildTimeSlot(String time) {
+  Widget _buildTimeSlot(String time) {
     final bool isSelected = selectedTimeSlot == time;
 
     return Padding(
@@ -367,5 +356,5 @@ class ScheduleScreenState extends StatelessWidget {
         ),
       ),
     );
-  }*/
+  }
 }
