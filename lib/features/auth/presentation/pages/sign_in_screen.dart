@@ -17,7 +17,6 @@ import '../bloc/auth_bloc.dart';
 import '../bloc/auth_event.dart';
 import '../bloc/auth_state.dart';
 import 'forgot_password_page.dart';
-
 class SignInScreen extends StatefulWidget {
   static const String routeName = '/sign-in';
 
@@ -60,53 +59,39 @@ class _SignInScreenState extends State<SignInScreen> {
               },
               desc: state.message,
             ).show();
-          }else{
-              if(!state.user.verified) {
+          }else if(state.user.userType == 'Drycleaner'){
                 AwesomeDialog(
                   context: context,
-                  dialogType: DialogType.info,
+                  dialogType: DialogType.success,
                   animType: AnimType.topSlide,
-                  title: 'Alert',
-                  btnOkOnPress: () =>
-                  {
+                  title: 'Success',
+                  btnOkOnPress: () => {
+                    // Navigate to HomePage instead of ProfilePage
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => DrycleanerHomePage(userId: state.user.id))
+                    )
                   },
-                  desc: 'Please Call Us To Approve Your Request\n0780680780',
+                  desc: state.message,
                 ).show();
               }else{
-                if(state.user.userType == 'Drycleaner'){
-                  AwesomeDialog(
-                    context: context,
-                    dialogType: DialogType.success,
-                    animType: AnimType.topSlide,
-                    title: 'Success',
-                    btnOkOnPress: () => {
-                      // Navigate to HomePage instead of ProfilePage
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (context) => DrycleanerHomePage(userId: state.user.id))
-                      )
-                    },
-                    desc: state.message,
-                  ).show();
-                }else{
-                  AwesomeDialog(
-                    context: context,
-                    dialogType: DialogType.success,
-                    animType: AnimType.topSlide,
-                    title: 'Success',
-                    btnOkOnPress: () => {
-                      // Navigate to HomePage instead of ProfilePage
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (context) => DeliveryHomePage(userId: state.user.id))
-                      )
-                    },
-                    desc: state.message,
-                  ).show();
-                }
+                AwesomeDialog(
+                  context: context,
+                  dialogType: DialogType.success,
+                  animType: AnimType.topSlide,
+                  title: 'Success',
+                  btnOkOnPress: () => {
+                    // Navigate to HomePage instead of ProfilePage
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => DeliveryHomePage(userId: state.user.id))
+                    )
+                  },
+                  desc: state.message,
+                ).show();
+              }
             }
-          }
-        }
+
         if (state is VerificationEmailSent) {
           AwesomeDialog(
             context: context,

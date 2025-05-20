@@ -13,6 +13,7 @@ class FirebaseAuthImp implements FirebaseAuthi{
   @override
   Future<UserCredential> loginUser(String username, String password) async{
     try{
+
       return await _firebaseAuth.signInWithEmailAndPassword(email: username, password: password);
     } on FirebaseAuthException catch (e) {
       throw (e.message ?? 'Login failed');
@@ -47,7 +48,7 @@ class FirebaseAuthImp implements FirebaseAuthi{
           'address': params.address,
           'createdAt': FieldValue.serverTimestamp(),
           'userType':params.userType,
-          'verified': false
+          'verified': true
         });
       }
       return user;

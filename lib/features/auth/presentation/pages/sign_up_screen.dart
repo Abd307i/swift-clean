@@ -54,8 +54,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             desc: state.message,
           ).show();
         }
-
-        if (state is AuthError) {
+        else if (state is AuthError) {
           AwesomeDialog(
             context: context,
             dialogType: DialogType.error,
