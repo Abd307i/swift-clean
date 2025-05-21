@@ -33,6 +33,13 @@ class _SignInScreenState extends State<SignInScreen> {
   bool _rememberMe = false;
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _emailController.text= "swiftclean.project@gmail.com";
+    _passwordController.text = "123456";
+  }
+  @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
@@ -44,71 +51,90 @@ class _SignInScreenState extends State<SignInScreen> {
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthAuthenticated) {
-          if(state.user.userType == 'Customer'){
+          if (state.user.userType == 'customer') {
             AwesomeDialog(
               context: context,
               dialogType: DialogType.success,
               animType: AnimType.topSlide,
               title: 'Success',
-              btnOkOnPress: () => {
+              btnOkOnPress: () =>
+              {
                 // Navigate to HomePage instead of ProfilePage
                 Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => HomePage(userId: state.user.id))
+                    MaterialPageRoute(
+                        builder: (context) => HomePage(userId: state.user.id))
                 )
               },
               desc: state.message,
             ).show();
-          }else if(state.user.userType == 'Drycleaner'){
-                AwesomeDialog(
-                  context: context,
-                  dialogType: DialogType.success,
-                  animType: AnimType.topSlide,
-                  title: 'Success',
-                  btnOkOnPress: () => {
-                    // Navigate to HomePage instead of ProfilePage
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => DrycleanerHomePage(userId: state.user.id))
-                    )
-                  },
-                  desc: state.message,
-                ).show();
-              }else{
-                AwesomeDialog(
-                  context: context,
-                  dialogType: DialogType.success,
-                  animType: AnimType.topSlide,
-                  title: 'Success',
-                  btnOkOnPress: () => {
-                    // Navigate to HomePage instead of ProfilePage
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => DeliveryHomePage(userId: state.user.id))
-                    )
-                  },
-                  desc: state.message,
-                ).show();
-              }
+          } else if (state.user.verified == false) {
+            AwesomeDialog(
+              context: context,
+              dialogType: DialogType.info,
+              animType: AnimType.topSlide,
+              title: 'Success',
+              btnOkOnPress: () =>
+              {
+              },
+              desc: 'Call us to activate your account\n0780680780',
+            ).show();
+          } else {
+            if (state.user.userType == 'Drycleaner') {
+              AwesomeDialog(
+                context: context,
+                dialogType: DialogType.success,
+                animType: AnimType.topSlide,
+                title: 'Success',
+                btnOkOnPress: () =>
+                {
+                  // Navigate to HomePage instead of ProfilePage
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) =>
+                          DrycleanerHomePage(userId: state.user.id))
+                  )
+                },
+                desc: state.message,
+              ).show();
+            } else {
+              AwesomeDialog(
+                context: context,
+                dialogType: DialogType.success,
+                animType: AnimType.topSlide,
+                title: 'Success',
+                btnOkOnPress: () =>
+                {
+                  // Navigate to HomePage instead of ProfilePage
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) =>
+                          DeliveryHomePage(userId: state.user.id))
+                  )
+                },
+                desc: state.message,
+              ).show();
             }
+          }
 
-        if (state is VerificationEmailSent) {
-          AwesomeDialog(
-            context: context,
-            dialogType: DialogType.info,
-            animType: AnimType.topSlide,
-            title: 'Alert',
-            desc: state.message,
-          ).show();
-        }
-        if (state is AuthError) {
-          AwesomeDialog(
-            context: context,
-            dialogType: DialogType.error,
-            animType: AnimType.topSlide,
-            title: 'Error',
-            desc: state.message,
-          ).show();
+          if (state is VerificationEmailSent) {
+            AwesomeDialog(
+              context: context,
+              dialogType: DialogType.info,
+              animType: AnimType.topSlide,
+              title: 'Alert',
+              desc: state.message,
+            ).show();
+          }
+          if (state is AuthError) {
+            AwesomeDialog(
+              context: context,
+              dialogType: DialogType.error,
+              animType: AnimType.topSlide,
+              title: 'Error',
+              desc: state.message,
+            ).show();
+          }
         }
       },
       builder: (context, state) {
@@ -247,7 +273,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           ),
                           child: Center(
                             child: Image.asset(
-                              'assets/images/Google.png',
+                              'assets/google.png',
                               width: 25,
                               height: 25,
                             ),

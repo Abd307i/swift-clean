@@ -23,7 +23,7 @@ class DrycleanerHomePage extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) => di.sl<OrderHistoryBloc>()
-            ..add(GetOrderHistoryByUserType('drycleaner', userId, 'pending')),
+            ..add(GetOrderHistoryByUserType('Drycleaner', userId, 'In Progress')),
         ),
         BlocProvider(
           create: (context) => ProfileBloc(

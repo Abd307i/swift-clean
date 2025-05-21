@@ -113,17 +113,17 @@ class ServiceCardItem extends StatelessWidget {
     // Converting to lowercase for case-insensitive comparison
     switch (serviceName.toLowerCase()) {
       case 'dry wash':
-        return 'assets/images/cleaning 1.png';
+        return 'assets/cleaning 1.png';
       case 'washing & folding':
-        return 'assets/images/d w 1.png';
+        return 'assets/d w 1.png';
       case 'ironing':
-        return 'assets/images/iron.png';
+        return 'assets/iron.png';
       case 'household items':
-        return 'assets/images/wash fold 1.png';
+        return 'assets/wash fold 1.png';
       case 'socks cleaning':
-        return 'assets/images/socks.png';
+        return 'assets/socks.png';
       default:
-        return 'assets/images/cleaning.png'; // Default icon
+        return 'assets/cleaning.png'; // Default icon
     }
   }
 

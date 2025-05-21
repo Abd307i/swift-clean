@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:testing_firebase/features/auth/data/datasources/remote/firebase_auth.dart';
+import 'package:testing_firebase/features/auth/data/models/UserModel.dart';
 import 'package:testing_firebase/features/auth/data/models/address_model.dart';
+import 'package:testing_firebase/features/auth/domain/entites/user_entity.dart';
 import 'package:testing_firebase/features/auth/domain/usecases/register_user.dart';
 
 class FirebaseAuthImp implements FirebaseAuthi{
@@ -87,9 +89,14 @@ class FirebaseAuthImp implements FirebaseAuthi{
   }
 
   @override
-  Future<User?> getCurrentUser() async {
+  Future<UserModel> getCurrentUser() async {
     try {
-      return _firebaseAuth.currentUser;
+      final user = await _firestore.collection('users').where('email',isEqualTo: _firebaseAuth.currentUser?.email??"").get();
+      final map = user.docs.first.data();
+      map ['id'] = user.docs.first.id;
+      map['emailVerified'] = _firebaseAuth.currentUser?.emailVerified == true;
+      return UserModel.fromJson(map);
+      //return _firebaseAuth.currentUser;
     } on FirebaseAuthException catch (e) {
       throw (e.message ?? 'Failed to get current user');
     }

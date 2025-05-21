@@ -132,7 +132,7 @@ class FirebaseOrderHistory {
     try {
       final QuerySnapshot orderSnapshot = await _firestore
           .collection('Orders')
-          .where('customerId', isEqualTo: userId,).where('status', isEqualTo: status)
+          .where('status', isEqualTo: status)
       // .orderBy('createdAt', descending: true)
           .get();
 

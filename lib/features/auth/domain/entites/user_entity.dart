@@ -9,7 +9,7 @@ abstract class UserEntity {
   final AddressEntity? address;
   final bool emailVerified;
   final String userType;
-  final bool verified;
+  final bool? verified;
 
   const UserEntity({
     required this.id,

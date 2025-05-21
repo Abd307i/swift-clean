@@ -10,10 +10,10 @@ class LoginUser implements UseCase<UserEntity,LoginUserParams>{
   @override
   Future<UserEntity> call(LoginUserParams params) async {
     final user = await repository.loginUser(params.email, params.password);
-    if(!user.emailVerified){
+    if(user?.emailVerified == false){
       throw 'Please Verify Your Email First';
     }
-    return user;
+    return user!;
   }
 
 }

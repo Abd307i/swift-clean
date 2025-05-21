@@ -41,7 +41,7 @@ class ItemsPage extends StatelessWidget{
             addToCart: di.sl<AddToCart>(),
             removeFromCart: di.sl<RemoveFromCart>(),
             getCartItems: di.sl<GetCartItems>(),
-            getCartTotalPrice: di.sl<GetCartTotalPrice>()),
+            getCartTotalPrice: di.sl<GetCartTotalPrice>())..add(LoadCartItems(userId)),
         ),
       ],
         child: Scaffold(
@@ -126,7 +126,7 @@ class ItemPage extends StatelessWidget {
                               ),
                               padding: const EdgeInsets.all(10),
                               child: Image.asset(
-                                'assets/images/hoodi.png',
+                                'assets/hoodi.png',
                                 fit: BoxFit.contain,
                               ),
                             ),
@@ -167,18 +167,28 @@ class ItemPage extends StatelessWidget {
                                   },
                                 ),
 
+
                                 // Quantity display
-                                Container(
-                                  width: 30,
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    (state.items[index].count??0).toString(),
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500,
-                                      color: Color(0xFF333F65),
-                                    ),
-                                  ),
+                                BlocBuilder<CartBloc,CartState>(
+                                  buildWhen: (prev,cur)=>cur is CartLoaded ,
+                                  builder: (context, state) {
+
+                                    if(state is CartLoaded){
+                                      return Container(
+                                        width: 30,
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          (state.items[index].count??0).toString(),
+                                          style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500,
+                                            color: Color(0xFF333F65),
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                    return Text('');
+                                  }
                                 ),
                                 // Increase button
                                 _buildQuantityButton(

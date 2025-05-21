@@ -3,7 +3,10 @@ import 'package:testing_firebase/features/services/domain/usecases/get_items_by_
 import 'package:testing_firebase/features/services/presentation/bloc/service_event.dart';
 import 'package:testing_firebase/features/services/presentation/bloc/service_state.dart';
 
+import '../../domain/usecases/add_to_cart.dart';
+import '../../domain/usecases/get_cart_items.dart';
 import '../../domain/usecases/get_services.dart';
+import '../../domain/usecases/remove_from_cart.dart';
 
 class ServiceBloc extends Bloc<ServiceEvent,ServiceState>{
   final GetServices getServices;

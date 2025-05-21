@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../domain/usecases/add_to_cart.dart';
@@ -17,12 +19,14 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     required this.addToCart,
     required this.removeFromCart,
     required this.getCartItems,
-    required this.getCartTotalPrice
+    required this.getCartTotalPrice,
+
   }) : super(CartInitial()) {
     on<AddItemToCart>(_onAddItemToCart);
     on<RemoveItemFromCart>(_onRemoveItemFromCart);
     on<LoadCartItems>(_onLoadCartItems);
     on<GetCartTotalPriceEvent>(_onGetCartTotalPrice);
+
   }
 
   Future <void> _onGetCartTotalPrice(
@@ -48,6 +52,10 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       final items = await getCartItems(event.userId);
       final totalPrice = await getCartTotalPrice(event.userId);
       emit(CartLoaded(items, totalPrice ));
+
+      // call service
+      add(LoadCartItems(event.userId));
+
     } catch (e) {
       emit(CartError('Failed to add item to cart'));
     }

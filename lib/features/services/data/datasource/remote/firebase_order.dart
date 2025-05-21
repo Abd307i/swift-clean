@@ -10,25 +10,28 @@ class FirebaseOrder {
   Future <void> confirmOrder(OrderEntity order) async {
     try{
       print(order.items);
-      await _firestore.collection('Orders').doc(order.orderId).set({
-        'createdAt':Timestamp.now(),
-        'customerId':order.customerId,
-        'items': order.items.map((item) => {
-          'itemName': item.itemName,
-          'itemId': item.itemId,
-          'subPrice': item.subPrice,
-          'count': item.count,
-          'imgUrl': item.imgUrl,
-          'description': item.description,
-        }).toList(),
-        'status': order.status,
-        'totalPrice': order.totalPrice,
-        'deliveryId': order.deliveryId,
-        'deliveryTime': order.deliveryTime,
-        'instructions': order.instructions,
-        'shopId': order.shopId,
-        'lastUpdate': Timestamp.now()
-      });
+
+      await _firestore.collection('Orders').add(
+        {
+          'createdAt':Timestamp.now(),
+          'customerId':order.customerId,
+          'items': order.items.map((item) => {
+            'itemName': item.itemName,
+            'itemId': item.itemId,
+            'subPrice': item.subPrice,
+            'count': item.count,
+            'imgUrl': item.imgUrl,
+            'description': item.description,
+          }).toList(),
+          'status': order.status,
+          'totalPrice': order.totalPrice,
+          'deliveryId': order.deliveryId,
+          'deliveryTime': order.deliveryTime,
+          'instructions': order.instructions,
+          'shopId': order.shopId,
+          'lastUpdate': Timestamp.now()
+        }
+      );
     }catch (e){
       print(e.toString());
       throw e.toString();

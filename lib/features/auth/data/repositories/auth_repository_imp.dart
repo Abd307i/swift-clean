@@ -24,22 +24,20 @@ class AuthRepositoryImp implements AuthRepository{
   @override
   Future<UserEntity?> getCurrentUser() async{
     try {
-      final user = await firebaseAuthi.getCurrentUser();
-      if (user != null) {
-        final userModel = UserModel.fromFirebaseUser(user);
-        return userModel;
-      }
-      return null;
+      return await firebaseAuthi.getCurrentUser();
     } catch (e) {
       throw e.toString();
     }
   }
 
   @override
-  Future<UserModel> loginUser(String username, String password) async {
+  Future<UserEntity?> loginUser(String username, String password) async {
     try {
       final userCredential = await firebaseAuthi.loginUser(username, password);
-      final userModel = UserModel.fromFirebaseUser(userCredential.user!);
+
+      final userModel = await getCurrentUser();
+
+      //final userModel = UserModel.fromFirebaseUser(userCredential.user!);
 
       if (!userCredential.user!.emailVerified) {
         await firebaseAuthi.sendEmailVerification();

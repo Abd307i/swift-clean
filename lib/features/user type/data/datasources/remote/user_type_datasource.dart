@@ -52,7 +52,7 @@ class UserTypeDataSourceImpl implements UserTypeDataSource {
         throw Exception('User document does not exist');
       }
 
-      return UserModel.fromJson(userDoc.data()!, userDoc.id);
+      return UserModel.fromJson(userDoc.data()!);
     } catch (e) {
       throw Exception('Failed to get current user: $e');
     }

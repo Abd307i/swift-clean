@@ -11,27 +11,27 @@ class ServiceSelectionScreen extends StatelessWidget {
       {
         'name': 'Dry Wash',
         'description': 'We provide the most advanced dry-cleaning services.',
-        'imagePath': 'assets/images/dry_clean.png',
+        'imagePath': 'assets/dry_clean.png',
       },
       {
         'name': 'Washing & Folding',
         'description': 'Our service includes washing & folding just the way you like.',
-        'imagePath': 'assets/images/wash_fold.png',
+        'imagePath': 'assets/wash_fold.png',
       },
       {
         'name': 'Ironing',
         'description': 'We care about your clothes most frequently all the time.',
-        'imagePath': 'assets/images/iron.png',
+        'imagePath': 'assets/iron.png',
       },
       {
         'name': 'Household Items',
         'description': 'Our equipment has the power to remove the toughest stains.',
-        'imagePath': 'assets/images/household.png',
+        'imagePath': 'assets/household.png',
       },
       {
         'name': 'Socks Cleaning',
         'description': 'Bring your socks to us for shine, heel tip repair or sole replacement.',
-        'imagePath': 'assets/images/socks.png',
+        'imagePath': 'assets/socks.png',
       },
     ];
 

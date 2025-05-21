@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:testing_firebase/features/auth/domain/entites/adddress_entity.dart';
 import 'package:testing_firebase/features/auth/domain/entites/user_entity.dart';
 
 import 'address_model.dart';
@@ -17,14 +18,14 @@ class UserModel extends UserEntity{
     required super.emailVerified,
   });
 
-  factory UserModel.fromJson(Map<String, dynamic> json, String id){
+  factory UserModel.fromJson(Map<String, dynamic> json){
     return UserModel(
         id: json['id'],
         email: json['email'],
         firstName: json['firstName'],
         lastName: json['lastName'],
         phone:json['phone'],
-        address: json['address'],
+        address: AddressEntity(),
         userType: json['userType'],
         verified: json['verified'],
         emailVerified: json['emailVerified']
