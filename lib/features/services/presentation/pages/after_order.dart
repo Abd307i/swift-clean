@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:testing_firebase/features/home%20page/Presentation/pages/Home%20Page%20User.dart';
+import 'package:testing_firebase/features/order%20history/presentation/pages/OrderHistoryScreen.dart';
 
 import '../../../order history/presentation/pages/OrderHistoryModel.dart';
 
@@ -85,7 +86,7 @@ class AfterOrderScreen extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => OrderTrackingPage(userId: userId),
+                      builder: (context) => OrderHistoryScreen(userId: userId),
                     ),
                   );
                 },

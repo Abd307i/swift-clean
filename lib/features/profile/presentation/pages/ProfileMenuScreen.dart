@@ -144,9 +144,6 @@ class ProfileScreen extends StatelessWidget {
                               Icons.notifications, 'Notification',ColorPickerHelper.colorHelper('fieldBackgroundColor')
                               ,ColorPickerHelper.colorHelper('mainTextColor')),
                         ),
-                        buildMenuItem(
-                            Icons.payment, 'Payment Method',ColorPickerHelper.colorHelper('fieldBackgroundColor')
-                           ,ColorPickerHelper.colorHelper('mainTextColor')),
                         GestureDetector(
                           onDoubleTap: (){
                             Navigator.push(
@@ -157,12 +154,6 @@ class ProfileScreen extends StatelessWidget {
                               Icons.history, 'Order History',ColorPickerHelper.colorHelper('fieldBackgroundColor')
                               ,ColorPickerHelper.colorHelper('mainTextColor')),
                         ),
-                        buildMenuItem(
-                            Icons.location_on, 'Delivery Address',ColorPickerHelper.colorHelper('fieldBackgroundColor')
-                            ,ColorPickerHelper.colorHelper('mainTextColor')),
-                        buildMenuItem(
-                            Icons.local_offer, 'Offer',ColorPickerHelper.colorHelper('fieldBackgroundColor')
-                            ,ColorPickerHelper.colorHelper('mainTextColor')),
                         GestureDetector(
                           onTap: () {
                             Navigator.push(
@@ -174,29 +165,9 @@ class ProfileScreen extends StatelessWidget {
                               Icons.group_add, 'Invite Friends',ColorPickerHelper.colorHelper('fieldBackgroundColor')
                               ,ColorPickerHelper.colorHelper('mainTextColor')),
                         ),
-                        GestureDetector(
-                          onDoubleTap:(){
-                            Navigator.push(
-                                context,
-                               MaterialPageRoute(builder: (context) => HelpCenterScreen()));
-                          },
-                          child: buildMenuItem(
-                              Icons.help, 'Help Center',ColorPickerHelper.colorHelper('fieldBackgroundColor')
-                              ,ColorPickerHelper.colorHelper('mainTextColor')),
-                        ),
-                        buildMenuItem(
+                          buildMenuItem(
                             Icons.info, 'About Us',ColorPickerHelper.colorHelper('fieldBackgroundColor')
                             ,ColorPickerHelper.colorHelper('mainTextColor')),
-                        GestureDetector(
-                          onDoubleTap:(){
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => ServicesPage(userId: userId,)));
-                          },
-                          child: buildMenuItem(
-                              Icons.help, 'Services',ColorPickerHelper.colorHelper('fieldBackgroundColor')
-                              ,ColorPickerHelper.colorHelper('mainTextColor')),
-                        )
                       ],
 
                     ),

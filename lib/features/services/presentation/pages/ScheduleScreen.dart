@@ -9,6 +9,7 @@ import 'package:testing_firebase/features/services/presentation/bloc/order_bloc.
 import 'package:testing_firebase/features/services/presentation/bloc/order_event.dart';
 import 'package:testing_firebase/features/services/presentation/bloc/order_state.dart';
 import 'package:get_it/get_it.dart';
+import 'package:testing_firebase/features/services/presentation/pages/after_order.dart';
 import 'package:uuid/uuid.dart';
 
 class ScheduleScreen extends StatefulWidget {
@@ -133,10 +134,17 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
         items: items,
         status: 'In Progress',
         totalPrice: totalPrice,
+      lastUpdate: DateTime.now(),
+      deliveryTime: deliveryTime,
+      createdAt: DateTime.now()
     );
 
     // Dispatch confirm order event
     _orderBloc.add(ConfirmOrderEvent(orderEntity));
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => AfterOrderScreen(userId: customerId, orderNumber: orderEntity.orderId))
+    );
   }
 
   @override

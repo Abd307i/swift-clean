@@ -6,15 +6,17 @@ import 'OrderHistoryModel.dart';
 
 class OrderTrackingScreen extends StatefulWidget {
   final OrderHistoryEntity order;
-
   const OrderTrackingScreen({Key? key, required this.order}) : super(key: key);
 
   @override
-  _OrderTrackingScreenState createState() => _OrderTrackingScreenState();
+  _OrderTrackingScreenState createState() => _OrderTrackingScreenState(order);
 }
 
 class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
   int currentStep = 2;
+  final OrderHistoryEntity order;
+  _OrderTrackingScreenState(this.order);
+
 
   List<StepData> steps = [
     StepData(title: 'Order Placed', subtitle: 'Your order has been placed', isCompleted: true),
@@ -30,7 +32,7 @@ class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
       appBar: AppBar(
         backgroundColor: ColorPickerHelper.colorHelper('backgroundColor'),
         title: Text(
-          'Track Order #${widget.order.orderId}',
+          'Track Order #${order.orderId}',
           style: TextStyle(
             color: ColorPickerHelper.colorHelper('mainTextColor'),
           ),
@@ -51,13 +53,12 @@ class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            OrderInfoCard(order: widget.order),
+            OrderInfoCard(order: order),
             const SizedBox(height: 20),
             DeliveryTimeline(steps: steps, currentStep: currentStep),
             const SizedBox(height: 20),
             DeliveryAddressCard(),
             const SizedBox(height: 20),
-            PaymentMethodCard(),
           ],
         ),
       ),
@@ -177,8 +178,7 @@ class DeliveryTimeline extends StatelessWidget {
 
 class OrderInfoCard extends StatelessWidget {
   final OrderHistoryEntity order;
-
-  const OrderInfoCard({Key? key, required this.order}) : super(key: key);
+  const OrderInfoCard({Key? key, required this.order,}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -219,24 +219,6 @@ class OrderInfoCard extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 8),
-            Row(
-              children: [
-                const Text(
-                  'Items: ',
-                  style: TextStyle(
-                    fontSize: 15,
-                    color: Colors.grey,
-                  ),
-                ),
-                Text(
-                  '${order.items.length}',
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15,
-                  ),
-                ),
-              ],
-            )
           ],
         ),
       ),
@@ -272,15 +254,16 @@ class DeliveryAddressCard extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             const Text(
-              'John Doe',
+              'Ali Dweik',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
             ),
             const SizedBox(height: 4),
+
             const Text(
-              '123 Main Street, Apt 4B',
+              'Amman',
               style: TextStyle(
                 fontSize: 14,
                 color: Colors.grey,
@@ -288,94 +271,11 @@ class DeliveryAddressCard extends StatelessWidget {
             ),
             const SizedBox(height: 4),
             const Text(
-              'New York, NY 10001',
+              'Phone: +962 780680780',
               style: TextStyle(
                 fontSize: 14,
                 color: Colors.grey,
               ),
-            ),
-            const SizedBox(height: 4),
-            const Text(
-              'United States',
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey,
-              ),
-            ),
-            const SizedBox(height: 12),
-            const Text(
-              'Phone: +1 (555) 123-4567',
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class PaymentMethodCard extends StatelessWidget {
-  const PaymentMethodCard({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 0,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(Icons.payment, color: Colors.blue),
-                const SizedBox(width: 8),
-                const Text(
-                  'Payment Method',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade100,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Icon(Icons.credit_card, color: Colors.blue),
-                ),
-                const SizedBox(width: 12),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Credit Card',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    const Text(
-                      'Visa **** **** **** 1234',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
             ),
           ],
         ),
