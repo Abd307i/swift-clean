@@ -9,6 +9,7 @@ import 'package:testing_firebase/features/profile/presentation/bloc/profile_bloc
 import 'package:testing_firebase/features/profile/presentation/bloc/profile_event.dart';
 import 'package:testing_firebase/features/profile/presentation/bloc/profile_state.dart';
 import 'package:testing_firebase/features/profile/domain/usecases/get_profile_data.dart';
+import '../../../order history/domain/entities/order_history.dart';
 import '../../../order%20history/dependency_injection.dart' as di;
 import '../../../profile/dependency_injection.dart' as profile_di;
 
@@ -321,7 +322,7 @@ class _DrycleanerHomePageContentState extends State<DrycleanerHomePageContent> w
     );
   }
 
-  Widget _buildOrderCard(order) {
+  Widget _buildOrderCard(OrderHistoryEntity order) {
     return Card(
       margin: EdgeInsets.only(bottom: 16.0),
       elevation: 2,
@@ -349,7 +350,7 @@ class _DrycleanerHomePageContentState extends State<DrycleanerHomePageContent> w
             ),
             Divider(height: 24),
             Text(
-              'Customer: ${order.userName}',
+              "Customer: ${order.customerId}",
               style: TextStyle(
                 fontSize: 14,
                 color: Colors.grey[700],
@@ -377,7 +378,7 @@ class _DrycleanerHomePageContentState extends State<DrycleanerHomePageContent> w
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Date: ${_formatDate(order.orderDate)}',
+                  'Date: ${_formatDate(order.createdAt!)}',
                   style: TextStyle(
                     fontSize: 12,
                     color: Colors.grey[600],

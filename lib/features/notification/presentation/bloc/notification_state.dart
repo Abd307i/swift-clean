@@ -23,6 +23,8 @@ class StreamNotificationsLoaded extends NotificationState{
   List<Object> get props => [notifications];
 }
 
+
+
 class NewNotificationArrived extends NotificationState {
   final NotificationEntity notifications;
 

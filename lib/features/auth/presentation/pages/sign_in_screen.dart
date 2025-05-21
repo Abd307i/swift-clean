@@ -32,13 +32,15 @@ class _SignInScreenState extends State<SignInScreen> {
   final _passwordController = TextEditingController();
   bool _rememberMe = false;
 
-  @override
+ /* @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _emailController.text= "swiftclean.project@gmail.com";
+    *//*_emailController.text= "swiftclean.project@gmail.com";
+    _passwordController.text = "123456";*//*
+    _emailController.text= "ali2dweik3@gmail.com";
     _passwordController.text = "123456";
-  }
+  }*/
   @override
   void dispose() {
     _emailController.dispose();

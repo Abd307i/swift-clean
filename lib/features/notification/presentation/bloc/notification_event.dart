@@ -24,6 +24,10 @@ class GetStreamNotificationsEvent extends NotificationEvent{
   List<Object> get props => [userId];
 }
 
+class ConsumeError extends NotificationEvent{
+  const ConsumeError();
+}
+
 
 class MarkNotificationAsReadEvent extends NotificationEvent {
   final String notificationId;

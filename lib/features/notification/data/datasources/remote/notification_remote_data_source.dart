@@ -139,14 +139,11 @@ class NotificationDataSource {
     }
   }
 
-  Stream<List<NotificationEntity>> getStreamNotifications(String userId){
-    return _firestore
-        .collection('users')
-        .doc(userId)
-        .collection('notifications')
-        .snapshots()
-        .map((querySnapshot) => querySnapshot.docs
-        .map((doc) => NotificationModel.fromJson(doc.data()))
-        .toList());
+  Stream<List<NotificationEntity>> getStreamNotifications(String userId)async*{
+    yield await _firestore.collection('users').doc(userId).collection('notifications').get()
+    .then((val){
+      final x= val.docs.map((doc) => NotificationModel.fromJson(doc.data())).toList();
+      return x;
+    });
   }
 }

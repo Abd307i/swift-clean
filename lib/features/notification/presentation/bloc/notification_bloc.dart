@@ -1,49 +1,64 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:testing_firebase/features/notification/domain/usecases/get_notifications.dart';
 import 'package:testing_firebase/features/notification/domain/usecases/mark_as_read.dart';
 import 'package:testing_firebase/features/notification/domain/usecases/toggle_mute_notifications.dart';
 import 'package:testing_firebase/features/notification/presentation/bloc/notification_event.dart';
 import 'package:testing_firebase/features/notification/presentation/bloc/notification_state.dart';
+import 'package:testing_firebase/features/notification/presentation/bloc/notification_state_uni.dart';
 
-class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
+class NotificationBloc extends Bloc<NotificationEvent, UniNotificationState> {
   final GetNotifications getNotifications;
   final GetStreamNotifications getStreamNotifications;
+  final FirebaseFirestore fireStore;
+
   //final MarkAsRead markAsRead;
   // ToggleMuteNotification toggleMuteNotification;
 
   NotificationBloc({
     required this.getNotifications,
-    required this.getStreamNotifications
+    required this.getStreamNotifications,
+    required this.fireStore,
     //required this.markAsRead,
     //required this.toggleMuteNotification,
-  }) : super(NotificationInitial()) {
-    on<GetNotificationsEvent>(_onGetNotifications);
+  }) : super(UniNotificationState()) {
+    //on<GetNotificationsEvent>(_onGetNotifications);
     on<GetStreamNotificationsEvent>(_onGetStreamNotifications);
+    on<ConsumeError>(_onConsumeError);
     //on<MarkNotificationAsReadEvent>(_onMarkNotificationAsRead);
     //on<ToggleNotificationMuteEvent>(_onToggleNotificationMute);
   }
 
+  Stream<QuerySnapshot> getStream(String userId){
+    return fireStore.collection('users').doc(userId).collection('notifications').snapshots();
+  }
+
+  void _onConsumeError(
+      ConsumeError event,
+      Emitter<UniNotificationState> emit
+      )  {
+    emit(state.copy(error: ''));
+
+  }
+
   void _onGetStreamNotifications(
       GetStreamNotificationsEvent event,
-      Emitter<NotificationState> emit
+      Emitter<UniNotificationState> emit
       )  {
-    emit(StreamNotificationsLoading());
+    emit(state.copy(isLoading: true));
     try{
-      final notifications = getStreamNotifications(event.userId)..listen((notifications){
-        if(notifications.isNotEmpty){
-          final latest = notifications.last;
-          emit(NewNotificationArrived(latest));
-        }
+      getStreamNotifications.call(event.userId).listen((notifications){
+        emit(state.copyWithNewNotification(notifications));
       });
-        emit(StreamNotificationsLoaded(notifications));
+
     } catch (e){
-      emit(NotificationError(e.toString()));
+      emit(state.copy(error: e.toString()));
     }
   }
 
-  Future<void> _onGetNotifications(
+/* Future<void> _onGetNotifications(
       GetNotificationsEvent event,
-      Emitter<NotificationState> emit,
+      Emitter<UniNotificationState> emit,
       ) async {
     emit(NotificationLoading());
     try {
@@ -53,7 +68,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
       emit(NotificationError(e.toString()));
     }
   }
-/*
+
   Future<void> _onMarkNotificationAsRead(
       MarkNotificationAsReadEvent event,
       Emitter<NotificationState> emit,

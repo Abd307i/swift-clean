@@ -23,6 +23,8 @@ Future<void> init() async {
         () => NotificationDataSource(FirebaseFirestore.instance),
   );
 
+  sl.registerLazySingleton<FirebaseFirestore>(()=> FirebaseFirestore.instance);
+
   // Repositories
   sl.registerLazySingleton<NotificationRepository>(
         () => NotificationRepositoryImpl(sl()),
@@ -37,7 +39,8 @@ Future<void> init() async {
   // BLoC
   sl.registerFactory(() => NotificationBloc(
     getNotifications: sl(),
-    getStreamNotifications: sl()
+    getStreamNotifications: sl(),
+    fireStore: sl(),
     //markAsRead: sl(),
     //toggleMuteNotification: sl(),
   ));
